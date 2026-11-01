@@ -11,7 +11,7 @@ You need a Github account. For the setup on your computer you also need `gh` (th
 
 1. Click **Use this template** > **Create a new repository** and choose **Private**. Your applications will be issues in this repository, so it has to stay private.
 2. After a minute, an issue called **Finish the setup** opens in your copy. It has three steps: make a token, save it as the secret `PROJECT_TOKEN`, and run **Actions** > **Setup**. The Setup fields show the default settings (Stockholm, for example), so change the ones that don't fit you. If the issue doesn't show up, run **Actions** > **Welcome** by hand.
-3. When the setup is done, it closes that issue and opens two new ones with the `setup` label: **Prepare the board** and **Add the bookmark**. Follow them and close them when you are done.
+3. When the setup is done, it closes that issue and opens two new ones with the `setup` label: **Prepare the board** and **Add the bookmark**. Follow them and close them when you are done. After that, and once more on day 7, an **Enjoying Horizon?** issue asks for a star. It doesn't show up if you have starred Horizon already.
 
 ## On your computer
 

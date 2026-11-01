@@ -1,0 +1,26 @@
+name: Setup steps
+
+# When you close the last setup issue (label "setup"), opens the "Enjoying Horizon?" issue.
+# The code is in .github/scripts/star.js.
+
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  issues: write
+
+jobs:
+  done:
+    if: contains(github.event.issue.labels.*.name, 'setup')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+        with:
+          script: |
+            const star = require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/star.js`);
+            const pat = process.env.PROJECT_TOKEN ? getOctokit(process.env.PROJECT_TOKEN) : null;
+            await star.afterSetup({ github, pat, core, ...context.repo });

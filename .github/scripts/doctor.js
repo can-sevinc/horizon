@@ -1,6 +1,7 @@
 // Doctor workflow: checks the setup each day. One "maintenance" issue lists the problems;
 // it changes when the problems change, and closes when everything is OK.
 const lib = require("./project");
+const star = require("./star");
 
 const WARN_DAYS = lib.config.tokenWarnDays;
 const TITLE = "The setup needs attention";
@@ -57,6 +58,9 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       problems.push(`The project board ${process.env.PROJECT_NUMBER} cannot be read (${e.message}). Check the variable \`PROJECT_NUMBER\`.`);
     }
   }
+
+  // On the 7th day of the copy: the "Enjoying Horizon?" issue
+  await star.dayReminder({ github, pat, owner, repo, core }, r.created_at);
 
   // Variables, labels, workflows
   // (No CURRENT_PERIOD is fine: the next application starts a period)
