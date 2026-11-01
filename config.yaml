@@ -1,0 +1,145 @@
+# Settings of the job application tracker.
+# The workflows, the setup, and the import scripts read this file.
+# After a change, run the setup again (bash scripts/setup.sh, or Actions > Setup > Run workflow):
+# it changes the board, the labels, the form, and the workflow times to match.
+
+# --- The setup asks for these ---
+
+# Name of the project board
+projectTitle: Job Applications
+# Default City in the new application form
+city: "Stockholm, SE"
+# Your time zone (a name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+timezone: Europe/Stockholm
+# Daily follow-up reminders, local time (HH:MM)
+reminderTime: "09:23"
+# Weekly summary: day and local time
+summaryDay: Monday
+summaryTime: "08:17"
+# Daily setup check (Doctor), local time
+doctorTime: "09:41"
+# Days without a "Last update" before an In progress application needs a follow-up
+followUpDays: 10
+# Days with no answer before an Applied application gets the "ghosted" label
+ghostedDays: 30
+# Days before the token expires when the Doctor warns you
+tokenWarnDays: 14
+# Example in the Salary range field of the form
+salaryPlaceholder: "70000-110000 SEK/month"
+# Import: days without an application that start a new period
+periodGapDays: 90
+
+# --- Lists ---
+
+# Hosts of job boards: their links get Source "Job board" (a subdomain counts too).
+# See docs/supported-sites.md.
+jobBoards: [thehub.io, arbetsformedlingen.se, indeed.com]
+
+# Color of the "period: ..." labels
+periodLabelColor: "C5DEF5"
+
+# Status options of the board, in this order. oldName: the name before a rename, so the cards
+# keep their status. Colors: GRAY, BLUE, GREEN, YELLOW, ORANGE, RED, PINK, PURPLE.
+statuses:
+  - name: Wishlist
+    color: PINK
+    description: You did not apply yet.
+  - name: Applied
+    color: BLUE
+    description: You applied. There is no answer yet.
+  - name: In progress
+    color: GREEN
+    description: The process continues.
+  - name: On hold
+    color: YELLOW
+    description: The process is not finished. You will continue it later.
+    oldName: Withdrawn interest
+  - name: Rejected after interview
+    color: RED
+    description: The company stopped the process after an interview.
+  - name: Rejected without interview
+    color: GRAY
+    description: The company stopped the process before an interview.
+    oldName: Rejected
+  - name: Offer
+    color: PURPLE
+    description: You got an offer.
+
+# Fields of the board. type: DATE, TEXT, or NUMBER. form: the section of the form that fills it.
+fields:
+  - name: Applied date
+    type: DATE
+    form: Date
+  - name: Last update
+    type: DATE
+  - name: Company
+    type: TEXT
+    form: Company
+  - name: Position
+    type: TEXT
+    form: Position
+  - name: City
+    type: TEXT
+    form: City
+  - name: Salary range
+    type: TEXT
+    form: Salary range
+  - name: Recruiter
+    type: TEXT
+    form: Recruiter / contact
+  - name: Job link
+    type: TEXT
+    form: Job link
+  - name: Interviews
+    type: NUMBER
+
+# Options of the Source dropdown in the form, and their labels
+sources:
+  - option: LinkedIn job post
+    label: "source: linkedin"
+    color: "0A66C2"
+  - option: Company website
+    label: "source: company site"
+    color: "5319E7"
+  - option: Job board
+    label: "source: job board"
+    color: "0E8A16"
+  - option: Recruiter outreach
+    label: "source: recruiter"
+    color: "D93F0B"
+  - option: Referral
+    label: "source: referral"
+    color: "FBCA04"
+  - option: Other
+    label: "source: other"
+    color: "CCCCCC"
+
+# Labels that the system uses
+labels:
+  - name: on-pause
+    color: "FFD700"
+    description: "Paused: no follow-up reminders"
+  - name: summary
+    color: "EDEDED"
+    description: Weekly summary
+  - name: revisit later
+    color: "F9A03F"
+    description: Rejected, but get in touch again later (/next)
+  - name: withdrawn interest
+    color: "BFD4F2"
+    description: You stopped the process (Rejected without interview)
+  - name: followed up
+    color: "E11298"
+    description: You sent a follow-up email
+  - name: redirected
+    color: "C5DEF5"
+    description: "Moved to another process (/moved #N)"
+  - name: ghosted
+    color: "3D3D3D"
+    description: Applied, but no answer for a long time (ghostedDays)
+  - name: maintenance
+    color: "B60205"
+    description: A problem with the setup, for example the token
+  - name: imported
+    color: "EDEDED"
+    description: Imported from a spreadsheet

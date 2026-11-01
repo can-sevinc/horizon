@@ -1,0 +1,28 @@
+name: Follow-up reminder
+
+on:
+  schedule:
+    # every day, 09:23 Europe/Stockholm: made by the setup from reminderTime in config.yaml
+    # (one line for each UTC offset of the time zone; the script runs for today's)
+    - cron: "23 7 * * *"
+    - cron: "23 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  remind:
+    # Not set up yet (no project board, for example in the template itself): do nothing
+    if: vars.PROJECT_NUMBER != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/followup.js`)({ github, context, core, getOctokit });

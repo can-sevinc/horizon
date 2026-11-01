@@ -1,0 +1,82 @@
+name: Job application
+description: Track a new job application
+title: "[Company] Position"
+body:
+  - type: markdown
+    attributes:
+      value: "**From the bookmark?** You cannot change its values here (a Github limitation). Edit them after you create the issue."
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      description: Empty = Applied.
+      options:
+        - Applied
+        - Wishlist (not applied yet)
+      default: 0
+  - type: dropdown
+    id: source
+    attributes:
+      label: Source
+      description: "How did this application start? Empty: the system fills it in from the Job link (LinkedIn job post, Job board, Company website, or Recruiter outreach when there is no link)."
+      options:
+        - LinkedIn job post
+        - Company website
+        - Job board
+        - Recruiter outreach
+        - Referral
+        - Other
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      placeholder: "2026-09-03"
+    validations:
+      required: true
+  - type: input
+    id: company
+    attributes:
+      label: Company
+    validations:
+      required: true
+  - type: input
+    id: position
+    attributes:
+      label: Position
+    validations:
+      required: true
+  - type: input
+    id: recruiter
+    attributes:
+      label: Recruiter / contact
+      description: Name and/or LinkedIn profile link
+  - type: input
+    id: city
+    attributes:
+      label: City
+      value: "Stockholm, SE"
+  - type: input
+    id: salary
+    attributes:
+      label: Salary range
+      placeholder: "70000-110000 SEK/month"
+  - type: input
+    id: link
+    attributes:
+      label: Job link
+      description: Optional. Leave empty for recruiter messages without a posting.
+  - type: textarea
+    id: description
+    attributes:
+      label: Job description / recruiter message
+      description: Paste the posting text or the recruiter's message. Postings get taken down, so keep a copy here.
+  - type: input
+    id: cv
+    attributes:
+      label: CV / cover letter version
+      placeholder: "cv-backend-2026-09"
+  - type: textarea
+    id: notes
+    attributes:
+      label: First impressions
+      description: Your thoughts on the role. Add interview notes later as comments.

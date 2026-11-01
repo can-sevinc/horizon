@@ -1,0 +1,29 @@
+name: End a period
+
+# Ends the current job search period (repo variable CURRENT_PERIOD): Actions > End a period > Run workflow.
+# Until you run it, new applications stay in the current period, also after a long break.
+
+on:
+  workflow_dispatch:
+    inputs:
+      next:
+        description: "Name of the new period, for example 2027-spring (empty: the next application starts it, named YYYY-MM)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  end:
+    if: vars.PROJECT_NUMBER != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          CURRENT_PERIOD: ${{ vars.CURRENT_PERIOD }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/end-period.js`)({ github, context, core, getOctokit });

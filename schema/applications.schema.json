@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Job applications",
+  "description": "The import format (scripts/import_applications.py) and the export format (export workflow). status and source must be names from config.yaml (statuses[].name, sources[].option); the script checks them.",
+  "type": "object",
+  "required": ["version", "applications"],
+  "properties": {
+    "version": { "const": 1 },
+    "generatedBy": { "type": "string" },
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "company", "status"],
+        "properties": {
+          "id": { "type": "string", "description": "Stable and unique: the row number of the source, or a hash. The import uses it to skip what is already imported." },
+          "company": { "type": "string", "minLength": 1 },
+          "position": { "type": "string" },
+          "date": { "type": ["string", "null"], "format": "date", "description": "The day you applied, YYYY-MM-DD" },
+          "status": { "type": "string", "description": "A statuses[].name of config.yaml" },
+          "withdrawn": { "type": "boolean", "description": "You stopped the process (the label withdrawn interest)" },
+          "source": { "type": ["string", "null"], "description": "A sources[].option of config.yaml, or empty: guessed from the link" },
+          "period": { "type": ["string", "null"], "description": "Job search period; empty: the year of date" },
+          "city": { "type": ["string", "null"] },
+          "salary": { "type": ["string", "null"] },
+          "recruiter": { "type": ["string", "null"] },
+          "link": { "type": ["string", "null"] },
+          "interviews": { "type": ["integer", "null"], "minimum": 0 },
+          "lastUpdate": { "type": ["string", "null"], "format": "date", "description": "The last real event, YYYY-MM-DD (not a plan)" },
+          "timeline": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["event"],
+              "properties": { "date": { "type": ["string", "null"], "format": "date" }, "event": { "type": "string" } }
+            }
+          },
+          "notes": { "type": ["string", "null"], "description": "Free text, in the original language" },
+          "original": { "description": "The raw source row, for traceability (not imported)" },
+          "warnings": { "type": "array", "items": { "type": "string" }, "description": "What the skill guessed (not imported)" }
+        }
+      }
+    }
+  }
+}

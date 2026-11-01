@@ -1,0 +1,24 @@
+name: Sync new applications
+
+on:
+  issues:
+    types: [opened, edited, closed]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  sync:
+    if: "!contains(github.event.issue.labels.*.name, 'summary') && !contains(github.event.issue.labels.*.name, 'maintenance')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          CURRENT_PERIOD: ${{ vars.CURRENT_PERIOD }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/sync.js`)({ github, context, core, getOctokit });

@@ -1,0 +1,50 @@
+name: Comment commands
+
+# /interview [type]          -> turns your comment into the interview-notes template
+# /next YYYY-MM-DD [what]    -> plans the next step and sets "Last update" on the card to that date;
+#                               a Wishlist or Applied card moves to In progress
+# /next +7 [what]            -> same, relative in days
+# /applied [YYYY-MM-DD] [notes] -> a Wishlist card becomes Applied; Applied date and Last update are
+#                               that date (default: today), and the form says Applied
+# /hold [why]                -> status On hold, Last update today
+# /offer [notes]             -> status Offer, Last update today; the comment becomes an offer template
+# /followup [+7|YYYY-MM-DD] [notes] -> you sent a follow-up email: "followed up" label, Last update
+#                               today; with a date, the comment plans a check for an answer
+# /withdraw [why]            -> you stopped the process: "withdrawn interest" label, status Rejected
+#                               without interview, Last update today, closes the issue
+# /period NAME              -> moves this application to the period NAME (the current period
+#                               stays; to end it: Actions > End a period)
+# /moved #N                  -> the company moved you to the process in issue #N: closes this issue
+#                               as a duplicate of #N, adds the "redirected" label, archives the card
+# /rejected [why]            -> the process stopped: closes the issue as not planned and sets the status
+#                               to Rejected after / without interview (by the Interviews field)
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  command:
+    if: >-
+      github.event.issue.pull_request == null &&
+      github.event.comment.user.login == github.repository_owner &&
+      (startsWith(github.event.comment.body, '/interview') || startsWith(github.event.comment.body, '/next') ||
+       startsWith(github.event.comment.body, '/moved') || startsWith(github.event.comment.body, '/rejected') ||
+       startsWith(github.event.comment.body, '/applied') || startsWith(github.event.comment.body, '/hold') ||
+       startsWith(github.event.comment.body, '/offer') || startsWith(github.event.comment.body, '/followup') ||
+       startsWith(github.event.comment.body, '/withdraw') || startsWith(github.event.comment.body, '/period'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          CURRENT_PERIOD: ${{ vars.CURRENT_PERIOD }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/commands.js`)({ github, context, core, getOctokit });

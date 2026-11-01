@@ -1,0 +1,40 @@
+name: Export
+
+# All applications (issues + project fields) as applications.json and applications.csv
+# (Actions > Export > Run workflow). The files are in the "applications" artifact of the run;
+# on your computer: gh run download --name applications
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "Only this period, for example 2026 (empty: all)"
+        required: false
+        default: ""
+      archived:
+        description: "Also the archived cards"
+        type: boolean
+        default: true
+
+permissions:
+  issues: read
+  contents: read
+
+jobs:
+  export:
+    if: vars.PROJECT_NUMBER != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/export.js`)({ github, context, core, getOctokit });
+      - uses: actions/upload-artifact@v7
+        with:
+          name: applications
+          path: export/
+          retention-days: 7

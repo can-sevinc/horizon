@@ -1,0 +1,28 @@
+name: Weekly summary
+
+on:
+  schedule:
+    # Mondays, 08:17 Europe/Stockholm: made by the setup from summaryTime and summaryDay in config.yaml
+    # (one line for each UTC offset of the time zone; the script runs for today's)
+    - cron: "17 6 * * 1"
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  summary:
+    # Not set up yet (no project board, for example in the template itself): do nothing
+    if: vars.PROJECT_NUMBER != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/weekly-summary.js`)({ github, context, core, getOctokit });

@@ -1,0 +1,61 @@
+name: Setup
+
+# Sets up the labels, the project board, and the variables from config.yaml, writes the settings
+# into the form (and the workflow times), and makes the bookmark (in the summary of the run).
+# Actions > Setup > Run workflow. Safe to run again: it changes only what is not set yet.
+# An empty field keeps the value of config.yaml. bash scripts/setup.sh runs this workflow too.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: only show what would change"
+        type: boolean
+        default: false
+      project_title:
+        description: "Name of the project board"
+        required: false
+      city:
+        description: "Default City in the form, for example Berlin, DE"
+        required: false
+      timezone:
+        description: "Time zone, for example Europe/Berlin"
+        required: false
+      reminder_time:
+        description: "Daily follow-up reminders, local time (HH:MM)"
+        required: false
+      summary_day:
+        description: "Weekly summary day"
+        type: choice
+        options: ["", Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+        default: ""
+      summary_time:
+        description: "Weekly summary, local time (HH:MM)"
+        required: false
+      follow_up_days:
+        description: "Days without news before a follow-up reminder"
+        required: false
+      ghosted_days:
+        description: "Days without an answer before the ghosted label"
+        required: false
+      salary_placeholder:
+        description: "Example in the Salary range field, for example 60k-80k EUR/year"
+        required: false
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          CURRENT_PERIOD: ${{ vars.CURRENT_PERIOD }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/setup.js`)({ github, context, core, getOctokit });

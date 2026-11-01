@@ -1,0 +1,33 @@
+name: Doctor
+
+# Every day: checks the setup (private repository, token, board, labels, variables, workflows).
+# Opens one "maintenance" issue with the problems, and closes it when everything is OK.
+
+on:
+  schedule:
+    # every day, 09:41 Europe/Stockholm: made by the setup from doctorTime in config.yaml
+    # (one line for each UTC offset of the time zone; the script runs for today's)
+    - cron: "41 7 * * *"
+    - cron: "41 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+  actions: read
+
+jobs:
+  check:
+    # Not set up yet (no project board, for example in the template itself): do nothing
+    if: vars.PROJECT_NUMBER != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          CURRENT_PERIOD: ${{ vars.CURRENT_PERIOD }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/doctor.js`)({ github, context, core, getOctokit });

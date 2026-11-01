@@ -1,0 +1,24 @@
+name: Welcome
+
+# In a new copy of the template: opens a "Finish the setup" issue with the steps of the setup in
+# the browser. It does nothing when the setup is done (PROJECT_NUMBER is set), and in the
+# template itself. If no issue opens, run it by hand: Actions > Welcome > Run workflow.
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  welcome:
+    if: vars.PROJECT_NUMBER == '' && !github.event.repository.is_template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/welcome.js`)({ github, context, core });

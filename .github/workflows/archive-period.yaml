@@ -1,0 +1,31 @@
+name: Archive a period
+
+# Archives the cards of all issues with the label "period: <period>" (Actions > Archive a period > Run workflow)
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "Period, for example 2026 (the label is \"period: 2026\")"
+        required: true
+      close:
+        description: "Also close the open issues of this period (as not planned)"
+        type: boolean
+        default: false
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/archive-period.js`)({ github, context, core, getOctokit });
