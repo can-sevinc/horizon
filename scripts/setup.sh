@@ -50,11 +50,6 @@ else
   R="$ME/$NAME"
   NEW_REPO=1
   echo "✓ Created the private repository $R"
-  # The labels that Github adds to every new repository (only now: later, they can be your own)
-  for name in bug documentation duplicate enhancement "good first issue" "help wanted" \
-              invalid question wontfix accessibility; do
-    gh label delete "$name" -R "$R" --yes >/dev/null 2>&1 || true
-  done
 fi
 
 # --- Settings: config.yaml ---

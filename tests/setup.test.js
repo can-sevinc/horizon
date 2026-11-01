@@ -171,3 +171,25 @@ test("browser setup: the bookmark goes into the Finish the setup issue, which cl
   const dry = await run({ dry_run: true }, board(), [{ number: 7, title: TITLE }]);
   assert.ok(!dry.calls.some(([n]) => n === "createComment"));
 });
+
+test("a new project: View 1 becomes the Board, and the Github default labels go", async () => {
+  const b = board();
+  const graphql = b.graphql;
+  b.graphql = async (q, v) => {
+    if (q.includes("projectsV2(first")) return { user: { id: "U", projectsV2: { nodes: [] } } };
+    if (/createProjectV2\(/.test(q)) { b.mutations.push("createProjectV2"); return { createProjectV2: { projectV2: { number: 2 } } }; }
+    if (/createProjectV2View\(/.test(q)) { b.mutations.push("createProjectV2View"); return { createProjectV2View: { projectV2View: { id: "NV" } } }; }
+    const r = await graphql(q, v);
+    if (r.user && r.user.projectV2 && r.user.projectV2.views) {
+      r.user.projectV2.views.nodes = [{ id: "V0", name: "View 1", layout: "TABLE_LAYOUT", filter: "", fields: { nodes: [{ name: "Title" }, { name: "Assignees" }] }, sortByFields: { nodes: [] } }];
+    }
+    return r;
+  };
+  labels.push({ name: "bug", color: "d73a4a", description: "" });
+  try {
+    const { mutations, calls } = await run({}, b);
+    assert.ok(calls.some(([n, a]) => n === "deleteLabel" && a.name === "bug"));
+    assert.strictEqual(mutations.filter(m => m === "createProjectV2View").length, 3);
+    assert.ok(mutations.includes("updateProjectV2View"));
+  } finally { labels.pop(); }
+});

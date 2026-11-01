@@ -16,6 +16,7 @@ module.exports = function mock({ body = "", issues = [], labels = [], workflows 
         get: async () => ({ data: { body } }), listForRepo: "listForRepo", listLabelsForRepo: "listLabelsForRepo",
         update: rec("update"), addLabels: rec("addLabels"), removeLabel: rec("removeLabel"),
         createLabel: rec("createLabel"), createComment: rec("createComment"), updateComment: rec("updateComment"),
+        deleteLabel: rec("deleteLabel"),
         create: async args => { calls.push(["create", args]); return { data: { node_id: "N" } }; },
       },
     },

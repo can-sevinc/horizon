@@ -14,6 +14,9 @@ const FORM = ".github/ISSUE_TEMPLATE/application.yaml";
 const BOARD_FIELDS = ["Title", "Labels", "Applied date", "Last update", "Interviews"];
 const TABLE_FIELDS = ["Title", "Status", "Applied date", "Last update", "Interviews", "Company", "Position", "City",
   "Salary range", "Recruiter", "Job link", "Labels"];
+// The labels that Github adds to a new repository: removed when the setup makes the board
+const DEFAULT_LABELS = ["bug", "documentation", "duplicate", "enhancement", "good first issue", "help wanted",
+  "invalid", "question", "wontfix", "accessibility"];
 const NEW_TOKEN = "https://github.com/settings/tokens/new?scopes=repo,project,workflow&description=job-applications";
 
 module.exports = async ({ github, context, core, getOctokit }) => {
@@ -102,6 +105,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   const user = (await pat.graphql(`query($o:String!) { user(login:$o) { id
     projectsV2(first:100) { nodes { number title } } } }`, { o: owner })).user;
   let num = Number(process.env.PROJECT_NUMBER) || null;
+  let created = false;
   if (num && !user.projectsV2.nodes.some(p => p.number === num)) num = null;
   if (!num) num = (user.projectsV2.nodes.find(p => p.title === config.projectTitle) || {}).number || null;
   if (!num) {
@@ -111,8 +115,13 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     }
     num = (await pat.graphql(`mutation($o:ID!, $t:String!) { createProjectV2(input:{ownerId:$o, title:$t}) {
       projectV2 { number } } }`, { o: user.id, t: config.projectTitle })).createProjectV2.projectV2.number;
+    created = true;
     say(`✓ Created the project #${num}`);
   } else say(`✓ Using the project #${num}`);
+  // A new board: the labels that Github adds to a new repository go
+  if (created) for (const name of DEFAULT_LABELS.filter(n => have[n])) {
+    await change(`delete the label "${name}"`, () => github.rest.issues.deleteLabel({ owner, repo, name }));
+  }
   const project = async sel => (await pat.graphql(`query($o:String!, $n:Int!) { user(login:$o) { projectV2(number:$n) { ${sel} } } }`,
     { o: owner, n: num })).user.projectV2;
   const p = await project("id title repositories(first:50) { nodes { nameWithOwner } }");
