@@ -32,7 +32,7 @@ The script:
 
 ## The install counter
 
-The Setup has a **Count this copy** checkbox, on by default. It adds 1 to the public [install counter](https://horizon.goatcounter.com) when the board is created, and the Update workflow adds 1 to the monthly active count. Nothing else is sent: no repository name, user, or data. Untick it, or set `telemetry: false` in `config.yaml`, to turn it off.
+The Setup has a **Count this copy** checkbox, on by default. It adds 1 to the public [install counter](https://horizon.goatcounter.com) once, when the board is created. Nothing else is sent: no repository name, user, or data. Untick it, or set `telemetry: false` in `config.yaml`, to turn it off.
 
 ## What the setup creates
 

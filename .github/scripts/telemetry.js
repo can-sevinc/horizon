@@ -1,6 +1,6 @@
 // The anonymous counter (telemetry in config.yaml): adds 1 to a public count at
-// https://horizon.goatcounter.com, "install" when the setup makes a board and "active" when the
-// monthly update runs. Only the name of the event is sent: no repository, user, or data.
+// https://horizon.goatcounter.com, "install" once, when the setup makes a board. Only the name of
+// the event is sent: no repository, user, or data.
 const COUNTER = "https://horizon.goatcounter.com/count";
 
 async function count(event, config, core) {

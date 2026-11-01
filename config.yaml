@@ -27,7 +27,7 @@ tokenWarnDays: 14
 # Example in the Salary range field of the form
 salaryPlaceholder: "70000-110000 SEK/month"
 # Count this copy: add 1 to Horizon's public install counter (https://horizon.goatcounter.com)
-# when the setup makes the board, and once a month when the Update workflow runs.
+# once, when the setup makes the board.
 # Nothing else is sent. false: never.
 telemetry: true
 # Import: days without an application that start a new period

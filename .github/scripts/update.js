@@ -131,7 +131,6 @@ module.exports = async ({ context, core, getOctokit }) => {
   const dir = process.env.GITHUB_WORKSPACE;
   const template = require("./config").load().templateRepo || "";
   if (`${owner}/${repo}`.toLowerCase() === template.toLowerCase()) return core.info("This is the template itself.");
-  await require("./telemetry").count("active", require("./config").load(), core);
   const r = update(dir);
   if (!r.files.length) return core.info(`Up to date with ${r.repo} (${r.head.slice(0, 7)}).`);
   const git = (...args) => execFileSync("git", args, { cwd: dir, stdio: "inherit" });
