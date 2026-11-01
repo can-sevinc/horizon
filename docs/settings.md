@@ -22,6 +22,7 @@ All settings are in `config.yaml`, each with a short comment. After a change, ru
 | Warn this many days before the token expires (14) | `tokenWarnDays` |
 | Statuses, fields, sources, labels | `statuses`, `fields`, `sources`, `labels` |
 | Job boards | `jobBoards` |
+| Where updates come from | `templateRepo` |
 
 The other form fields are in `.github/ISSUE_TEMPLATE/application.yaml`. If you change the **Source** options, update `sources` and `scripts/bookmarklet.src.js` too.
 
@@ -40,5 +41,6 @@ Github runs schedules in UTC. Each scheduled workflow has one line for summer ti
 | `scripts/import_applications.py`, `scripts/import_csv.py` | The importers |
 | `schema/applications.schema.json` | The import and export format |
 | `skills/`, `AGENTS.md` | Instructions for AI coding agents |
+| `.github/template-version` | The template version you have, written by the Update workflow |
 | `docs/` | This documentation |
 | `tests/` | Tests: `node --test "tests/*.test.js"` |

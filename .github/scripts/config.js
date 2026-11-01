@@ -89,4 +89,30 @@ function setValues(text, values) {
   return text;
 }
 
-module.exports = { FILE, parse, load, setValues, yamlValue };
+// The top-level settings of a newer config.yaml that a text does not have yet, added at the end
+// with their comments: { text, added: ["newKey", ...] }. The values that the text has stay.
+function addMissing(text, newer) {
+  const have = parse(text);
+  const added = [];
+  const blocks = [];
+  let comments = [], block = null;
+  for (const line of newer.split("\n")) {
+    const key = line.match(/^([A-Za-z_][\w-]*):/);
+    if (key) {
+      block = { key: key[1], lines: [...comments, line] };
+      blocks.push(block);
+      comments = [];
+    } else if (block && /^(\s+\S|-)/.test(line)) block.lines.push(line);
+    else {
+      block = null;
+      comments = /^#/.test(line) ? [...comments, line] : [];
+    }
+  }
+  for (const b of blocks.filter(b => !(b.key in have))) {
+    text = text.replace(/\n*$/, "\n\n") + b.lines.join("\n") + "\n";
+    added.push(b.key);
+  }
+  return { text, added };
+}
+
+module.exports = { FILE, parse, load, setValues, yamlValue, addMissing };

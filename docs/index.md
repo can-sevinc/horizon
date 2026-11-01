@@ -23,6 +23,7 @@ Keep your copy private. Your applications, notes, and salaries are in its issues
 | [Reminders and summary](reminders-and-summary.md) | Follow-ups, the weekly summary, charts |
 | [Export, archive, import](export-import.md) | Your data in and out |
 | [Settings and files](settings.md) | `config.yaml` and the repository layout |
+| [Get updates](updates.md) | New versions of the template |
 | [Supported sites](supported-sites.md) | Where the bookmark reads the job post |
 | [AI agent skills](skills.md) | What an AI agent can do for you |
 | [If there is a problem](troubleshooting.md) | The daily check and common fixes |

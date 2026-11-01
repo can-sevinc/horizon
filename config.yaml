@@ -28,6 +28,8 @@ tokenWarnDays: 14
 salaryPlaceholder: "70000-110000 SEK/month"
 # Import: days without an application that start a new period
 periodGapDays: 90
+# The template that the Update workflow gets new versions from (owner/name)
+templateRepo: can-sevinc/horizon
 
 # --- Lists ---
 

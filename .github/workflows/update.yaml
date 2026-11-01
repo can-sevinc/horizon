@@ -1,0 +1,31 @@
+name: Update
+
+# Gets the new version of the template (templateRepo in config.yaml) and opens a pull request with
+# the changes. Your config.yaml and your settings stay. Runs on the 1st of each month, or by hand:
+# Actions > Update > Run workflow. The code is in .github/scripts/update.js.
+
+on:
+  schedule:
+    - cron: "17 5 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    # Not set up yet (for example the template itself): do nothing
+    if: vars.PROJECT_NUMBER != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The token pushes the branch: a change in .github/workflows needs its workflow scope
+          token: ${{ secrets.PROJECT_TOKEN }}
+          fetch-depth: 0
+      - uses: actions/github-script@v9
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+        with:
+          script: |
+            await require(`${process.env.GITHUB_WORKSPACE}/.github/scripts/update.js`)({ github, context, core, getOctokit });

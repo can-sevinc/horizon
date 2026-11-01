@@ -34,7 +34,7 @@ cd job-applications
 bash scripts/setup.sh
 ```
 
-More in [Setup](docs/setup.md).
+More in [Setup](docs/setup.md). When the template changes, the **Update** workflow opens a pull request in your copy. See [Get updates](docs/updates.md).
 
 ## Keep it private
 

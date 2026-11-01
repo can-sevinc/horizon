@@ -1,6 +1,6 @@
 ---
 title: AI agent skills
-nav_order: 10
+nav_order: 11
 ---
 
 # AI agent skills
