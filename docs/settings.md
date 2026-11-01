@@ -23,6 +23,7 @@ All settings are in `config.yaml`, each with a short comment. After a change, ru
 | Statuses, fields, sources, labels | `statuses`, `fields`, `sources`, `labels` |
 | Job boards | `jobBoards` |
 | Where updates come from | `templateRepo` |
+| The anonymous install counter | `telemetry` |
 
 The other form fields are in `.github/ISSUE_TEMPLATE/application.yaml`. If you change the **Source** options, update `sources` and `scripts/bookmarklet.src.js` too.
 

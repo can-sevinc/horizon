@@ -8,6 +8,7 @@ const cfg = require("./config");
 const render = require("./render");
 const lib = require("./project");
 const issues = require("./setup-issues");
+const telemetry = require("./telemetry");
 
 const ROOT = path.join(__dirname, "../..");
 const FORM = ".github/ISSUE_TEMPLATE/application.yaml";
@@ -53,7 +54,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   const values = {};
   for (const [input, key] of Object.entries(render.INPUTS)) {
     const v = String(inputs[input] ?? "").trim();
-    if (v && v !== fieldDefaults[input]) values[key] = /Days$/.test(key) ? Number(v) : v;
+    if (v && v !== fieldDefaults[input]) values[key] = /Days$/.test(key) ? Number(v) : key === "telemetry" ? v === "true" : v;
   }
   for (const [key, v] of Object.entries(values)) {
     if (/Days$/.test(key) && !(Number.isInteger(v) && v > 0)) return core.setFailed(`${key} must be a number of days, not "${v}".`);
@@ -120,6 +121,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       projectV2 { number } } }`, { o: user.id, t: config.projectTitle })).createProjectV2.projectV2.number;
     created = true;
     say(`✓ Created the project #${num}`);
+    await telemetry.count("install", config, core);
   } else say(`✓ Using the project #${num}`);
   // A new board: the labels that Github adds to a new repository go
   if (created) for (const name of DEFAULT_LABELS.filter(n => have[n])) {

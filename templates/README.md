@@ -37,6 +37,6 @@ Every new issue gets a comment with the full list.
 
 ## Settings and more
 
-Your settings are in [`config.yaml`](config.yaml). After a change, run [Actions > Setup](https://github.com/{{REPO}}/actions/workflows/setup.yaml).
+Your settings are in [`config.yaml`](config.yaml). `telemetry: false` turns off the anonymous install counter, which only adds 1 at setup and once a month. After a change, run [Actions > Setup](https://github.com/{{REPO}}/actions/workflows/setup.yaml).
 
 Export, import, periods, and everything else: https://can-sevinc.github.io/horizon/

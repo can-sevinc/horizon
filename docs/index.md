@@ -15,6 +15,8 @@ Horizon tracks your job search in a private Github repository. Each application 
 
 Keep your copy private. Your applications, notes, and salaries are in its issues.
 
+![Installs](https://horizon.goatcounter.com/counter/install.svg?no_branding=1) ![Active this month](https://horizon.goatcounter.com/counter/active.svg?start=month&no_branding=1)
+
 | Page | |
 | --- | --- |
 | [Setup](setup.md) | Create your copy |

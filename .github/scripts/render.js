@@ -37,7 +37,7 @@ function issueForm(text, config) {
 const INPUTS = {
   project_title: "projectTitle", city: "city", timezone: "timezone", reminder_time: "reminderTime",
   summary_day: "summaryDay", summary_time: "summaryTime", follow_up_days: "followUpDays",
-  ghosted_days: "ghostedDays", salary_placeholder: "salaryPlaceholder",
+  ghosted_days: "ghostedDays", salary_placeholder: "salaryPlaceholder", count_copy: "telemetry",
 };
 const SETUP_WORKFLOW = ".github/workflows/setup.yaml";
 
@@ -49,7 +49,9 @@ function setupInputs(text, config) {
     if (start < 0) throw new Error(`The Setup workflow has no input ${input}`);
     let end = start + 1;
     while (end < lines.length && lines[end].startsWith("        ")) end++;
-    const line = `        default: ${JSON.stringify(String(config[key] ?? ""))}`;
+    // (a checkbox: true or false, without quotes)
+    const v = config[key];
+    const line = `        default: ${typeof v === "boolean" ? v : JSON.stringify(String(v ?? ""))}`;
     const at = lines.findIndex((l, i) => i > start && i < end && /^\s*default:/.test(l));
     if (at >= 0) lines[at] = line;
     else lines.splice(end, 0, line);

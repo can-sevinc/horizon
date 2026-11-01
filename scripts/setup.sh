@@ -58,12 +58,12 @@ get() { sed -n "s/^$1: *//p" "$CONFIG" | head -n1 | sed -e 's/ *#.*$//' -e 's/^"
 # Changes the line of a key (a number stays a number; text gets quotes)
 put() {
   local value="$2"
-  # (text: in double quotes, with \ and " escaped)
-  [[ "$value" =~ ^[0-9]+$ ]] || value="\"$(printf '%s' "$value" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')\""
+  # (a number or true/false stays as it is; text: in double quotes, with \ and " escaped)
+  [[ "$value" =~ ^([0-9]+|true|false)$ ]] || value="\"$(printf '%s' "$value" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')\""
   K="$1" V="$value" awk '!done && index($0, ENVIRON["K"] ":") == 1 { print ENVIRON["K"] ": " ENVIRON["V"]; done = 1; next } { print }' \
     "$CONFIG" >"$CONFIG.tmp" && mv "$CONFIG.tmp" "$CONFIG"
 }
-# ask <key> <question> <check: time|days|zone|day|text>
+# ask <key> <question> <check: time|days|zone|day|yesno|text>
 ask() {
   local key="$1" question="$2" check="$3" old value
   old=$(get "$key")
@@ -77,6 +77,7 @@ ask() {
       days) [[ "$value" =~ ^[1-9][0-9]*$ ]] && break; echo "  Use a number of days." ;;
       zone) [ -f "/usr/share/zoneinfo/$value" ] && break; echo "  Use a time zone name, for example Europe/Berlin." ;;
       day) [[ "$value" =~ ^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$ ]] && break; echo "  Use a day name, for example Monday." ;;
+      yesno) [[ "$value" =~ ^(true|false)$ ]] && break; echo "  Use true or false." ;;
       *) break ;;
     esac
   done
@@ -95,6 +96,7 @@ if [ -t 0 ]; then
   ask followUpDays "Days without news before a follow-up reminder" days
   ask ghostedDays "Days without an answer before the ghosted label" days
   ask salaryPlaceholder "Example in the Salary range field" text
+  ask telemetry "Count this copy? It adds 1 to Horizon's public install counter, nothing else (true/false)" yesno
 fi
 if ! git diff --quiet -- "$CONFIG"; then
   git add "$CONFIG"

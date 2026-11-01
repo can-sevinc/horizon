@@ -39,6 +39,10 @@ on:
       ghosted_days:
         description: "Days without an answer before the ghosted label"
         default: "30"
+      count_copy:
+        description: "Count this copy: add 1 to Horizon's public install counter. Nothing else is sent."
+        type: boolean
+        default: true
       salary_placeholder:
         description: "Example in the Salary range field, for example 60k-80k EUR/year"
         default: "70000-110000 SEK/month"

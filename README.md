@@ -5,6 +5,8 @@ Track your job search in a private Github repository. Each application is an iss
 
 Documentation: https://can-sevinc.github.io/horizon/
 
+![Installs](https://horizon.goatcounter.com/counter/install.svg?no_branding=1) ![Active this month](https://horizon.goatcounter.com/counter/active.svg?start=month&no_branding=1)
+
 ## Features
 
 <!-- GIF: the bookmark on a job post -->
@@ -40,6 +42,8 @@ More in [Setup](docs/setup.md). When the template changes, the **Update** workfl
 ## Keep it private
 
 Your applications, notes, and salaries live in the issues of your copy. The setup stops if the repository is public, and a daily check warns you if it ever becomes public.
+
+The only thing your copy sends out is a +1 to the public [install counter](https://horizon.goatcounter.com): once at setup and once a month when it checks for updates. No repository name, user, or data is sent, and `telemetry: false` in `config.yaml` turns it off.
 
 ## Settings
 

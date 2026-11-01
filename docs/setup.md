@@ -30,6 +30,10 @@ The script:
 - opens a page to make the token and saves it as `PROJECT_TOKEN`
 - runs the **Setup** workflow, which opens the same two issues as in the browser, and saves the bookmark to `data/bookmarklet.txt`
 
+## The install counter
+
+The Setup has a **Count this copy** checkbox, on by default. It adds 1 to the public [install counter](https://horizon.goatcounter.com) when the board is created, and the Update workflow adds 1 to the monthly active count. Nothing else is sent: no repository name, user, or data. Untick it, or set `telemetry: false` in `config.yaml`, to turn it off.
+
 ## What the setup creates
 
 Four views on the project board (the empty **View 1** of a new project becomes **Board**):
