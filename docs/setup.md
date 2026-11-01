@@ -11,7 +11,7 @@ You need a Github account. For the setup on your computer you also need `gh` (th
 
 1. Click **Use this template** > **Create a new repository** and choose **Private**. Your applications will be issues in this repository, so it has to stay private.
 2. After a minute, an issue called **Finish the setup** opens in your copy. It has three steps: make a token, save it as the secret `PROJECT_TOKEN`, and run **Actions** > **Setup**. The Setup fields show the default settings (Stockholm, for example), so change the ones that don't fit you. If the issue doesn't show up, run **Actions** > **Welcome** by hand.
-3. When the setup is done, it posts the bookmark and the last manual steps in that issue and closes it.
+3. When the setup is done, it closes that issue and opens two new ones with the `setup` label: **Prepare the board** and **Add the bookmark**. Follow them and close them when you are done.
 
 ## On your computer
 
@@ -28,13 +28,11 @@ The script:
 - stops if your repository is public
 - asks for your settings (board name, city, time zone, reminder times, and so on). Press Enter to keep the value in brackets. The answers go into `config.yaml`.
 - opens a page to make the token and saves it as `PROJECT_TOKEN`
-- runs the **Setup** workflow and saves the bookmark to `data/bookmarklet.txt`
-
-To add the bookmark, create a new bookmark in your browser and paste the text of `data/bookmarklet.txt` as its URL.
+- runs the **Setup** workflow, which opens the same two issues as in the browser, and saves the bookmark to `data/bookmarklet.txt`
 
 ## What the setup creates
 
-Four views on the project board:
+Four views on the project board (the empty **View 1** of a new project becomes **Board**):
 
 | View | Layout | Shows |
 | --- | --- | --- |
@@ -55,19 +53,28 @@ The **Status** options:
 | Rejected without interview | Gray | Stopped before any interview |
 | Offer | Purple | You got an offer |
 
-It also adds the fields **Applied date**, **Last update**, **Company**, **Position**, **City**, **Salary range**, **Recruiter**, **Job link**, and **Interviews**, plus the labels from `config.yaml`. It removes the default project workflows. Don't rename the statuses: the workflows look for these names.
+It also adds the fields **Applied date**, **Last update**, **Company**, **Position**, **City**, **Salary range**, **Recruiter**, **Job link**, and **Interviews**, plus the labels from `config.yaml`. On a new board, it removes the default project workflows and the labels that Github adds to every repository (`bug`, `question`, and so on). Your copy also gets its own short README with links to your board. Don't rename the statuses: the workflows look for these names.
 
 ## Manual steps
 
-The API can't sort views or set timeline dates, so do this once:
+Github doesn't let workflows sort views or set timeline dates, so the **Prepare the board** issue asks you to do this once:
 
-- **Board**: view menu > **Sort by** > **Last update**, descending. Save.
-- **Table**: **Sort by** > **Applied date**, ascending. Save.
-- **Interviews**: **Date fields** > start **Applied date**, target **Last update**. Save.
+| View | Settings |
+| --- | --- |
+| Board | Sort by **Last update**, new to old. Field sum: **Count** and **Interviews**. |
+| Table | Sort by **Applied date**, old to new |
+| Interviews | Sort by **Last update**, new to old. Dates: **Applied date** to **Last update**. Zoom level: **Year**. |
+| Summaries | Sort by **Created**, new to old |
+
+![Board view settings](images/board-view.png) ![Interviews view settings](images/interviews-view.png)
+
+The **Add the bookmark** issue has your bookmark code. In Chrome, right-click the bookmarks bar, choose **Add page...**, and paste the code as the URL:
+
+![Add bookmark in Chrome](images/add-bookmark.png)
 
 ## Run the setup again
 
-You can run the setup as often as you like, for example after you change `config.yaml`. It doesn't touch your issues or cards. It only adds what is missing and updates colors, descriptions, the form, and the workflow times. Your sorting, columns, and own views stay as they are. It asks before it replaces the token.
+You can run the setup as often as you like, for example after you change `config.yaml`. It doesn't touch your issues or cards. It only adds what is missing and updates colors, descriptions, the form, and the workflow times. Your sorting, columns, and own views stay as they are. It doesn't open the setup issues again. It asks before it replaces the token.
 
 To see what it would change without changing anything:
 

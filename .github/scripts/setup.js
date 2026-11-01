@@ -7,6 +7,7 @@ const path = require("path");
 const cfg = require("./config");
 const render = require("./render");
 const lib = require("./project");
+const issues = require("./setup-issues");
 
 const ROOT = path.join(__dirname, "../..");
 const FORM = ".github/ISSUE_TEMPLATE/application.yaml";
@@ -124,7 +125,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   }
   const project = async sel => (await pat.graphql(`query($o:String!, $n:Int!) { user(login:$o) { projectV2(number:$n) { ${sel} } } }`,
     { o: owner, n: num })).user.projectV2;
-  const p = await project("id title repositories(first:50) { nodes { nameWithOwner } }");
+  const p = await project("id title url repositories(first:50) { nodes { nameWithOwner } }");
   if (p.title !== config.projectTitle) {
     await change(`rename the project to "${config.projectTitle}"`, () => pat.graphql(`mutation($p:ID!, $t:String!) {
       updateProjectV2(input:{projectId:$p, title:$t}) { clientMutationId } }`, { p: p.id, t: config.projectTitle }));
@@ -209,7 +210,8 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   };
   sorted("Board", "Last update", "DESC");
   sorted("Table", "Applied date", "ASC");
-  todo.push("Interviews view (once): open the view > Date fields > start: Applied date, target: Last update.");
+  sorted("Interviews", "Last update", "DESC");
+  sorted("Summaries", "Created", "DESC");
 
   // --- The default workflows of a project use Todo/Done and work against these workflows ---
   const defaults = (await project("workflows(first:50) { nodes { id name } }")).workflows.nodes;
@@ -222,7 +224,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   if (!defaults.length) say("✓ No default project workflows");
 
   await commitFiles();
-  return finish();
+  return finish(p.url || `https://github.com/users/${owner}/projects/${num}`);
 
   // Commits the changed files in one commit with the token (a file in .github/workflows needs
   // the workflow scope)
@@ -246,11 +248,31 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     }
   }
 
-  async function finish() {
+  async function finish(projectUrl) {
     const mark = render.bookmarklet(fs.readFileSync(path.join(ROOT, "scripts/bookmarklet.src.js"), "utf8"), R);
     // (setup.sh reads these lines from the log)
     todo.forEach(t => core.info(`TODO ${t}`));
     core.info(`BOOKMARKLET ${mark}`);
+    // The steps for you, each in its own issue (once; the open bookmark issue gets the new bookmark)
+    const opened = [];
+    if (!dry) {
+      const branch = context.payload.repository.default_branch;
+      const all = await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: "all", per_page: 100 });
+      const open = async (title, body, refresh) => {
+        const old = all.find(i => i.title === title && !i.pull_request);
+        if (old) {
+          if (refresh && old.state === "open") await github.rest.issues.update({ owner, repo, issue_number: old.number, body });
+          return old;
+        }
+        const i = (await github.rest.issues.create({ owner, repo, title, labels: [issues.LABEL], body })).data;
+        say(`✓ Opened the issue "${title}"`);
+        opened.push(i);
+        return i;
+      };
+      const ctx = { owner, repo: R, branch, projectUrl, bookmarklet: mark };
+      if (projectUrl) await open(issues.PREPARE, issues.prepare(ctx), false);
+      await open(issues.BOOKMARK, issues.bookmark(ctx), true);
+    }
     await core.summary
       .addHeading(dry ? "Setup (dry run: nothing changed)" : "Setup")
       .addList(out)
@@ -261,18 +283,18 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       .addCodeBlock(mark)
       .addRaw(`New application form (for your phone): https://github.com/${R}/issues/new?template=application.yaml`, true)
       .write();
-    // Browser setup: the bookmark and the last steps in the "Finish the setup" issue, which closes
+    // Browser setup: the "Finish the setup" issue points to the new issues, and closes
     if (!dry) {
       const { TITLE } = require("./welcome");
-      const issues = (await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: "open", per_page: 100 }))
+      const finishing = (await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: "open", per_page: 100 }))
         .filter(i => i.title === TITLE);
-      for (const i of issues) {
+      const extra = todo.filter(t => !t.startsWith("Sort the "));
+      for (const i of finishing) {
         await github.rest.issues.createComment({ owner, repo, issue_number: i.number, body: [
           "The setup is done.", "", ...out.map(o => `- ${o}`), "",
-          "**The bookmark:** make a new bookmark in your browser and paste this text into its URL field:", "",
-          "```", mark, "```", "",
-          ...(todo.length ? ["**Steps for you** (the API cannot do these):", "", ...todo.map(t => `- [ ] ${t}`), ""] : []),
-          `New application form (save it on your phone): https://github.com/${R}/issues/new?template=application.yaml`,
+          ...(opened.length ? ["Next steps:", "", ...opened.map(o => `- [ ] #${o.number} ${o.title}`), ""] : []),
+          // (the sort of the views is in the Prepare the board issue)
+          ...(extra.length ? ["Also:", "", ...extra.map(t => `- [ ] ${t}`), ""] : []),
         ].join("\n") });
         await github.rest.issues.update({ owner, repo, issue_number: i.number, state: "closed", state_reason: "completed" });
       }

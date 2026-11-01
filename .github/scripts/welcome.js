@@ -10,7 +10,7 @@ module.exports = async ({ github, context, core }) => {
   const open = await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: "open", per_page: 100 });
   if (open.some(i => i.title === TITLE)) return core.info("The setup issue is already open");
   const visibility = (await github.rest.repos.get({ owner, repo })).data.private ? "private" : "public";
-  const l = lib.config.labels.find(l => l.name === "maintenance");
+  const l = lib.config.labels.find(l => l.name === "setup");
   try {
     await github.rest.issues.createLabel({ owner, repo, name: l.name, color: l.color, description: l.description });
   } catch (e) { if (e.status !== 422) throw e; }  // 422: the label exists
@@ -29,11 +29,11 @@ module.exports = async ({ github, context, core }) => {
     `- [ ] **Run the setup**: [Actions > Setup](${base}/actions/workflows/setup.yaml) > **Run workflow**. ` +
       "The fields show the default settings. Change what you want, for example your city and time zone, and click **Run workflow**.",
     "",
-    "The setup creates the labels and the project board. Then it posts your bookmark here and closes this issue.",
+    "The setup creates the labels and the project board. Then it opens two short issues for the last steps (the board views and the bookmark) and closes this one.",
     "",
     "Prefer the terminal? Clone this repository and run `bash scripts/setup.sh` (needs `gh` and `git`).",
   ].join("\n");
-  await github.rest.issues.create({ owner, repo, title: TITLE, labels: ["maintenance"], body });
+  await github.rest.issues.create({ owner, repo, title: TITLE, labels: ["setup"], body });
   core.info(`Opened "${TITLE}" (${visibility} repository)`);
 };
 module.exports.TITLE = TITLE;

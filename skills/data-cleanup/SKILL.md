@@ -16,7 +16,7 @@ gh issue list -R "$R" --state all --limit 1000 --json number,title,state,stateRe
 
 The form sections in the body are `### Section` headings (`.github/ISSUE_TEMPLATE/application.yaml`).
 The statuses, fields, sources, and labels are in `config.yaml`. Skip issues with the labels
-`summary` and `maintenance`.
+`summary`, `setup`, and `maintenance`.
 
 ## Look for
 

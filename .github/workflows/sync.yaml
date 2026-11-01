@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   sync:
-    if: "!contains(github.event.issue.labels.*.name, 'summary') && !contains(github.event.issue.labels.*.name, 'maintenance')"
+    if: "!contains(github.event.issue.labels.*.name, 'summary') && !contains(github.event.issue.labels.*.name, 'maintenance') && !contains(github.event.issue.labels.*.name, 'setup')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

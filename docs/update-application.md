@@ -65,6 +65,7 @@ So update **Interviews** before you close. The issue is closed as **not planned*
 | `redirected` | Moved to another process | `/moved` |
 | `ghosted` | No answer for 30 days | The workflow |
 | `summary` | Weekly summary | The workflow |
+| `setup` | A setup step for you | The setup |
 | `maintenance` | A setup problem | The Doctor workflow |
 | `imported` | Imported from old data | The import script |
 | `period: ...` | The job search period | The workflow |

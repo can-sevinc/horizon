@@ -38,8 +38,8 @@ function board() {
   const views = [
     { id: "V1", name: "Board", layout: "BOARD_LAYOUT", filter: "-label:summary", fields: ["Title", "Labels", "Applied date", "Last update", "Interviews"], sort: ["Last update", "DESC"] },
     { id: "V2", name: "Table", layout: "TABLE_LAYOUT", filter: "-label:summary", fields: ["Title", "Status", "Applied date", "Last update", "Interviews", "Company", "Position", "City", "Salary range", "Recruiter", "Job link", "Labels"], sort: ["Applied date", "ASC"] },
-    { id: "V3", name: "Interviews", layout: "ROADMAP_LAYOUT", filter: 'status:"In progress","On hold","Rejected after interview" -label:summary', fields: [] },
-    { id: "V4", name: "Summaries", layout: "TABLE_LAYOUT", filter: "label:summary", fields: ["Title", "Created"] },
+    { id: "V3", name: "Interviews", layout: "ROADMAP_LAYOUT", filter: 'status:"In progress","On hold","Rejected after interview" -label:summary', fields: [], sort: ["Last update", "DESC"] },
+    { id: "V4", name: "Summaries", layout: "TABLE_LAYOUT", filter: "label:summary", fields: ["Title", "Created"], sort: ["Created", "DESC"] },
   ];
   const mutations = [];
   const graphql = async q => {
@@ -76,7 +76,7 @@ test("a board that matches config.yaml: no changes, the bookmark", async () => {
   assert.deepStrictEqual(mutations, []);
   assert.ok(!calls.some(([n]) => n === "createLabel" || n === "updateLabel"));
   assert.match(res.bookmarklet, /^javascript:\(\(\) => \{ const REPO = 'o\/r';/);
-  assert.strictEqual(res.todo.length, 1);
+  assert.deepStrictEqual(res.todo, []);
 });
 
 test("dry run: a new setting changes nothing, a bad time fails", async () => {
@@ -161,15 +161,29 @@ test("a scheduled run happens only for the cron line of today's UTC offset", () 
   assert.strictEqual(lib.onTime({ eventName: "workflow_dispatch", payload: {} }, "reminderTime"), true);
 });
 
-test("browser setup: the bookmark goes into the Finish the setup issue, which closes", async () => {
+test("the steps for you get their own issues, and Finish the setup closes with links to them", async () => {
   const { TITLE } = require("../.github/scripts/welcome");
-  const { calls } = await run({}, board(), [{ number: 7, title: TITLE }, { number: 8, title: "[Acme] Dev" }]);
+  const issues = require("../.github/scripts/setup-issues");
+  const { calls } = await run({}, board(), [{ number: 7, title: TITLE, state: "open" }, { number: 8, title: "[Acme] Dev", state: "open" }]);
+  const created = calls.filter(([n]) => n === "create").map(([, a]) => a);
+  assert.deepStrictEqual(created.map(a => a.title), [issues.PREPARE, issues.BOOKMARK]);
+  assert.ok(created.every(a => a.labels[0] === "setup"));
+  assert.match(created[0].body, /Field sum: \*\*Count\*\* and \*\*Interviews\*\*[\s\S]*board-view\.png\?raw=true[\s\S]*Zoom level: \*\*Year\*\*/);
+  assert.match(created[1].body, /```\n   javascript:[\s\S]*add-bookmark\.png/);
   const comment = calls.find(([n, a]) => n === "createComment" && a.issue_number === 7);
-  assert.ok(comment && /javascript:/.test(comment[1].body) && /Steps for you/.test(comment[1].body));
+  assert.match(comment[1].body, /Next steps:\n\n- \[ \] #\d+ Prepare the board\n- \[ \] #\d+ Add the bookmark/);
   assert.ok(calls.some(([n, a]) => n === "update" && a.issue_number === 7 && a.state === "closed"));
   assert.ok(!calls.some(([, a]) => a && a.issue_number === 8));
   const dry = await run({ dry_run: true }, board(), [{ number: 7, title: TITLE }]);
-  assert.ok(!dry.calls.some(([n]) => n === "createComment"));
+  assert.ok(!dry.calls.some(([n]) => n === "createComment" || n === "create"));
+});
+
+test("a second run opens no new issues; the open bookmark issue gets the current bookmark", async () => {
+  const issues = require("../.github/scripts/setup-issues");
+  const { calls } = await run({}, board(), [{ number: 3, title: issues.PREPARE, state: "closed" }, { number: 4, title: issues.BOOKMARK, state: "open" }]);
+  assert.ok(!calls.some(([n]) => n === "create"));
+  assert.ok(calls.some(([n, a]) => n === "update" && a.issue_number === 4 && /javascript:/.test(a.body)));
+  assert.ok(!calls.some(([n, a]) => n === "update" && a.issue_number === 3));
 });
 
 test("a new project: View 1 becomes the Board, and the Github default labels go", async () => {

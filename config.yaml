@@ -139,6 +139,9 @@ labels:
   - name: ghosted
     color: "3D3D3D"
     description: Applied, but no answer for a long time (ghostedDays)
+  - name: setup
+    color: "0E8A16"
+    description: A setup step for you
   - name: maintenance
     color: "B60205"
     description: A problem with the setup, for example the token

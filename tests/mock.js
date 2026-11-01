@@ -17,7 +17,7 @@ module.exports = function mock({ body = "", issues = [], labels = [], workflows 
         update: rec("update"), addLabels: rec("addLabels"), removeLabel: rec("removeLabel"),
         createLabel: rec("createLabel"), createComment: rec("createComment"), updateComment: rec("updateComment"),
         deleteLabel: rec("deleteLabel"),
-        create: async args => { calls.push(["create", args]); return { data: { node_id: "N" } }; },
+        create: async args => { calls.push(["create", args]); return { data: { node_id: "N", number: 100 + calls.length, title: args.title } }; },
       },
     },
   };
