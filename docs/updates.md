@@ -17,7 +17,7 @@ For each file:
 - If only you changed it, your version stays.
 - If you both changed it, the changes are merged. If you both changed the same lines, the pull request has the template's version and lists the file under **Check these files**, so you can add your change again.
 
-`config.yaml` always stays yours. If the template added a new setting, it is added with its default value. The form, the workflow times, and the Setup fields are made again from your settings, so your city and times stay as they are.
+`config.yaml` and `README.md` always stay yours. If the template added a new setting, it is added with its default value. The form, the workflow times, and the Setup fields are made again from your settings, so your city and times stay as they are.
 
 After you merge, run **Actions** > **Setup** once, so your board gets any new labels or fields. If the bookmark changed, the pull request tells you, and the Setup run shows the new one.
 

@@ -7,7 +7,7 @@
 //   - a file that you did not change gets the new version; a file that only you changed stays;
 //     a file that both changed is merged line by line (git merge-file), or, when the same lines
 //     changed, gets the new version and is listed in the pull request to check
-//   - config.yaml stays yours: only new settings are added. The form and the workflow times and
+//   - config.yaml and README.md stay yours: only new settings are added. The form and the workflow times and
 //     fields are made again from it.
 const { execFileSync } = require("child_process");
 const fs = require("fs");
@@ -17,7 +17,8 @@ const path = require("path");
 const TEMPLATE_VERSION = ".github/template-version";
 const BRANCH = "update-from-template";
 // Never taken from the template
-const KEEP = p => p === "config.yaml" || p === TEMPLATE_VERSION || p.startsWith("data/");
+// (README.md: a copy has its own, made by the setup from templates/README.md)
+const KEEP = p => p === "config.yaml" || p === "README.md" || p === TEMPLATE_VERSION || p.startsWith("data/");
 
 // owner/name -> its Github URL; a URL or a folder stays as it is (the tests use a folder)
 const templateUrl = t => /^[\w.-]+\/[\w.-]+$/.test(t) ? `https://github.com/${t}.git` : t;

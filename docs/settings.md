@@ -35,7 +35,8 @@ Github runs schedules in UTC. Each scheduled workflow has one line for summer ti
 | `config.yaml` | The settings |
 | `.github/workflows/`, `.github/scripts/` | The workflows and their code |
 | `.github/ISSUE_TEMPLATE/application.yaml` | The new application form (Github needs it here) |
-| `templates/` | The form (a link to the file above) and the interview notes template |
+| `templates/` | The form (a link to the file above), the interview notes template, and the README of a new copy |
+| `docs/images/` | Screenshots for the docs and the setup issues |
 | `scripts/setup.sh` | The setup on your computer |
 | `scripts/bookmarklet.src.js` | The bookmark code. After a change, run `bash scripts/make_bookmarklet.sh USER/job-applications` |
 | `scripts/import_applications.py`, `scripts/import_csv.py` | The importers |

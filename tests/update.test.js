@@ -42,13 +42,13 @@ test("update: a copy made from the template gets the new version, and keeps its 
   const cfg = require("../.github/scripts/config");
   edit(mine, "config.yaml", t => cfg.setValues(t, { city: "Oslo, NO", templateRepo: tpl }));
   edit(mine, ".github/ISSUE_TEMPLATE/application.yaml", t => render.issueForm(t, cfg.parse(read(mine, "config.yaml"))));
-  edit(mine, "README.md", t => t.replace(/^# Horizon$/m, "# My job search"));
+  edit(mine, "AGENTS.md", t => t.replace(/^# .*$/m, "# My agents"));
   edit(mine, "skills/weekly-plan/SKILL.md", t => t.replace(/^# .*$/m, "# My weekly plan"));
   git(mine, "commit", "-qam", "my changes");
 
   // The new version of the template
   edit(tpl, "scripts/bookmarklet.src.js", t => t + "// new\n");
-  edit(tpl, "README.md", t => t.replace(/^## License$/m, "## License (new)"));
+  edit(tpl, "AGENTS.md", t => t.replace(/^## Skills$/m, "## Skills (new)"));
   edit(tpl, "skills/weekly-plan/SKILL.md", t => t.replace(/^# .*$/m, "# Weekly plan (new)"));
   edit(tpl, ".github/ISSUE_TEMPLATE/application.yaml", t => t.replace("label: Salary range", "label: Salary"));
   edit(tpl, "config.yaml", t => t + "\n# A new setting\nnewSetting: 5\n");
@@ -64,7 +64,7 @@ test("update: a copy made from the template gets the new version, and keeps its 
   assert.ok(fs.existsSync(path.join(mine, "docs/new.md")));
   assert.ok(!fs.existsSync(path.join(mine, "docs/troubleshooting.md")));
   assert.ok(r.bookmark);
-  assert.match(read(mine, "README.md"), /^# My job search$[\s\S]*^## License \(new\)$/m);
+  assert.match(read(mine, "AGENTS.md"), /^# My agents$[\s\S]*^## Skills \(new\)$/m);
   assert.deepStrictEqual(r.check, ["skills/weekly-plan/SKILL.md"]);
   assert.match(read(mine, "skills/weekly-plan/SKILL.md"), /^# Weekly plan \(new\)$/m);
   assert.deepStrictEqual(r.added, ["newSetting"]);

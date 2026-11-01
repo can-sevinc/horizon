@@ -18,6 +18,8 @@ const TABLE_FIELDS = ["Title", "Status", "Applied date", "Last update", "Intervi
 // The labels that Github adds to a new repository: removed when the setup makes the board
 const DEFAULT_LABELS = ["bug", "documentation", "duplicate", "enhancement", "good first issue", "help wanted",
   "invalid", "question", "wontfix", "accessibility"];
+// The README of Horizon has this line; a copy gets templates/README.md instead
+const PITCH = "<!-- horizon: the README of the template -->";
 const NEW_TOKEN = "https://github.com/settings/tokens/new?scopes=repo,project,workflow&description=job-applications";
 
 module.exports = async ({ github, context, core, getOctokit }) => {
@@ -222,6 +224,13 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     } catch (e) { todo.push(`Turn off the project workflow "${w.name}": project menu > Workflows.`); }
   }
   if (!defaults.length) say("✓ No default project workflows");
+
+  // A copy of the template gets its own README, with the links of its board
+  const readme = fs.readFileSync(path.join(ROOT, "README.md"), "utf8");
+  if (readme.includes(PITCH) && !context.payload.repository.is_template) {
+    files["README.md"] = fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8")
+      .replace(/\{\{REPO\}\}/g, R).replace(/\{\{PROJECT_URL\}\}/g, p.url || `https://github.com/users/${owner}/projects/${num}`);
+  }
 
   await commitFiles();
   return finish(p.url || `https://github.com/users/${owner}/projects/${num}`);

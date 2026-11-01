@@ -1,3 +1,4 @@
+<!-- horizon: the README of the template -->
 # Horizon
 
 Track your job search in a private Github repository. Each application is an issue and a card on a project board, and a few workflows keep it up to date. No server and no subscription.

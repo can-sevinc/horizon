@@ -60,14 +60,15 @@ function board() {
 const labels = [...config.labels.map(l => ({ name: l.name, color: l.color, description: l.description })),
   ...config.sources.map(s => ({ name: s.label, color: s.color, description: "" })), { name: "period: 2026", color: "C5DEF5" }];
 
-async function run(inputs, b = board(), issues = []) {
+// (the tests run in the template: its README stays, see the README test)
+async function run(inputs, b = board(), issues = [], template = true) {
   Object.assign(process.env, { PROJECT_TOKEN: "x", PROJECT_NUMBER: "1", CURRENT_PERIOD: "2026" });
   const m = mock({ graphql: b.graphql });
   m.github.paginate = async fn => fn === "listLabelsForRepo" ? labels : issues;
   m.core.setFailed = msg => m.calls.push(["failed", msg]);
   m.core.info = msg => m.calls.push(["info", msg]);
   const res = await setup({ github: m.github, core: m.core, getOctokit: m.getOctokit,
-    context: { repo: { owner: "o", repo: "r" }, payload: { inputs, repository: { node_id: "R", default_branch: "main" } } } });
+    context: { repo: { owner: "o", repo: "r" }, payload: { inputs, repository: { node_id: "R", default_branch: "main", is_template: template } } } });
   return { ...m, res, mutations: b.mutations };
 }
 
@@ -118,6 +119,13 @@ test("fields left at their defaults keep config.yaml, a changed field is saved",
   const changed = changes(await run({ dry_run: "true", ...defaults, city: "Oslo, NO" }));
   assert.ok(["config.yaml", ".github/ISSUE_TEMPLATE/application.yaml", render.SETUP_WORKFLOW]
     .every(f => changed.includes(`(dry run) would change ${f}`)), changed.join("\n"));
+});
+
+test("a copy of the template gets its own README with its links", async () => {
+  const { calls } = await run({ dry_run: "true" }, board(), [], false);
+  assert.ok(calls.some(([n, m]) => n === "info" && m === "(dry run) would change README.md"));
+  const tpl = fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8");
+  assert.ok(!tpl.includes("<!-- horizon:") && tpl.includes("{{PROJECT_URL}}"));
 });
 
 test("a missing field and Status option are made", async () => {
