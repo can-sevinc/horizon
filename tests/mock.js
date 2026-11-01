@@ -10,7 +10,8 @@ module.exports = function mock({ body = "", issues = [], labels = [], workflows 
     paginate: async fn => fn === "listLabelsForRepo" ? labels.map(name => ({ name }))
       : fn === "listRepoWorkflows" ? workflows : issues,
     rest: {
-      repos: { get: async () => ({ data: repo }) },
+      repos: { get: async () => ({ data: repo }), getContent: async () => ({ data: { sha: "S" } }),
+        createOrUpdateFileContents: rec("createOrUpdateFileContents") },
       actions: { listRepoWorkflows: "listRepoWorkflows" },
       issues: {
         get: async () => ({ data: { body } }), listForRepo: "listForRepo", listLabelsForRepo: "listLabelsForRepo",

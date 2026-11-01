@@ -1,12 +1,18 @@
 // Welcome workflow: in a new copy of the template (not set up yet), an issue with the steps of
 // the setup in the browser. The Setup workflow writes the bookmark into it and closes it.
+const fs = require("fs");
+const path = require("path");
 const lib = require("./project");
+const render = require("./render");
+
+const ROOT = path.join(__dirname, "../..");
 
 const TITLE = "Finish the setup";
 const TOKEN_LINK = "https://github.com/settings/tokens/new?scopes=repo,project,workflow&description=job-applications";
 
 module.exports = async ({ github, context, core }) => {
   const { owner, repo } = context.repo;
+  await ownReadme(github, owner, repo, core);
   const open = await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: "open", per_page: 100 });
   if (open.some(i => i.title === TITLE)) return core.info("The setup issue is already open");
   const visibility = (await github.rest.repos.get({ owner, repo })).data.private ? "private" : "public";
@@ -37,4 +43,14 @@ module.exports = async ({ github, context, core }) => {
   await github.rest.issues.create({ owner, repo, title: TITLE, labels: ["setup"], body });
   core.info(`Opened "${TITLE}" (${visibility} repository)`);
 };
+
+// The README of Horizon is for people who don't use it yet: a copy gets templates/README.md
+async function ownReadme(github, owner, repo, core) {
+  if (!fs.readFileSync(path.join(ROOT, "README.md"), "utf8").includes(render.PITCH)) return;
+  const text = render.copyReadme(fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8"), `${owner}/${repo}`);
+  const { sha } = (await github.rest.repos.getContent({ owner, repo, path: "README.md" })).data;
+  await github.rest.repos.createOrUpdateFileContents({ owner, repo, path: "README.md", sha,
+    message: "chore: use the README of a copy", content: Buffer.from(text).toString("base64") });
+  core.info("README.md: the README of a copy");
+}
 module.exports.TITLE = TITLE;

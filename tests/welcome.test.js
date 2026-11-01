@@ -22,6 +22,17 @@ test("a public copy gets a warning first", async () => {
   assert.match((await run({ repo: { private: false } })).body, /^> \[!CAUTION\]\n> \*\*This repository is public/);
 });
 
+test("a new copy gets its own README, once", async () => {
+  const m = mock({ issues: [{ title: welcome.TITLE }] });
+  await welcome({ github: m.github, core: m.core, context: { repo: { owner: "me", repo: "jobs" } } });
+  const [, put] = m.calls.find(([n]) => n === "createOrUpdateFileContents");
+  const text = Buffer.from(put.content, "base64").toString();
+  assert.strictEqual(put.sha, "S");
+  assert.match(text, /^# Job applications/);
+  assert.match(text, /github\.com\/me\/jobs\/projects/);
+  assert.ok(!text.includes("{{"));
+});
+
 test("no second issue", async () => {
   assert.strictEqual(await run({ issues: [{ title: welcome.TITLE }] }), undefined);
 });

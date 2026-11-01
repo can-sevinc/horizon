@@ -32,6 +32,11 @@ function issueForm(text, config) {
   return formAttribute(text, "salary", "placeholder", config.salaryPlaceholder || "");
 }
 
+// --- The README of a copy ---
+// The README of Horizon has this line; a copy gets templates/README.md instead
+const PITCH = "<!-- horizon: the README of the template -->";
+const copyReadme = (text, repo) => text.replace(/\{\{REPO\}\}/g, repo);
+
 // --- The fields of the Setup workflow ---
 // The settings that the Setup workflow can change: input -> config.yaml key
 const INPUTS = {
@@ -118,4 +123,4 @@ function workflowSchedule(text, config, keys) {
   return text.replace(re, (_, head) => head + block.join("\n") + "\n");
 }
 
-module.exports = { bookmarklet, formAttribute, issueForm, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };
+module.exports = { bookmarklet, formAttribute, issueForm, PITCH, copyReadme, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };

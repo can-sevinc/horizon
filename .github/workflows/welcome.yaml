@@ -1,7 +1,7 @@
 name: Welcome
 
-# In a new copy of the template: opens a "Finish the setup" issue with the steps of the setup in
-# the browser. It does nothing when the setup is done (PROJECT_NUMBER is set), and in the
+# In a new copy of the template: replaces the README with the one of a copy (templates/README.md)
+# and opens a "Finish the setup" issue with the steps of the setup in the browser. It does nothing when the setup is done (PROJECT_NUMBER is set), and in the
 # template itself. If no issue opens, run it by hand: Actions > Welcome > Run workflow.
 
 on:
@@ -10,7 +10,7 @@ on:
 
 permissions:
   issues: write
-  contents: read
+  contents: write
 
 jobs:
   welcome:

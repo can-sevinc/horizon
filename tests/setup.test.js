@@ -125,7 +125,7 @@ test("a copy of the template gets its own README with its links", async () => {
   const { calls } = await run({ dry_run: "true" }, board(), [], false);
   assert.ok(calls.some(([n, m]) => n === "info" && m === "(dry run) would change README.md"));
   const tpl = fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8");
-  assert.ok(!tpl.includes("<!-- horizon:") && tpl.includes("{{PROJECT_URL}}"));
+  assert.ok(!tpl.includes("<!-- horizon:") && tpl.includes("{{REPO}}"));
 });
 
 test("a missing field and Status option are made", async () => {

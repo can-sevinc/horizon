@@ -1,6 +1,6 @@
 # Job applications
 
-My job search, tracked with [Horizon](https://github.com/can-sevinc/horizon). Each application is an issue and a card on the [project board]({{PROJECT_URL}}).
+My job search, tracked with [Horizon](https://github.com/can-sevinc/horizon). Each application is an issue and a card on the [project board](https://github.com/{{REPO}}/projects).
 
 Keep this repository private. The issues have your applications, notes, and salaries.
 
@@ -12,7 +12,7 @@ Keep this repository private. The issues have your applications, notes, and sala
 
 ## Update an application
 
-Move the card on the [board]({{PROJECT_URL}}), or start a comment with a command:
+Move the card on the [board](https://github.com/{{REPO}}/projects), or start a comment with a command:
 
 | Command | What it does |
 | --- | --- |

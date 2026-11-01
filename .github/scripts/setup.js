@@ -19,8 +19,6 @@ const TABLE_FIELDS = ["Title", "Status", "Applied date", "Last update", "Intervi
 // The labels that Github adds to a new repository: removed when the setup makes the board
 const DEFAULT_LABELS = ["bug", "documentation", "duplicate", "enhancement", "good first issue", "help wanted",
   "invalid", "question", "wontfix", "accessibility"];
-// The README of Horizon has this line; a copy gets templates/README.md instead
-const PITCH = "<!-- horizon: the README of the template -->";
 const NEW_TOKEN = "https://github.com/settings/tokens/new?scopes=repo,project,workflow&description=job-applications";
 
 module.exports = async ({ github, context, core, getOctokit }) => {
@@ -227,11 +225,11 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   }
   if (!defaults.length) say("✓ No default project workflows");
 
-  // A copy of the template gets its own README, with the links of its board
+  // A copy of the template gets its own README (the Welcome workflow does it first; this is for
+  // a copy without it)
   const readme = fs.readFileSync(path.join(ROOT, "README.md"), "utf8");
-  if (readme.includes(PITCH) && !context.payload.repository.is_template) {
-    files["README.md"] = fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8")
-      .replace(/\{\{REPO\}\}/g, R).replace(/\{\{PROJECT_URL\}\}/g, p.url || `https://github.com/users/${owner}/projects/${num}`);
+  if (readme.includes(render.PITCH) && !context.payload.repository.is_template) {
+    files["README.md"] = render.copyReadme(fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8"), R);
   }
 
   await commitFiles();
@@ -244,14 +242,18 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     if (!paths.length) return say("✓ Files already match config.yaml");
     if (dry) return paths.forEach(f => say(`(dry run) would change ${f}`));
     const branch = context.payload.repository.default_branch;
-    const ref = (await pat.rest.git.getRef({ owner, repo, ref: `heads/${branch}` })).data;
-    const base = (await pat.rest.git.getCommit({ owner, repo, commit_sha: ref.object.sha })).data;
-    const tree = (await pat.rest.git.createTree({ owner, repo, base_tree: base.tree.sha,
-      tree: paths.map(f => ({ path: f, mode: "100644", type: "blob", content: files[f] })) })).data;
-    const commit = (await pat.rest.git.createCommit({ owner, repo, message: "chore: apply the settings of config.yaml",
-      tree: tree.sha, parents: [ref.object.sha] })).data;
-    try {
+    const push = async () => {
+      const ref = (await pat.rest.git.getRef({ owner, repo, ref: `heads/${branch}` })).data;
+      const base = (await pat.rest.git.getCommit({ owner, repo, commit_sha: ref.object.sha })).data;
+      const tree = (await pat.rest.git.createTree({ owner, repo, base_tree: base.tree.sha,
+        tree: paths.map(f => ({ path: f, mode: "100644", type: "blob", content: files[f] })) })).data;
+      const commit = (await pat.rest.git.createCommit({ owner, repo, message: "chore: apply the settings of config.yaml",
+        tree: tree.sha, parents: [ref.object.sha] })).data;
       await pat.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: commit.sha });
+    };
+    try {
+      // (once more when the branch moved in the meantime, for example by the Welcome workflow)
+      await push().catch(e => e.status === 422 ? push() : Promise.reject(e));
       say(`✓ Changed ${paths.join(", ")}`);
     } catch (e) {
       core.warning(`The files could not be changed (${e.message}). A file in .github/workflows needs a token with the workflow scope: ${NEW_TOKEN}`);
