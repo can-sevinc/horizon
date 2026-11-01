@@ -65,6 +65,7 @@ async function run(inputs, b = board(), issues = []) {
   const m = mock({ graphql: b.graphql });
   m.github.paginate = async fn => fn === "listLabelsForRepo" ? labels : issues;
   m.core.setFailed = msg => m.calls.push(["failed", msg]);
+  m.core.info = msg => m.calls.push(["info", msg]);
   const res = await setup({ github: m.github, core: m.core, getOctokit: m.getOctokit,
     context: { repo: { owner: "o", repo: "r" }, payload: { inputs, repository: { node_id: "R", default_branch: "main" } } } });
   return { ...m, res, mutations: b.mutations };
@@ -84,6 +85,39 @@ test("dry run: a new setting changes nothing, a bad time fails", async () => {
   assert.deepStrictEqual(mutations, []);
   const bad = await run({ reminder_time: "9:5" });
   assert.ok(bad.calls.some(([n, m]) => n === "failed" && /HH:MM/.test(m)));
+});
+
+test("the Setup workflow fields show the values of config.yaml", () => {
+  const text = fs.readFileSync(path.join(ROOT, render.SETUP_WORKFLOW), "utf8");
+  assert.strictEqual(render.setupInputs(text, cfg.load()), text);
+  const changed = render.setupInputs(text, { ...cfg.load(), city: "Oslo, NO", followUpDays: 7 });
+  assert.match(changed, /      city:\n.*\n        default: "Oslo, NO"\n/);
+  assert.strictEqual(render.inputDefaults(changed).follow_up_days, "7");
+});
+
+test("fields left at their defaults keep config.yaml, a changed field is saved", async () => {
+  const text = fs.readFileSync(path.join(ROOT, render.SETUP_WORKFLOW), "utf8");
+  const same = await run({ dry_run: "true", ...render.inputDefaults(text) });
+  assert.ok(same.res.dry && !same.calls.some(([n, m]) => n === "info" && /would change/.test(m)));
+  const changed = await run({ dry_run: "true", ...render.inputDefaults(text), city: "Oslo, NO" });
+  assert.ok(changed.calls.some(([n, m]) => n === "info" && /would change config\.yaml/.test(m)));
+});
+
+test("the Setup workflow fields show the values of config.yaml", () => {
+  const text = fs.readFileSync(path.join(ROOT, render.SETUP_WORKFLOW), "utf8");
+  assert.strictEqual(render.setupInputs(text, cfg.load()), text);
+  const changed = render.setupInputs(text, { ...cfg.load(), city: "Oslo, NO", followUpDays: 7 });
+  assert.match(changed, /      city:\n.*\n        default: "Oslo, NO"\n/);
+  assert.strictEqual(render.inputDefaults(changed).follow_up_days, "7");
+});
+
+test("fields left at their defaults keep config.yaml, a changed field is saved", async () => {
+  const defaults = render.inputDefaults(fs.readFileSync(path.join(ROOT, render.SETUP_WORKFLOW), "utf8"));
+  const changes = r => r.calls.filter(([n, m]) => n === "info" && /would change/.test(m)).map(([, m]) => m);
+  assert.deepStrictEqual(changes(await run({ dry_run: "true", ...defaults })), []);
+  const changed = changes(await run({ dry_run: "true", ...defaults, city: "Oslo, NO" }));
+  assert.ok(["config.yaml", ".github/ISSUE_TEMPLATE/application.yaml", render.SETUP_WORKFLOW]
+    .every(f => changed.includes(`(dry run) would change ${f}`)), changed.join("\n"));
 });
 
 test("a missing field and Status option are made", async () => {

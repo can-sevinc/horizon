@@ -20,18 +20,18 @@ module.exports = async ({ github, context, core }) => {
       "> [!CAUTION]",
       `> **This repository is public.** Your applications will be issues here, so everyone could read them. ` +
       `Make it private first: [Settings](${base}/settings) > **Change visibility** > **Make private**.`, ""] : []),
-    `@${owner} welcome! Three steps, all in the browser:`,
+    `@${owner} welcome! Three steps to finish the setup:`,
     "",
-    `- [ ] **Make a token**, so the workflows can change your project board: [open this link](${TOKEN_LINK}), ` +
-      "choose an expiration (for example 90 days; the daily check reminds you before it expires), click **Generate token**, and copy it.",
-    `- [ ] **Save the token** as a secret: [New repository secret](${base}/settings/secrets/actions/new), ` +
-      "name `PROJECT_TOKEN`, paste the token, click **Add secret**.",
+    `- [ ] **Make a token** so the workflows can update your board: [open this link](${TOKEN_LINK}), ` +
+      "pick an expiration (90 days is fine, you get a reminder before it expires), click **Generate token**, and copy it.",
+    `- [ ] **Save it** as a [new repository secret](${base}/settings/secrets/actions/new) ` +
+      "called `PROJECT_TOKEN`.",
     `- [ ] **Run the setup**: [Actions > Setup](${base}/actions/workflows/setup.yaml) > **Run workflow**. ` +
-      "Fill in your time zone, the default City, and the other fields (empty: the value in `config.yaml`), then click **Run workflow**.",
+      "The fields show the default settings. Change what you want, for example your city and time zone, and click **Run workflow**.",
     "",
-    "The setup makes the labels and the project board. When it is done, it writes the bookmark and the last steps here, and closes this issue.",
+    "The setup creates the labels and the project board. Then it posts your bookmark here and closes this issue.",
     "",
-    "On your computer instead? Clone this repository and run `bash scripts/setup.sh` (it needs `gh` and `git`).",
+    "Prefer the terminal? Clone this repository and run `bash scripts/setup.sh` (needs `gh` and `git`).",
   ].join("\n");
   await github.rest.issues.create({ owner, repo, title: TITLE, labels: ["maintenance"], body });
   core.info(`Opened "${TITLE}" (${visibility} repository)`);

@@ -32,6 +32,44 @@ function issueForm(text, config) {
   return formAttribute(text, "salary", "placeholder", config.salaryPlaceholder || "");
 }
 
+// --- The fields of the Setup workflow ---
+// The settings that the Setup workflow can change: input -> config.yaml key
+const INPUTS = {
+  project_title: "projectTitle", city: "city", timezone: "timezone", reminder_time: "reminderTime",
+  summary_day: "summaryDay", summary_time: "summaryTime", follow_up_days: "followUpDays",
+  ghosted_days: "ghostedDays", salary_placeholder: "salaryPlaceholder",
+};
+const SETUP_WORKFLOW = ".github/workflows/setup.yaml";
+
+// The Setup workflow with the values of config.yaml as the defaults of its fields
+function setupInputs(text, config) {
+  const lines = text.split("\n");
+  for (const [input, key] of Object.entries(INPUTS)) {
+    const start = lines.indexOf(`      ${input}:`);
+    if (start < 0) throw new Error(`The Setup workflow has no input ${input}`);
+    let end = start + 1;
+    while (end < lines.length && lines[end].startsWith("        ")) end++;
+    const line = `        default: ${JSON.stringify(String(config[key] ?? ""))}`;
+    const at = lines.findIndex((l, i) => i > start && i < end && /^\s*default:/.test(l));
+    if (at >= 0) lines[at] = line;
+    else lines.splice(end, 0, line);
+  }
+  return lines.join("\n");
+}
+
+// The defaults of the Setup workflow fields: { city: "Stockholm, SE", ... }
+function inputDefaults(text) {
+  const out = {};
+  for (const input of Object.keys(INPUTS)) {
+    const lines = text.split("\n");
+    const start = lines.indexOf(`      ${input}:`);
+    const m = start < 0 ? null : lines.slice(start + 1).find(l => /^\s*default:/.test(l) || !l.startsWith("        "));
+    const v = m && m.match(/^\s*default:\s*(.*)$/);
+    out[input] = v ? v[1].replace(/^"(.*)"$/, "$1") : "";
+  }
+  return out;
+}
+
 // --- The times of the scheduled workflows ---
 // Github runs a schedule in UTC. A time zone with summer time has two UTC offsets in a year, so a
 // workflow gets one cron line for each; the script runs only for the line of today's offset
@@ -78,4 +116,4 @@ function workflowSchedule(text, config, keys) {
   return text.replace(re, (_, head) => head + block.join("\n") + "\n");
 }
 
-module.exports = { bookmarklet, formAttribute, issueForm, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };
+module.exports = { bookmarklet, formAttribute, issueForm, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };

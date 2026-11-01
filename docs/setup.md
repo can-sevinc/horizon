@@ -10,7 +10,7 @@ You need a Github account. For the setup on your computer you also need `gh` (th
 ## In the browser
 
 1. Click **Use this template** > **Create a new repository** and choose **Private**. Your applications will be issues in this repository, so it has to stay private.
-2. After a minute, an issue called **Finish the setup** opens in your copy. It has three steps: make a token, save it as the secret `PROJECT_TOKEN`, and run **Actions** > **Setup**. If the issue doesn't show up, run **Actions** > **Welcome** by hand.
+2. After a minute, an issue called **Finish the setup** opens in your copy. It has three steps: make a token, save it as the secret `PROJECT_TOKEN`, and run **Actions** > **Setup**. The Setup fields show the default settings (Stockholm, for example), so change the ones that don't fit you. If the issue doesn't show up, run **Actions** > **Welcome** by hand.
 3. When the setup is done, it posts the bookmark and the last manual steps in that issue and closes it.
 
 ## On your computer
@@ -79,6 +79,6 @@ DRY_RUN=1 bash scripts/setup.sh
 
 You can also run **Actions** > **Setup** on Github without anything on your computer. It needs the `PROJECT_TOKEN` secret.
 
-- Fill in a field to change that setting. The workflow saves it to `config.yaml` and the form in one commit. Empty fields keep the current value.
+- The fields show your current settings from `config.yaml`. Change a field to change that setting. The workflow saves it to `config.yaml`, the form, and the field defaults in one commit.
 - Tick **Dry run** to only see what would change.
 - The run summary shows what it did, the manual steps, and the bookmark.

@@ -3,7 +3,8 @@ name: Setup
 # Sets up the labels, the project board, and the variables from config.yaml, writes the settings
 # into the form (and the workflow times), and makes the bookmark (in the summary of the run).
 # Actions > Setup > Run workflow. Safe to run again: it changes only what is not set yet.
-# An empty field keeps the value of config.yaml. bash scripts/setup.sh runs this workflow too.
+# The fields show the values of config.yaml (the setup writes them there): change a field to change
+# that setting. bash scripts/setup.sh runs this workflow too.
 
 on:
   workflow_dispatch:
@@ -14,33 +15,33 @@ on:
         default: false
       project_title:
         description: "Name of the project board"
-        required: false
+        default: "Job Applications"
       city:
         description: "Default City in the form, for example Berlin, DE"
-        required: false
+        default: "Stockholm, SE"
       timezone:
         description: "Time zone, for example Europe/Berlin"
-        required: false
+        default: "Europe/Stockholm"
       reminder_time:
         description: "Daily follow-up reminders, local time (HH:MM)"
-        required: false
+        default: "09:23"
       summary_day:
         description: "Weekly summary day"
         type: choice
-        options: ["", Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
-        default: ""
+        options: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+        default: "Monday"
       summary_time:
         description: "Weekly summary, local time (HH:MM)"
-        required: false
+        default: "08:17"
       follow_up_days:
         description: "Days without news before a follow-up reminder"
-        required: false
+        default: "10"
       ghosted_days:
         description: "Days without an answer before the ghosted label"
-        required: false
+        default: "30"
       salary_placeholder:
         description: "Example in the Salary range field, for example 60k-80k EUR/year"
-        required: false
+        default: "70000-110000 SEK/month"
 
 permissions:
   issues: write

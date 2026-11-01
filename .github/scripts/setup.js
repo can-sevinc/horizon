@@ -14,12 +14,6 @@ const FORM = ".github/ISSUE_TEMPLATE/application.yaml";
 const BOARD_FIELDS = ["Title", "Labels", "Applied date", "Last update", "Interviews"];
 const TABLE_FIELDS = ["Title", "Status", "Applied date", "Last update", "Interviews", "Company", "Position", "City",
   "Salary range", "Recruiter", "Job link", "Labels"];
-// The settings that the workflow inputs can change: input -> config.yaml key
-const INPUTS = {
-  project_title: "projectTitle", city: "city", timezone: "timezone", reminder_time: "reminderTime",
-  summary_day: "summaryDay", summary_time: "summaryTime", follow_up_days: "followUpDays",
-  ghosted_days: "ghostedDays", salary_placeholder: "salaryPlaceholder",
-};
 const NEW_TOKEN = "https://github.com/settings/tokens/new?scopes=repo,project,workflow&description=job-applications";
 
 module.exports = async ({ github, context, core, getOctokit }) => {
@@ -46,10 +40,14 @@ module.exports = async ({ github, context, core, getOctokit }) => {
 
   // --- Settings: the workflow inputs go into config.yaml ---
   const configText = fs.readFileSync(cfg.FILE, "utf8");
+  // A field counts only when it is not its default: the default can be older than config.yaml
+  // (after a change of config.yaml by hand, or by scripts/setup.sh)
+  const setupText = fs.readFileSync(path.join(ROOT, render.SETUP_WORKFLOW), "utf8");
+  const fieldDefaults = render.inputDefaults(setupText);
   const values = {};
-  for (const [input, key] of Object.entries(INPUTS)) {
+  for (const [input, key] of Object.entries(render.INPUTS)) {
     const v = String(inputs[input] ?? "").trim();
-    if (v) values[key] = /Days$/.test(key) ? Number(v) : v;
+    if (v && v !== fieldDefaults[input]) values[key] = /Days$/.test(key) ? Number(v) : v;
   }
   for (const [key, v] of Object.entries(values)) {
     if (/Days$/.test(key) && !(Number.isInteger(v) && v > 0)) return core.setFailed(`${key} must be a number of days, not "${v}".`);
@@ -78,6 +76,9 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     const rendered = render.workflowSchedule(text, config, keys);
     if (rendered !== text) files[file] = rendered;
   }
+  // The fields of this workflow show the values of config.yaml (the workflow scope too)
+  const newSetup = render.setupInputs(setupText, config);
+  if (newSetup !== setupText) files[render.SETUP_WORKFLOW] = newSetup;
 
   // --- Labels ---
   const have = Object.fromEntries((await github.paginate(github.rest.issues.listLabelsForRepo, { owner, repo, per_page: 100 }))
