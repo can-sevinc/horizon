@@ -1,6 +1,6 @@
 # Instructions for AI coding agents
 
-This repository tracks job applications: each application is a Github issue, on a Github Projects board. The workflows in `.github/workflows` (code in `.github/scripts`) keep the board up to date. Settings are in `config.yaml`. See `README.md`.
+This repository tracks job applications: each application is a Github issue, on a Github Projects board. The workflows in `.github/workflows` (code in `.github/scripts`) keep the board up to date. Settings are in `config.yaml`. The documentation is in `docs/` (published with Github Pages).
 
 Rules:
 

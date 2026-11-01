@@ -1,3 +1,8 @@
+---
+title: Supported sites
+nav_order: 8
+---
+
 # Supported sites
 
 The sites where the bookmark (`scripts/bookmarklet.src.js`) reads the job post. On any other site,

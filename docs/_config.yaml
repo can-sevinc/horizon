@@ -1,0 +1,21 @@
+# The documentation site (Github Pages: Settings > Pages > Deploy from a branch > main, /docs)
+title: Horizon
+description: Track your job search on Github, with issues, a project board, and a few workflows.
+url: https://can-sevinc.github.io
+baseurl: /horizon
+
+remote_theme: just-the-docs/just-the-docs@v0.10.1
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+
+search_enabled: true
+heading_anchors: true
+aux_links:
+  Horizon on Github: https://github.com/can-sevinc/horizon
+gh_edit_link: true
+gh_edit_repository: https://github.com/can-sevinc/horizon
+gh_edit_branch: main
+gh_edit_source: docs
+gh_edit_view_mode: tree
+footer_content: "MIT License. Keep your own copy private: your applications are in its issues."
