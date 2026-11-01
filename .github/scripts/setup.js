@@ -165,10 +165,13 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   const views = (await project(`views(first:20) { nodes { id name layout filter
     fields(first:50) { nodes { ... on ProjectV2FieldCommon { name } } }
     sortByFields(first:5) { nodes { direction field { ... on ProjectV2FieldCommon { name } } } } } }`)).views.nodes;
+  // A new project has an empty "View 1": it becomes the Board
+  const blank = views.find(v => /^View \d+$/.test(v.name));
   const view = async (name, layout, filter, fields) => {
-    const cur = views.find(v => v.name === name);
+    let cur = views.find(v => v.name === name), fresh = false;
+    if (!cur && name === "Board" && blank) { cur = blank; fresh = true; }
     let list = fields;
-    if (cur) {
+    if (cur && !fresh) {
       const shown = cur.fields.nodes.map(f => f.name);
       const add = fields.filter(f => !shown.includes(f));
       if (cur.layout === layout && cur.filter === filter && !add.length) return say(`✓ View already set: ${name}`);
@@ -177,7 +180,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     const visible = list.map(f => ids[f]).filter(Boolean);
     // (a timeline view has no visible fields)
     const configuration = fields.length ? `, configuration:{visibleFieldIds:${JSON.stringify(visible)}}` : "";
-    await change(`${cur ? "update" : "create"} the view ${name}`, async () => {
+    await change(fresh ? `turn ${cur.name} into the view ${name}` : `${cur ? "update" : "create"} the view ${name}`, async () => {
       const id = cur ? cur.id : (await pat.graphql(`mutation($p:ID!, $n:String!) { createProjectV2View(input:{projectId:$p, name:$n,
         layout:${layout}}) { projectV2View { id } } }`, { p: p.id, n: name })).createProjectV2View.projectV2View.id;
       await pat.graphql(`mutation($v:ID!, $n:String!, $f:String!) { updateProjectV2View(input:{viewId:$v, name:$n,
