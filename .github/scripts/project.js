@@ -26,6 +26,8 @@ const OPEN_PROCESS = ["Applied", "In progress", "On hold"];
 const REVISIT = "revisit later";
 // Label: you stopped the process (Status: Rejected without interview)
 const WITHDRAWN = "withdrawn interest";
+// Labels made only when they are needed: the Doctor makes "maintenance" with its issue
+const ON_DEMAND_LABELS = ["maintenance"];
 // Days without a "Last update" before an "In progress" application needs a follow-up
 // (the daily reminders and the weekly summary)
 const FOLLOW_UP_DAYS = config.followUpDays;
@@ -296,6 +298,6 @@ async function setIssueFields(pat, project, owner, repo, number, values) {
 }
 
 module.exports = {
-  config, onTime, DAY, FOLLOW_UP_DAYS, GHOSTED, GHOSTED_DAYS, SOURCE_LABELS, ACTIVE, INTERVIEWED, ORDER, NOT_STARTED, OPEN_PROCESS, REVISIT, WITHDRAWN, INTERVIEWS, NO_INTERVIEW, DESCRIPTION, fmt, field, guessSource, lastNext, formValues,
+  config, onTime, DAY, FOLLOW_UP_DAYS, GHOSTED, GHOSTED_DAYS, SOURCE_LABELS, ACTIVE, INTERVIEWED, ORDER, NOT_STARTED, OPEN_PROCESS, REVISIT, WITHDRAWN, ON_DEMAND_LABELS, INTERVIEWS, NO_INTERVIEW, DESCRIPTION, fmt, field, guessSource, lastNext, formValues,
   getProject, setVariable, addItem, setStatus, getCard, reject, findItem, archiveItem, setFields, setIssueFields, getItems, followUpReason, isGhosted,
 };

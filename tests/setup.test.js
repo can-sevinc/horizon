@@ -10,6 +10,8 @@ const mock = require("./mock");
 const setup = require("../.github/scripts/setup");
 
 const ROOT = path.join(__dirname, "..");
+// Horizon itself, not a copy (a copy has no templates/README.md)
+const HORIZON = fs.existsSync(path.join(ROOT, "templates/README.md"));
 
 test("the bookmark is the same as from make_bookmarklet.sh", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bm-"));
@@ -46,10 +48,10 @@ function board() {
     if (/^\s*mutation/.test(q)) { mutations.push(q.match(/mutation[^{]*\{\s*(\w+)/)[1]); return {}; }
     if (q.includes("projectsV2(first")) return { user: { id: "U", projectsV2: { nodes: [{ number: 1, title: config.projectTitle }] } } };
     const p = {
-      id: "P", title: config.projectTitle, repositories: { nodes: [{ nameWithOwner: "o/r" }] },
+      id: "P", title: config.projectTitle, url: "https://github.com/users/o/projects/1", repositories: { nodes: [{ nameWithOwner: "o/r" }] },
       field: { id: "S", options: config.statuses.map(s => ({ id: s.name, name: s.name, color: s.color, description: s.description })) },
       fields: { nodes: [...config.fields.map(f => ({ id: f.name, name: f.name })), { id: "T", name: "Title" }, { id: "L", name: "Labels" }, { id: "St", name: "Status" }, { id: "C", name: "Created" }] },
-      views: { nodes: views.map(v => ({ id: v.id, name: v.name, layout: v.layout, filter: v.filter, fields: { nodes: v.fields.map(name => ({ name })) },
+      views: { nodes: views.map((v, i) => ({ id: v.id, number: i + 1, name: v.name, layout: v.layout, filter: v.filter, fields: { nodes: v.fields.map(name => ({ name })) },
         sortByFields: { nodes: v.sort ? [{ field: { name: v.sort[0] }, direction: v.sort[1] }] : [] } })) },
       workflows: { nodes: [] },
     };
@@ -57,7 +59,7 @@ function board() {
   };
   return { graphql, mutations };
 }
-const labels = [...config.labels.map(l => ({ name: l.name, color: l.color, description: l.description })),
+const labels = [...config.labels.filter(l => l.name !== "maintenance").map(l => ({ name: l.name, color: l.color, description: l.description })),
   ...config.sources.map(s => ({ name: s.label, color: s.color, description: "" })), { name: "period: 2026", color: "C5DEF5" }];
 
 // (the tests run in the template: its README stays, see the README test)
@@ -121,7 +123,7 @@ test("fields left at their defaults keep config.yaml, a changed field is saved",
     .every(f => changed.includes(`(dry run) would change ${f}`)), changed.join("\n"));
 });
 
-test("a copy of the template gets its own README with its links", async () => {
+test("a copy of the template gets its own README with its links", { skip: !HORIZON && "only in Horizon" }, async () => {
   const { calls } = await run({ dry_run: "true" }, board(), [], false);
   assert.ok(calls.some(([n, m]) => n === "info" && m === "(dry run) would change README.md"));
   const tpl = fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8");
@@ -177,6 +179,8 @@ test("the steps for you get their own issues, and Finish the setup closes with l
   assert.deepStrictEqual(created.map(a => a.title), [issues.PREPARE, issues.BOOKMARK]);
   assert.ok(created.every(a => a.labels[0] === "setup"));
   assert.match(created[0].body, /Field sum: \*\*Count\*\* and \*\*Interviews\*\*[\s\S]*board-view\.png\?raw=true[\s\S]*Zoom level: \*\*Year\*\*/);
+  assert.match(created[0].body, /- \[ \] \*\*\[Board\]\(https:\/\/github\.com\/users\/o\/projects\/1\/views\/1\)\*\*/);
+  assert.match(created[0].body, /- \[ \] \*\*\[Summaries\]\(https:\/\/github\.com\/users\/o\/projects\/1\/views\/4\)\*\*/);
   assert.match(created[1].body, /```\n   javascript:[\s\S]*add-bookmark\.png/);
   const comment = calls.find(([n, a]) => n === "createComment" && a.issue_number === 7);
   assert.match(comment[1].body, /Next steps:\n\n- \[ \] #\d+ Prepare the board\n- \[ \] #\d+ Add the bookmark/);
@@ -192,6 +196,17 @@ test("a second run opens no new issues; the open bookmark issue gets the current
   assert.ok(!calls.some(([n]) => n === "create"));
   assert.ok(calls.some(([n, a]) => n === "update" && a.issue_number === 4 && /javascript:/.test(a.body)));
   assert.ok(!calls.some(([n, a]) => n === "update" && a.issue_number === 3));
+});
+
+test("the maintenance label is not made, and goes when no open issue has it", async () => {
+  labels.push({ name: "maintenance", color: "B60205", description: "" });
+  try {
+    const { calls } = await run({});
+    assert.ok(calls.some(([n, a]) => n === "deleteLabel" && a.name === "maintenance"));
+    assert.ok(!calls.some(([n, a]) => n === "createLabel" && a.name === "maintenance"));
+    const used = await run({}, board(), [{ number: 5, title: "Setup problems", state: "open", labels: [{ name: "maintenance" }] }]);
+    assert.ok(!used.calls.some(([n]) => n === "deleteLabel"));
+  } finally { labels.pop(); }
 });
 
 test("a new project: View 1 becomes the Board, and the Github default labels go", async () => {

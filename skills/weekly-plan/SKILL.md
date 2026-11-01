@@ -34,4 +34,4 @@ End with 1–3 sentences on the week (for example: many applications but no inte
 ## Rules
 
 - Read only. Do not change the board or the issues unless the user asks.
-- For follow-ups, the user can use the `follow-up-email` skill and then `/followup +7` in the issue.
+- For follow-ups, the user can use the `follow-up-email` skill and then `/followedup +7` in the issue.

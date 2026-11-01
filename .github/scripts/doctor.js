@@ -66,7 +66,8 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   // (No CURRENT_PERIOD is fine: the next application starts a period)
   ok(`period ${process.env.CURRENT_PERIOD || "(none: the next application starts one)"}`);
   const have = new Set((await github.paginate(github.rest.issues.listLabelsForRepo, { owner, repo, per_page: 100 })).map(l => l.name));
-  const labels = [...lib.config.labels.map(l => l.name), ...lib.config.sources.map(s => s.label)].filter(n => !have.has(n));
+  const labels = [...lib.config.labels.map(l => l.name), ...lib.config.sources.map(s => s.label)]
+    .filter(n => !have.has(n) && !lib.ON_DEMAND_LABELS.includes(n));
   if (labels.length) problems.push(`Labels missing: ${labels.map(l => `\`${l}\``).join(", ")}. Run \`bash scripts/setup.sh\` again.`);
   else ok("labels");
   const off = (await github.paginate(github.rest.actions.listRepoWorkflows, { owner, repo, per_page: 100 }))

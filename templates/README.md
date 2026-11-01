@@ -21,11 +21,11 @@ Move the card on the [board](https://github.com/{{REPO}}/projects), or start a c
 | `/applied` | You applied for a wishlist job |
 | `/hold` | Puts the application on hold |
 | `/offer` | You got an offer |
-| `/followup` | You sent a follow-up |
+| `/followedup` | You sent a follow-up |
 | `/withdraw` | You stopped the process |
 | `/rejected` | They said no. Closing the issue does the same. |
 
-Every new issue gets a comment with the full list.
+Every new issue gets a comment with the full list. To change the comments that the commands write, edit the files in [`templates/comments`](templates/comments).
 
 ## What happens by itself
 

@@ -88,7 +88,8 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   // --- Labels ---
   const have = Object.fromEntries((await github.paginate(github.rest.issues.listLabelsForRepo, { owner, repo, per_page: 100 }))
     .map(l => [l.name, l]));
-  const wanted = [...config.labels.map(l => ({ name: l.name, color: l.color, description: l.description || "" })),
+  const wanted = [...config.labels.filter(l => !lib.ON_DEMAND_LABELS.includes(l.name))
+    .map(l => ({ name: l.name, color: l.color, description: l.description || "" })),
     ...config.sources.map(s => ({ name: s.label, color: s.color, description: "" }))];
   let labelsChanged = 0;
   for (const l of wanted) {
@@ -100,6 +101,13 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       labelsChanged++;
       await change(`update the label "${l.name}"`, () => github.rest.issues.updateLabel({ owner, repo, ...l }));
     }
+  }
+  // The labels made only when needed go while no open issue has them
+  for (const name of lib.ON_DEMAND_LABELS.filter(n => have[n])) {
+    const used = await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: "open", labels: name, per_page: 100 });
+    if (used.length) continue;
+    labelsChanged++;
+    await change(`delete the label "${name}"`, () => github.rest.issues.deleteLabel({ owner, repo, name }));
   }
   if (!labelsChanged) say("✓ Labels already set");
 
@@ -214,6 +222,10 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   sorted("Table", "Applied date", "ASC");
   sorted("Interviews", "Last update", "DESC");
   sorted("Summaries", "Created", "DESC");
+  // Links to the views, for the Prepare the board issue
+  const boardUrl = p.url || `https://github.com/users/${owner}/projects/${num}`;
+  const viewUrls = dry ? {} : Object.fromEntries((await project("views(first:20) { nodes { name number } }")).views.nodes
+    .map(v => [v.name, `${boardUrl}/views/${v.number}`]));
 
   // --- The default workflows of a project use Todo/Done and work against these workflows ---
   const defaults = (await project("workflows(first:50) { nodes { id name } }")).workflows.nodes;
@@ -230,7 +242,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   if (!context.payload.repository.is_template) Object.assign(files, require("./welcome").copyChanges(ROOT, R));
 
   await commitFiles();
-  return finish(p.url || `https://github.com/users/${owner}/projects/${num}`);
+  return finish(boardUrl, viewUrls);
 
   // Commits the changed files in one commit with the token (a file in .github/workflows needs
   // the workflow scope)
@@ -259,7 +271,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     }
   }
 
-  async function finish(projectUrl) {
+  async function finish(projectUrl, viewUrls = {}) {
     const mark = render.bookmarklet(fs.readFileSync(path.join(ROOT, "scripts/bookmarklet.src.js"), "utf8"), R);
     // (setup.sh reads these lines from the log)
     todo.forEach(t => core.info(`TODO ${t}`));
@@ -280,7 +292,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
         opened.push(i);
         return i;
       };
-      const ctx = { owner, repo: R, branch, projectUrl, bookmarklet: mark };
+      const ctx = { owner, repo: R, branch, projectUrl, viewUrls, bookmarklet: mark };
       if (projectUrl) await open(issues.PREPARE, issues.prepare(ctx), false);
       await open(issues.BOOKMARK, issues.bookmark(ctx), true);
     }

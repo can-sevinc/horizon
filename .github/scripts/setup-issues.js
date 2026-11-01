@@ -8,32 +8,35 @@ const BOOKMARK = "Add the bookmark";
 // A picture of this repository, for an issue
 const image = (repo, branch, file, alt) => `![${alt}](https://github.com/${repo}/blob/${branch}/docs/images/${file}?raw=true)`;
 
-function prepare({ owner, repo, branch, projectUrl }) {
+function prepare({ owner, repo, branch, projectUrl, viewUrls = {} }) {
   const img = (f, alt) => "  " + image(repo, branch, f, alt);
+  // The name of a view, with a link to it
+  const view = name => viewUrls[name] ? `**[${name}](${viewUrls[name]})**` : `**${name}**`;
   return [
     `@${owner} Github doesn't let workflows change these view settings, so please do them once by hand.`,
-    `Open the [project board](${projectUrl}), pick a view, and open its menu (the arrow next to the view name).`,
+    `Click a view name below (Cmd+click on a Mac, Ctrl+click on Windows, to keep this issue open), ` +
+      `or open the [project board](${projectUrl}) and pick the view. Then open its menu (the arrow next to the view name).`,
     "Click **Save** after each view.",
     "",
-    "- [ ] **Board**",
+    `- [ ] ${view("Board")}`,
     "  - Sort by: **Last update**, new to old",
     "  - Field sum: **Count** and **Interviews**",
     "",
     img("board-view.png", "Board view settings"),
     "",
-    "- [ ] **Table**",
+    `- [ ] ${view("Table")}`,
     "  - Sort by: **Applied date**, old to new",
     "",
     img("table-view.png", "Table view settings"),
     "",
-    "- [ ] **Interviews**",
+    `- [ ] ${view("Interviews")}`,
     "  - Sort by: **Last update**, new to old",
     "  - Dates: start **Applied date**, end **Last update**",
     "  - Zoom level: **Year**",
     "",
     img("interviews-view.png", "Interviews view settings"),
     "",
-    "- [ ] **Summaries**",
+    `- [ ] ${view("Summaries")}`,
     "  - Sort by: **Created**, new to old",
     "",
     img("summaries-view.png", "Summaries view settings"),

@@ -1,5 +1,6 @@
 // Sync workflow: labels and project fields of an issue that is opened, edited or closed.
 const lib = require("./project");
+const { comment } = require("./comments");
 
 module.exports = async ({ github, context, core, getOctokit }) => {
   const { owner, repo } = context.repo;
@@ -37,14 +38,19 @@ module.exports = async ({ github, context, core, getOctokit }) => {
 
   // 2) "period: ..." label of a new issue: the current job search period (repo variable
   //    CURRENT_PERIOD). It stays until you end it (Actions > End a period). With no current
-  //    period, this application starts one, named by the month of its Date (YYYY-MM).
-  //    (The import script adds its own label.)
+  //    period, this application starts one, named by the year of its Date (YYYY, or YYYY-2 when
+  //    that year already had a period). (The import script adds its own label.)
   const action = context.payload.action;
   if (action === "opened" && !labels.includes("imported") && !labels.some(l => l.startsWith("period: "))) {
-    const date = lib.field(issue.body, "Date");
-    const month = /^\d{4}-\d{2}/.test(date || "") ? date.slice(0, 7) : lib.fmt(new Date(issue.created_at)).slice(0, 7);
-    const name = process.env.CURRENT_PERIOD || month;
-    const started = !process.env.CURRENT_PERIOD;
+    let name = process.env.CURRENT_PERIOD;
+    const started = !name;
+    if (started) {
+      const date = lib.field(issue.body, "Date");
+      const year = (/^\d{4}-\d{2}/.test(date || "") ? date : lib.fmt(new Date(issue.created_at))).slice(0, 4);
+      const have = new Set((await github.paginate(github.rest.issues.listLabelsForRepo, { owner, repo, per_page: 100 })).map(l => l.name));
+      name = year;
+      for (let n = 2; have.has(`period: ${name}`); n++) name = `${year}-${n}`;
+    }
     if (started) {
       try {
         await lib.setVariable(getOctokit(process.env.PROJECT_TOKEN), owner, repo, "CURRENT_PERIOD", name);
@@ -108,28 +114,9 @@ module.exports = async ({ github, context, core, getOctokit }) => {
         "There is no **Job description / recruiter message**. Postings get removed: " +
         "edit the issue and paste the text of the posting or the message now." });
     }
-    // Reminder of the comment commands (see commands.yaml)
-    await github.rest.issues.createComment({ owner, repo, issue_number, body: [
-      "Added to the board. Write a comment that starts with a command:",
-      "",
-      "| Command | Result |",
-      "| --- | --- |",
-      "| `/interview` | Interview notes template. Interviews + 1 on the card |",
-      "| `/interview technical` | The same, with the interview type filled in |",
-      `| \`/next ${lib.fmt(new Date(Date.now() + 7 * lib.DAY))} email recruiter\` | Plans the next step on that date. Wishlist or Applied → In progress |`,
-      "| `/next +7 they will answer` | Plans the next step 7 days from today |",
-      "| `/applied` | You applied for a Wishlist job: Status → Applied, Applied date → today |",
-      "| `/hold summer vacation` | Status → On hold |",
-      "| `/offer` | Status → Offer, with an offer template |",
-      "| `/followup +7` | You sent a follow-up email: `followed up` label, Last update → today, check for an answer in 7 days |",
-      "| `/period 2026-03` | Moves this application to another job search period |",
-      "| `/withdraw not a fit` | You stopped the process: closes the issue, Status → Rejected without interview |",
-      "| `/moved #123` | The company moved you to the process in #123: closes this issue as a duplicate |",
-      "| `/rejected position filled` | The process stopped: closes the issue, Status → Rejected after / without interview |",
-      "",
-      "_When something happens in the process, change **Last update** on the card. " +
-      "Comments do not change it. Add the `on-pause` label to stop follow-up reminders._",
-    ].join("\n") });
+    // Reminder of the comment commands (see commands.yaml), from templates/comments/added.md
+    await github.rest.issues.createComment({ owner, repo, issue_number,
+      body: comment("added", { nextWeek: lib.fmt(new Date(Date.now() + 7 * lib.DAY)) }) });
     return;
   }
   if (action === "closed") {

@@ -1,5 +1,7 @@
-// Comment commands workflow: /interview, /next, /applied, /hold, /offer, /followup, /withdraw, /period, /moved, /rejected.
+// Comment commands workflow: /interview, /next, /applied, /hold, /offer, /followedup, /withdraw, /period, /moved, /rejected.
+// Your comment becomes the comment of templates/comments/COMMAND.md (see comments.js).
 const lib = require("./project");
+const { comment, notes } = require("./comments");
 
 module.exports = async ({ github, context, core, getOctokit }) => {
   const { owner, repo } = context.repo;
@@ -25,28 +27,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
 
   if ((m = firstLine.match(/^\/interview\b[ \t]*(.*)$/))) {
     interview = true;
-    const type = m[1].trim() || "screen / technical / onsite / final";
-    body = [
-      `## Interview: ${lib.fmt(new Date())}`,
-      "",
-      "**With:** ",
-      `**Type:** ${type}`,
-      "",
-      "### What they asked",
-      "- ",
-      "",
-      "### What I asked / learned",
-      "- ",
-      "",
-      "### My impression",
-      "**Interest:** ?/5",
-      "- ",
-      ...(rest ? ["", "### Notes", rest] : []),
-      "",
-      "### Next step",
-      "**Next step:** ",
-      "**Next date:** YYYY-MM-DD",
-    ].join("\n");
+    body = comment("interview", { date: lib.fmt(new Date()), type: m[1], notes: rest });
   } else if ((m = firstLine.match(/^\/next[ \t]+(\S+)[ \t]*(.*)$/))) {
     let d = null;
     if (/^\+\d+$/.test(m[1])) d = new Date(Date.now() + Number(m[1].slice(1)) * 864e5);
@@ -55,12 +36,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       body = text + "\n\n> Use `/next YYYY-MM-DD what` or `/next +7 what`";
     } else {
       nextDate = lib.fmt(d);
-      body = [
-        "### Next step",
-        `**Next step:** ${m[2].trim() || "follow up"}`,
-        `**Next date:** ${lib.fmt(d)}`,
-        ...(rest ? ["", rest] : []),
-      ].join("\n");
+      body = comment("next", { date: nextDate, what: m[2], notes: rest });
     }
   }
   if (body) await github.rest.issues.updateComment({ owner, repo, comment_id: c.id, body });
@@ -103,7 +79,6 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       return warn(`\`/${cmd}\` works when the status is ${allowed[cmd].join(", ")}. The status is ${before || "empty"}.`);
     }
     let date = lib.fmt(new Date());
-    let heading;
     if (cmd === "applied") {
       // "/applied 2026-10-20": the date you applied
       const d = why.match(/^(\d{4}-\d{2}-\d{2})\b[ \t]*(.*)$/);
@@ -115,37 +90,24 @@ module.exports = async ({ github, context, core, getOctokit }) => {
         .replace(/(### Date\s+)[^\n]+/, `$1${date}`);
       await github.rest.issues.update({ owner, repo, issue_number: issue.number, body: newBody });
       await lib.setFields(pat, project, itemId, { "Applied date": date, [lib.INTERVIEWS]: 0 });
-      heading = `Applied: ${date}`;
-    } else if (cmd === "hold") {
-      heading = `On hold: ${date}`;
-    } else {
-      heading = [
-        `## Offer: ${date}`,
-        "",
-        "**Salary:** ",
-        "**Benefits:** ",
-        "**Start date:** ",
-        "**Answer by:** YYYY-MM-DD",
-      ].join("\n");
     }
     const status = { applied: "Applied", hold: "On hold", offer: "Offer" }[cmd];
     await lib.setStatus(pat, project, itemId, status);
     await lib.setFields(pat, project, itemId, { "Last update": date });
     core.info(`Status ${before} -> ${status}, Last update ${date}`);
     await github.rest.issues.updateComment({ owner, repo, comment_id: c.id,
-      body: heading + (cmd === "offer" ? "" : ` (${before} → ${status})`) +
-        (why ? `\n\n${cmd === "offer" ? "### Notes\n" : ""}${why}` : "") + (rest ? `\n\n${rest}` : "") });
+      body: comment(cmd, { date, before, status, notes: notes(why, rest) }) });
   }
 
-  // /followup [+7 | YYYY-MM-DD] [notes]: you sent a follow-up email. "followed up" label,
+  // /followedup [+7 | YYYY-MM-DD] [notes]: you sent a follow-up email. "followed up" label,
   // Last update today (the follow-up reminders start again), and the date to check for an answer
-  if ((m = firstLine.match(/^\/followup\b[ \t]*(.*)$/))) {
+  if ((m = firstLine.match(/^\/followedup\b[ \t]*(.*)$/))) {
     let [, args] = m;
     let check = null;
     const d = args.match(/^(\+\d+|\d{4}-\d{2}-\d{2})\b[ \t]*(.*)$/);
     if (d) {
       check = d[1].startsWith("+") ? new Date(Date.now() + Number(d[1].slice(1)) * lib.DAY) : new Date(d[1] + "T00:00:00Z");
-      if (isNaN(check)) return warn("Use `/followup`, `/followup +7`, or `/followup YYYY-MM-DD`.");
+      if (isNaN(check)) return warn("Use `/followedup`, `/followedup +7`, or `/followedup YYYY-MM-DD`.");
       args = d[2];
     }
     const { pat, project, itemId } = await card();
@@ -154,12 +116,8 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     await github.rest.issues.addLabels({ owner, repo, issue_number: context.issue.number, labels: ["followed up"] });
     await lib.setFields(pat, project, itemId, { "Last update": today });
     core.info(`Followed up, Last update ${today}` + (check ? `, check ${lib.fmt(check)}` : ""));
-    await github.rest.issues.updateComment({ owner, repo, comment_id: c.id, body: [
-      `Followed up: ${today}`,
-      ...(check ? ["", "**Next step:** check for an answer to the follow-up", `**Next date:** ${lib.fmt(check)}`] : []),
-      ...(args.trim() ? ["", args.trim()] : []),
-      ...(rest ? ["", rest] : []),
-    ].join("\n") });
+    await github.rest.issues.updateComment({ owner, repo, comment_id: c.id,
+      body: comment("followedup", { date: today, check: check && lib.fmt(check), notes: notes(args, rest) }) });
   }
 
   // /withdraw [why]: you stopped the process. "withdrawn interest" label,
@@ -178,8 +136,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     await lib.setFields(pat, project, itemId, { "Last update": today });
     core.info(`Status ${before} -> Rejected without interview (withdrawn)`);
     await github.rest.issues.updateComment({ owner, repo, comment_id: c.id,
-      body: `Withdrawn: ${today} (${before} → Rejected without interview)` +
-        (why ? `\n\n${why}` : "") + (rest ? `\n\n${rest}` : "") });
+      body: comment("withdraw", { date: today, before, status: "Rejected without interview", notes: notes(why, rest) }) });
     // Closing with this token does not run sync.yaml: the status stays
     await github.rest.issues.update({ owner, repo, issue_number: context.issue.number,
       state: "closed", state_reason: "not_planned" });
@@ -189,7 +146,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   // to end it, run Actions > End a period)
   if ((m = firstLine.match(/^\/period\b[ \t]*(.*)$/))) {
     const name = m[1].trim().replace(/^period:\s*/, "");
-    if (!/^[\w.-]+$/.test(name)) return warn("Use `/period NAME`, for example `/period 2026-03` (letters, numbers, `-`, `.`, `_`).");
+    if (!/^[\w.-]+$/.test(name)) return warn("Use `/period NAME`, for example `/period 2026` (letters, numbers, `-`, `.`, `_`).");
     const issue = context.payload.issue;
     for (const l of issue.labels.map(l => l.name).filter(l => l.startsWith("period: ") && l !== `period: ${name}`)) {
       await github.rest.issues.removeLabel({ owner, repo, issue_number: issue.number, name: l });
@@ -201,7 +158,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: [`period: ${name}`] });
     core.info(`Moved to period ${name}`);
     await github.rest.issues.updateComment({ owner, repo, comment_id: c.id,
-      body: `Moved to the period **${name}**.` + (rest ? `\n\n${rest}` : "") });
+      body: comment("period", { period: name, notes: rest }) });
   }
 
   if ((m = firstLine.match(/^\/moved[ \t]+#?(\d+)\b/))) {
@@ -213,13 +170,13 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       return;
     }
     await github.rest.issues.updateComment({ owner, repo, comment_id: c.id,
-      body: `Redirected to #${to.number}.` + (rest ? `\n\n${rest}` : "") });
+      body: comment("moved", { to: to.number, notes: rest }) });
     await github.rest.issues.addLabels({ owner, repo, issue_number: from.number, labels: ["redirected"] });
     await github.graphql(`mutation($i:ID!, $d:ID!) {
       closeIssue(input:{issueId:$i, stateReason:DUPLICATE, duplicateIssueId:$d}) { clientMutationId } }`,
       { i: from.node_id, d: to.node_id });
     await github.rest.issues.createComment({ owner, repo, issue_number: to.number,
-      body: `#${from.number} was redirected to this process.` });
+      body: comment("moved-to", { from: from.number }) });
     // Off the board: it is not a process of its own
     const pat = getOctokit(process.env.PROJECT_TOKEN);
     const project = await lib.getProject(pat, owner, Number(process.env.PROJECT_NUMBER));
@@ -236,8 +193,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     const status = itemId && await lib.reject(pat, project, itemId);
     if (itemId) await lib.setFields(pat, project, itemId, { "Last update": lib.fmt(new Date()) });
     await github.rest.issues.updateComment({ owner, repo, comment_id: c.id,
-      body: `Rejected: ${lib.fmt(new Date())}` + (status ? ` (${status})` : "") +
-        (why ? `\n\n${why}` : "") + (rest ? `\n\n${rest}` : "") });
+      body: comment("rejected", { date: lib.fmt(new Date()), status, notes: notes(why, rest) }) });
     await github.rest.issues.update({ owner, repo, issue_number: context.issue.number,
       state: "closed", state_reason: "not_planned" });
   }

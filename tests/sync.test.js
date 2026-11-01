@@ -10,10 +10,10 @@ const form = (date, { stage = "", source = "", link = "", description = "text" }
   section(lib.DESCRIPTION, description)].join("\n\n");
 
 // Runs sync.js for a new issue up to the project board (the fake board fails there)
-async function open(date, { current = "2026", others = [], ...opts } = {}) {
+async function open(date, { current = "2026", others = [], have = [], ...opts } = {}) {
   process.env.CURRENT_PERIOD = current;
   const body = form(date, opts);
-  const m = mock({ body, issues: others.map((d, i) => ({ number: 100 + i, body: form(d) })) });
+  const m = mock({ body, labels: have, issues: others.map((d, i) => ({ number: 100 + i, body: form(d) })) });
   await sync({ github: m.github, core: m.core, getOctokit: m.getOctokit, context: { repo: { owner: "o", repo: "r" },
     payload: { action: "opened", issue: { number: 1, body, labels: [], created_at: "2026-11-03T00:00:00Z" } } } })
     .catch(e => { if (e.message !== "no board") throw e; });
@@ -39,9 +39,12 @@ test("the current period stays, also after a long break", async () => {
   assert.ok(!calls.some(([route]) => route.includes("actions/variables")));
 });
 
-test("with no current period, the application starts one named by its month", async () => {
+test("with no current period, the application starts one named by its year", async () => {
   const { labels, calls } = await open("2027-04-05", { current: "" });
-  assert.ok(labels.includes("period: 2027-04"));
-  assert.ok(calls.some(([route, a]) => route.includes("actions/variables") && a.value === "2027-04"));
+  assert.ok(labels.includes("period: 2027"));
+  assert.ok(calls.some(([route, a]) => route.includes("actions/variables") && a.value === "2027"));
   assert.ok(calls.some(([n, a]) => n === "createComment" && a.body.includes("new job search period")));
+  // That year already had a period: 2027-2
+  const again = await open("2027-09-05", { current: "", have: ["period: 2027"] });
+  assert.ok(again.labels.includes("period: 2027-2"));
 });

@@ -11,6 +11,8 @@ Move the card on the board, or write a command in a comment. Everything else you
 
 Start a comment with one of these. Only the repository owner can use them, and they work in the Github mobile app too.
 
+The comments that the commands write come from the files in `templates/comments`. Change a file to change its comment.
+
 | Command | What it does |
 | --- | --- |
 | `/interview` | Turns the comment into interview notes. **Interviews** goes up by 1. |
@@ -21,10 +23,10 @@ Start a comment with one of these. Only the repository owner can use them, and t
 | `/applied 2026-10-20 sent by email` | Same, with a date and a note |
 | `/hold summer vacation` | Status becomes On hold |
 | `/offer` | Status becomes Offer. The comment turns into an offer template (salary, benefits, start date, answer date). |
-| `/followup +7` | You sent a follow-up. Adds the `followed up` label and plans a check in 7 days. |
+| `/followedup +7` | You sent a follow-up. Adds the `followed up` label and plans a check in 7 days. |
 | `/withdraw not a fit` | You stopped the process. Closes the issue as Rejected without interview with the `withdrawn interest` label. |
 | `/moved #296` | The company moved you to another process. Closes this issue as a duplicate of #296. |
-| `/period 2026-03` | Moves the application to another period |
+| `/period 2026` | Moves the application to another period |
 | `/rejected position filled` | Closes the issue and sets the right rejected status. The reason is optional. |
 
 ## Project fields
@@ -61,7 +63,7 @@ So update **Interviews** before you close. The issue is closed as **not planned*
 | `on-pause` | No follow-up reminders | You |
 | `revisit later` | Contact them again later | You |
 | `withdrawn interest` | You stopped the process | `/withdraw` |
-| `followed up` | You sent a follow-up | `/followup` |
+| `followed up` | You sent a follow-up | `/followedup` |
 | `redirected` | Moved to another process | `/moved` |
 | `ghosted` | No answer for 30 days | The workflow |
 | `summary` | Weekly summary | The workflow |
@@ -74,6 +76,6 @@ So update **Interviews** before you close. The issue is closed as **not planned*
 
 A period is one job search, not a calendar year. New issues get the label of the current period (the `CURRENT_PERIOD` variable), and it stays until you end it.
 
-- To end a period, run **Actions** > **End a period**. Give the new period a name, or leave it empty and your next application starts one named after its month, for example `period: 2027-04`.
+- To end a period, run **Actions** > **End a period**. Give the new period a name, or leave it empty and your next application starts one named after its year, for example `period: 2027` (or `period: 2027-2` when 2027 already had a period).
 - To move one application, comment `/period NAME`.
 - To take an old period off the board, see [Archive a period](export-import.md#archive-a-period).

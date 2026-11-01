@@ -1,6 +1,8 @@
 name: Comment commands
 
-# /interview [type]          -> turns your comment into the interview-notes template
+# The comments that the commands write are in templates/comments: change them there.
+
+# /interview [type]          -> turns your comment into the interview notes (templates/comments/interview.md)
 # /next YYYY-MM-DD [what]    -> plans the next step and sets "Last update" on the card to that date;
 #                               a Wishlist or Applied card moves to In progress
 # /next +7 [what]            -> same, relative in days
@@ -8,7 +10,7 @@ name: Comment commands
 #                               that date (default: today), and the form says Applied
 # /hold [why]                -> status On hold, Last update today
 # /offer [notes]             -> status Offer, Last update today; the comment becomes an offer template
-# /followup [+7|YYYY-MM-DD] [notes] -> you sent a follow-up email: "followed up" label, Last update
+# /followedup [+7|YYYY-MM-DD] [notes] -> you sent a follow-up email: "followed up" label, Last update
 #                               today; with a date, the comment plans a check for an answer
 # /withdraw [why]            -> you stopped the process: "withdrawn interest" label, status Rejected
 #                               without interview, Last update today, closes the issue
@@ -35,7 +37,7 @@ jobs:
       (startsWith(github.event.comment.body, '/interview') || startsWith(github.event.comment.body, '/next') ||
        startsWith(github.event.comment.body, '/moved') || startsWith(github.event.comment.body, '/rejected') ||
        startsWith(github.event.comment.body, '/applied') || startsWith(github.event.comment.body, '/hold') ||
-       startsWith(github.event.comment.body, '/offer') || startsWith(github.event.comment.body, '/followup') ||
+       startsWith(github.event.comment.body, '/offer') || startsWith(github.event.comment.body, '/followedup') ||
        startsWith(github.event.comment.body, '/withdraw') || startsWith(github.event.comment.body, '/period'))
     runs-on: ubuntu-latest
     steps:

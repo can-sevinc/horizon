@@ -34,5 +34,5 @@ description: Draft a short follow-up or thank-you email for one of the user's jo
 
 4. Show the draft. Do not send it: the user sends it.
 
-5. After the user sent it, offer to record it: they can write `/followup +7` in the issue
+5. After the user sent it, offer to record it: they can write `/followedup +7` in the issue
    (adds the `followed up` label, sets Last update to today, and plans a check for an answer in 7 days).
