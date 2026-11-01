@@ -22,15 +22,18 @@ test("a public copy gets a warning first", async () => {
   assert.match((await run({ repo: { private: false } })).body, /^> \[!CAUTION\]\n> \*\*This repository is public/);
 });
 
-test("a new copy gets its own README, once", async () => {
+test("a new copy gets its own README, and the files only for Horizon go, in one commit", async () => {
   const m = mock({ issues: [{ title: welcome.TITLE }] });
   await welcome({ github: m.github, core: m.core, context: { repo: { owner: "me", repo: "jobs" } } });
-  const [, put] = m.calls.find(([n]) => n === "createOrUpdateFileContents");
-  const text = Buffer.from(put.content, "base64").toString();
-  assert.strictEqual(put.sha, "S");
-  assert.match(text, /^# Job applications/);
-  assert.match(text, /github\.com\/me\/jobs\/projects/);
-  assert.ok(!text.includes("{{"));
+  const [, { tree }] = m.calls.find(([n]) => n === "createTree");
+  const readme = tree.find(e => e.path === "README.md");
+  assert.match(readme.content, /^# Job applications/);
+  assert.match(readme.content, /github\.com\/me\/jobs\/projects/);
+  assert.ok(!readme.content.includes("{{"));
+  const gone = tree.filter(e => e.sha === null).map(e => e.path);
+  for (const p of ["docs/index.md", "docs/setup.md", "docs/_config.yaml", "docs/_includes/head_custom.html", "templates/README.md"]) assert.ok(gone.includes(p), p);
+  for (const p of ["docs/supported-sites.md", "docs/images/board-view.png", "templates/interview-note.md", "LICENSE"]) assert.ok(!gone.includes(p), p);
+  assert.ok(m.calls.some(([n, a]) => n === "updateRef" && a.sha === "NEW"));
 });
 
 test("no second issue", async () => {

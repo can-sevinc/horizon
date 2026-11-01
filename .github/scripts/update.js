@@ -18,7 +18,9 @@ const TEMPLATE_VERSION = ".github/template-version";
 const BRANCH = "update-from-template";
 // Never taken from the template
 // (README.md: a copy has its own, made by the setup from templates/README.md)
-const KEEP = p => p === "config.yaml" || p === "README.md" || p === TEMPLATE_VERSION || p.startsWith("data/");
+// (and the files only for Horizon, which a copy deletes: see horizonOnly in render.js)
+const KEEP = p => p === "config.yaml" || p === "README.md" || p === TEMPLATE_VERSION || p.startsWith("data/") ||
+  require("./render").horizonOnly(p);
 
 // owner/name -> its Github URL; a URL or a folder stays as it is (the tests use a folder)
 const templateUrl = t => /^[\w.-]+\/[\w.-]+$/.test(t) ? `https://github.com/${t}.git` : t;

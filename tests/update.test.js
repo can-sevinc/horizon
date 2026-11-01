@@ -52,8 +52,9 @@ test("update: a copy made from the template gets the new version, and keeps its 
   edit(tpl, "skills/weekly-plan/SKILL.md", t => t.replace(/^# .*$/m, "# Weekly plan (new)"));
   edit(tpl, ".github/ISSUE_TEMPLATE/application.yaml", t => t.replace("label: Salary range", "label: Salary"));
   edit(tpl, "config.yaml", t => t + "\n# A new setting\nnewSetting: 5\n");
-  fs.writeFileSync(path.join(tpl, "docs/new.md"), "new\n");
-  fs.rmSync(path.join(tpl, "docs/troubleshooting.md"));
+  fs.writeFileSync(path.join(tpl, "scripts/new.sh"), "new\n");
+  fs.rmSync(path.join(tpl, "templates/interview-note.md"));
+  edit(tpl, "docs/setup.md", t => t + "\nNew docs.\n");
   git(tpl, "add", "-A");
   git(tpl, "commit", "-qm", "new version");
   const second = git(tpl, "rev-parse", "HEAD");
@@ -61,8 +62,10 @@ test("update: a copy made from the template gets the new version, and keeps its 
   const r = update(mine);
   assert.strictEqual(r.base, first);
   assert.strictEqual(r.head, second);
-  assert.ok(fs.existsSync(path.join(mine, "docs/new.md")));
-  assert.ok(!fs.existsSync(path.join(mine, "docs/troubleshooting.md")));
+  assert.ok(fs.existsSync(path.join(mine, "scripts/new.sh")));
+  assert.ok(!fs.existsSync(path.join(mine, "templates/interview-note.md")));
+  // (the files only for Horizon never come)
+  assert.doesNotMatch(read(mine, "docs/setup.md"), /New docs/);
   assert.ok(r.bookmark);
   assert.match(read(mine, "AGENTS.md"), /^# My agents$[\s\S]*^## Skills \(new\)$/m);
   assert.deepStrictEqual(r.check, ["skills/weekly-plan/SKILL.md"]);

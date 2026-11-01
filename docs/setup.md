@@ -57,7 +57,7 @@ The **Status** options:
 | Rejected without interview | Gray | Stopped before any interview |
 | Offer | Purple | You got an offer |
 
-It also adds the fields **Applied date**, **Last update**, **Company**, **Position**, **City**, **Salary range**, **Recruiter**, **Job link**, and **Interviews**, plus the labels from `config.yaml`. On a new board, it removes the default project workflows and the labels that Github adds to every repository (`bug`, `question`, and so on). Your copy also gets its own short README with links to your board. Don't rename the statuses: the workflows look for these names.
+It also adds the fields **Applied date**, **Last update**, **Company**, **Position**, **City**, **Salary range**, **Recruiter**, **Job link**, and **Interviews**, plus the labels from `config.yaml`. On a new board, it removes the default project workflows and the labels that Github adds to every repository (`bug`, `question`, and so on). Your copy also gets its own short README with links to your board, and the files of this documentation site are removed from it. Don't rename the statuses: the workflows look for these names.
 
 ## Manual steps
 

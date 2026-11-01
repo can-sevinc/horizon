@@ -225,12 +225,9 @@ module.exports = async ({ github, context, core, getOctokit }) => {
   }
   if (!defaults.length) say("✓ No default project workflows");
 
-  // A copy of the template gets its own README (the Welcome workflow does it first; this is for
-  // a copy without it)
-  const readme = fs.readFileSync(path.join(ROOT, "README.md"), "utf8");
-  if (readme.includes(render.PITCH) && !context.payload.repository.is_template) {
-    files["README.md"] = render.copyReadme(fs.readFileSync(path.join(ROOT, "templates/README.md"), "utf8"), R);
-  }
+  // A new copy: its own README, without the files only for Horizon (the Welcome workflow does it
+  // first; this is for a copy without it)
+  if (!context.payload.repository.is_template) Object.assign(files, require("./welcome").copyChanges(ROOT, R));
 
   await commitFiles();
   return finish(p.url || `https://github.com/users/${owner}/projects/${num}`);
@@ -246,7 +243,8 @@ module.exports = async ({ github, context, core, getOctokit }) => {
       const ref = (await pat.rest.git.getRef({ owner, repo, ref: `heads/${branch}` })).data;
       const base = (await pat.rest.git.getCommit({ owner, repo, commit_sha: ref.object.sha })).data;
       const tree = (await pat.rest.git.createTree({ owner, repo, base_tree: base.tree.sha,
-        tree: paths.map(f => ({ path: f, mode: "100644", type: "blob", content: files[f] })) })).data;
+        tree: paths.map(f => files[f] === null ? { path: f, mode: "100644", type: "blob", sha: null }
+          : { path: f, mode: "100644", type: "blob", content: files[f] }) })).data;
       const commit = (await pat.rest.git.createCommit({ owner, repo, message: "chore: apply the settings of config.yaml",
         tree: tree.sha, parents: [ref.object.sha] })).data;
       await pat.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: commit.sha });

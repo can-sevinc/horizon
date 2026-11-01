@@ -44,5 +44,5 @@ Github runs schedules in UTC. Each scheduled workflow has one line for summer ti
 | `schema/applications.schema.json` | The import and export format |
 | `skills/`, `AGENTS.md` | Instructions for AI coding agents |
 | `.github/template-version` | The template version you have, written by the Update workflow |
-| `docs/` | This documentation |
+| `docs/` | This documentation. A copy keeps only `docs/images` and `docs/supported-sites.md`. |
 | `tests/` | Tests: `node --test "tests/*.test.js"` |

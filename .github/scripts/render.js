@@ -36,6 +36,11 @@ function issueForm(text, config) {
 // The README of Horizon has this line; a copy gets templates/README.md instead
 const PITCH = "<!-- horizon: the README of the template -->";
 const copyReadme = (text, repo) => text.replace(/\{\{REPO\}\}/g, repo);
+// Files only for Horizon itself (its documentation site, the README of a copy): a copy deletes
+// them, and the Update workflow does not bring them back. docs/images (the setup issues use them)
+// and docs/supported-sites.md (the add-job-board skill changes it) stay.
+const horizonOnly = p => p === "templates/README.md" || p === "docs/_config.yaml" || p.startsWith("docs/_includes/") ||
+  (/^docs\/[^/]+\.md$/.test(p) && p !== "docs/supported-sites.md");
 
 // --- The fields of the Setup workflow ---
 // The settings that the Setup workflow can change: input -> config.yaml key
@@ -123,4 +128,4 @@ function workflowSchedule(text, config, keys) {
   return text.replace(re, (_, head) => head + block.join("\n") + "\n");
 }
 
-module.exports = { bookmarklet, formAttribute, issueForm, PITCH, copyReadme, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };
+module.exports = { bookmarklet, formAttribute, issueForm, PITCH, copyReadme, horizonOnly, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };

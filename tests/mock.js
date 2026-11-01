@@ -10,8 +10,14 @@ module.exports = function mock({ body = "", issues = [], labels = [], workflows 
     paginate: async fn => fn === "listLabelsForRepo" ? labels.map(name => ({ name }))
       : fn === "listRepoWorkflows" ? workflows : issues,
     rest: {
-      repos: { get: async () => ({ data: repo }), getContent: async () => ({ data: { sha: "S" } }),
-        createOrUpdateFileContents: rec("createOrUpdateFileContents") },
+      repos: { get: async () => ({ data: { default_branch: "main", ...repo } }) },
+      git: {
+        getRef: async () => ({ data: { object: { sha: "HEAD" } } }),
+        getCommit: async () => ({ data: { tree: { sha: "TREE" } } }),
+        createTree: async args => { calls.push(["createTree", args]); return { data: { sha: "NEWTREE" } }; },
+        createCommit: async args => { calls.push(["createCommit", args]); return { data: { sha: "NEW" } }; },
+        updateRef: rec("updateRef"),
+      },
       actions: { listRepoWorkflows: "listRepoWorkflows" },
       issues: {
         get: async () => ({ data: { body } }), listForRepo: "listForRepo", listLabelsForRepo: "listLabelsForRepo",
