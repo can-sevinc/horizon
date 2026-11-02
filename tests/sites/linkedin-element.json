@@ -1,0 +1,17 @@
+{
+  "site": "LinkedIn: a job page with the description element",
+  "page": {
+    "url": "https://www.linkedin.com/jobs/view/4100000002/?trk=abc",
+    "title": "Backend Developer | Acme | LinkedIn",
+    "elements": {
+      "#job-details": "About the job\nBuild our APIs.",
+      "main": "Acme Backend Developer About the job Build our APIs. Set alert for similar jobs"
+    }
+  },
+  "expect": {
+    "company": "Acme",
+    "position": "Backend Developer",
+    "link": "https://www.linkedin.com/jobs/view/4100000002/",
+    "description": "About the job\nBuild our APIs."
+  }
+}

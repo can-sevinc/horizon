@@ -1,0 +1,17 @@
+{
+  "site": "LinkedIn: a job in the list (currentJobId), the description between About the job and … more",
+  "page": {
+    "url": "https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4100000001",
+    "title": "(3) Senior Customer Engineer, Nordics | Acme | LinkedIn",
+    "elements": {
+      "main": "Acme\n\nSenior Customer Engineer, Nordics\n\nStockholm, Sweden · Reposted 1 hour ago · 34 people clicked apply\n\nOn-site\nFull-time\nPractice an interview\n\nPeople you can reach out to\n\nShow all\nAbout the job\n\nMinimum qualifications:\n\nBachelor's degree or equivalent practical experience.\n\nAbout The Job\n\nYou help customers get the most out of our tools.\n… more\n\nSet alert for similar jobs\n\nSee how you compare to others who clicked apply\nCandidates who clicked apply\n\n34"
+    }
+  },
+  "expect": {
+    "company": "Acme",
+    "position": "Senior Customer Engineer, Nordics",
+    "title": "[Acme] Senior Customer Engineer, Nordics",
+    "link": "https://www.linkedin.com/jobs/view/4100000001/",
+    "description": "Minimum qualifications:\n\nBachelor's degree or equivalent practical experience.\n\nAbout The Job\n\nYou help customers get the most out of our tools."
+  }
+}

@@ -63,6 +63,21 @@
     });
     return all.find(j => j && [].concat(j['@type']).includes('JobPosting')) || null;
   })();
+  // Sites whose description has no stable element: the text of the page between a heading and
+  // the first line after the description (the class names of LinkedIn change often)
+  const SECTIONS = {
+    'linkedin.com': [
+      /^\s*(About the job|Om jobbet)\s*$/im,
+      /^\s*(…|\.\.\.)\s*(more|mer|visa mer)\s*$|^\s*(Show less|Visa mindre|Set alert for similar jobs|See how you compare|About the company|Om företaget|Meet the hiring team)\b/im,
+    ],
+  };
+  const between = (text, start, end) => {
+    const s = text.match(start);
+    if (!s) return '';
+    const rest = text.slice(s.index + s[0].length);
+    const e = rest.match(end);
+    return e ? rest.slice(0, e.index) : rest;
+  };
   // Text with line breaks from HTML (DOMParser: nothing in it runs or loads)
   const toText = html => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -105,13 +120,17 @@
     if (ld && ld.title) position = ld.title;
   }
 
-  // Job description: the text you selected, the JobPosting, a known element, or the longest
-  // text block of the page (no description on a LinkedIn profile)
+  // Job description: the text you selected, the JobPosting, a known element, the section of
+  // the page, or the longest text block of the page (no description on a LinkedIn profile)
   let description = String(getSelection()).trim();
   if (!description && ld && ld.description) description = toText(ld.description);
   if (!description) {
     const el = DESCRIPTION.map(s => document.querySelector(s)).find(e => e && e.innerText.trim());
     if (el) description = el.innerText;
+  }
+  const section = Object.keys(SECTIONS).find(h => host === h || host.endsWith('.' + h));
+  if (!description && section && recruiter === '') {
+    description = between((document.querySelector('main') || document.body).innerText, ...SECTIONS[section]);
   }
   if (!description && recruiter === '') {
     const blocks = [...document.querySelectorAll('main, article, section, [role="main"]')];

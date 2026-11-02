@@ -1,0 +1,11 @@
+{
+  "site": "Platsbanken before the page has its headings: the page title",
+  "page": {
+    "url": "https://arbetsformedlingen.se/platsbanken/annonser/29000002",
+    "title": "Data Engineer - Acme - Sverige AB - Platsbanken"
+  },
+  "expect": {
+    "company": "Acme - Sverige AB",
+    "position": "Data Engineer"
+  }
+}

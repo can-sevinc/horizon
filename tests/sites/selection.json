@@ -1,0 +1,14 @@
+{
+  "site": "Any site: the text you selected wins",
+  "page": {
+    "url": "https://www.linkedin.com/jobs/view/4100000003/",
+    "title": "Designer | Acme | LinkedIn",
+    "selection": "Only this part.",
+    "elements": {
+      "#job-details": "The whole description."
+    }
+  },
+  "expect": {
+    "description": "Only this part."
+  }
+}

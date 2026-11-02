@@ -18,7 +18,7 @@ in `jobBoards` in `config.yaml`). An *ATS* hosts the career pages of companies; 
 
 | Site | Type | Example link | Company and position from | Description from | Tested |
 | --- | --- | --- | --- | --- | --- |
-| LinkedIn | LinkedIn | `linkedin.com/jobs/view/ID`, `linkedin.com/jobs/...?currentJobId=ID` | Page title | Description element | - |
+| LinkedIn | LinkedIn | `linkedin.com/jobs/view/ID`, `linkedin.com/jobs/...?currentJobId=ID` | Page title | Description element, or the text from **About the job** to **… more** | - |
 | LinkedIn profile | Recruiter outreach | `linkedin.com/in/NAME` | Name and profile link go to **Recruiter / contact** | - | - |
 | The Hub | Job board | `thehub.io/jobs/ID` | Page title (`The Hub \| Position \| Company`) | JobPosting | 2026-11-03 |
 | Platsbanken (Arbetsförmedlingen) | Job board | `arbetsformedlingen.se/platsbanken/annonser/ID` | Headings (h1, h2), or the page title | Description element | 2026-11-03 |
@@ -32,4 +32,4 @@ in `jobBoards` in `config.yaml`). An *ATS* hosts the career pages of companies; 
 | Teamtailor, BambooHR, Recruitee, Personio, Breezy, Homerun, Workbuster | ATS | `COMPANY.teamtailor.com/jobs/ID` | Subdomain, then JobPosting | JobPosting | - |
 | Other company sites | Company website | any | JobPosting, or the host name | JobPosting, or the longest text block | - |
 
-"Tested": the date someone checked the site with the bookmark on a real post.
+"Tested": the date someone checked the site with the bookmark on a real post. Each site also has a test page in `tests/sites`: the tests run the bookmark on it.

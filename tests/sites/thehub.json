@@ -1,0 +1,25 @@
+{
+  "site": "The Hub",
+  "page": {
+    "url": "https://thehub.io/jobs/65f0c0ffee",
+    "title": "The Hub | Backend Developer | Acme ApS",
+    "ld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "JobPosting",
+        "title": "Backend Developer",
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": "Acme ApS"
+        },
+        "description": "<p>We are hiring.</p><ul><li>Node.js</li><li>Postgres</li></ul>"
+      }
+    ]
+  },
+  "expect": {
+    "company": "Acme ApS",
+    "position": "Backend Developer",
+    "link": "https://thehub.io/jobs/65f0c0ffee",
+    "description": "We are hiring.\n\n- Node.js\n- Postgres"
+  }
+}

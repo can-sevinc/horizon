@@ -1,0 +1,18 @@
+{
+  "site": "Jobylon (ATS)",
+  "page": {
+    "url": "https://emp.jobylon.com/jobs/123456-acme-backend-developer/",
+    "title": "Backend Developer - Acme AB | Jobylon",
+    "elements": {
+      "main": "We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week."
+    }
+  },
+  "expect": {
+    "company": "Acme AB",
+    "position": "Backend Developer",
+    "link": "https://emp.jobylon.com/jobs/123456-acme-backend-developer/",
+    "descriptionHas": [
+      "We build tools for small teams."
+    ]
+  }
+}

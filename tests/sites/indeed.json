@@ -1,0 +1,18 @@
+{
+  "site": "Indeed: a search with the job open in the side panel (vjk)",
+  "page": {
+    "url": "https://se.indeed.com/jobs?q=utvecklare&l=Stockholm&vjk=a1b2c3d4e5",
+    "title": "Utvecklare jobb i Stockholm | Indeed",
+    "elements": {
+      "[data-testid=\"jobsearch-JobInfoHeader-title\"]": "Frontend Developer - job post",
+      "[data-testid=\"inlineHeader-companyName\"]": "Acme AB",
+      "#jobDescriptionText": "React and TypeScript."
+    }
+  },
+  "expect": {
+    "company": "Acme AB",
+    "position": "Frontend Developer",
+    "link": "https://se.indeed.com/viewjob?jk=a1b2c3d4e5",
+    "description": "React and TypeScript."
+  }
+}

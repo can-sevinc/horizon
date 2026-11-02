@@ -1,0 +1,16 @@
+{
+  "site": "LinkedIn profile: the recruiter who wrote to you",
+  "page": {
+    "url": "https://www.linkedin.com/in/anna-svensson-123/?miniProfile=x",
+    "title": "(2) Anna Svensson | LinkedIn",
+    "elements": {
+      "main": "Anna Svensson\nTalent Acquisition at Acme\nWe build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. "
+    }
+  },
+  "expect": {
+    "recruiter": "Anna Svensson https://www.linkedin.com/in/anna-svensson-123/",
+    "position": "",
+    "link": "",
+    "description": ""
+  }
+}

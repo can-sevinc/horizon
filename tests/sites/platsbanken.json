@@ -1,0 +1,18 @@
+{
+  "site": "Platsbanken (Arbetsförmedlingen)",
+  "page": {
+    "url": "https://arbetsformedlingen.se/platsbanken/annonser/29000001?q=utvecklare",
+    "title": "Systemutvecklare - Acme AB - Platsbanken",
+    "elements": {
+      "h1.break-title": "Systemutvecklare",
+      "h2.break-title": "Acme AB",
+      ".job-description": "Vi söker en systemutvecklare."
+    }
+  },
+  "expect": {
+    "company": "Acme AB",
+    "position": "Systemutvecklare",
+    "link": "https://arbetsformedlingen.se/platsbanken/annonser/29000001",
+    "description": "Vi söker en systemutvecklare."
+  }
+}

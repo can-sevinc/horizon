@@ -1,0 +1,14 @@
+{
+  "site": "Greenhouse (ATS) without a JobPosting: the link path and the description element",
+  "page": {
+    "url": "https://boards.greenhouse.io/acme-labs/jobs/7000001",
+    "title": "Job Application for Data Scientist at Acme Labs",
+    "elements": {
+      ".job__description": "Models and experiments."
+    }
+  },
+  "expect": {
+    "company": "Acme Labs",
+    "description": "Models and experiments."
+  }
+}

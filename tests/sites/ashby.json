@@ -1,0 +1,22 @@
+{
+  "site": "Ashby (ATS): the JobPosting",
+  "page": {
+    "url": "https://jobs.ashbyhq.com/acme/0b1c2d3e-0000-4000-8000-000000000000",
+    "title": "Platform Engineer @ Acme",
+    "ld": [
+      {
+        "@type": "JobPosting",
+        "title": "Platform Engineer",
+        "hiringOrganization": {
+          "name": "Acme Inc."
+        },
+        "description": "<p>Run our cloud.</p>"
+      }
+    ]
+  },
+  "expect": {
+    "company": "Acme Inc.",
+    "position": "Platform Engineer",
+    "description": "Run our cloud."
+  }
+}

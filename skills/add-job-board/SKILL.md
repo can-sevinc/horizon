@@ -51,6 +51,14 @@ board has its own small parser, and its host is in `config.yaml`.
    - End every statement with `;`.
    - No dependencies, no `fetch`: only what is in the page.
 
+   **The description.** The bookmark takes, in this order: the selected text, the JobPosting,
+   an element of `DESCRIPTION`, the section of `SECTIONS`, the longest text block. When the
+   description comes out wrong (too much text, or the header of the page in it):
+   - a stable element (an id, a `data-` attribute): add its selector to `DESCRIPTION`;
+   - no stable element (generated class names, like LinkedIn): add the host to `SECTIONS` with a
+     regular expression for the heading line before the description and one for the first line
+     after it. They are matched on the text of the page (`innerText` of `main`), line by line.
+
 4. **Job board or ATS?** A job board (posts of many companies, like Platsbanken): add the host
    to `jobBoards` in `config.yaml`, so the sync workflow and the import script set **Source** to
    **Job board** for its links (a subdomain of the host counts too). An ATS (the career pages of
@@ -58,11 +66,42 @@ board has its own small parser, and its host is in `config.yaml`.
 
 5. **Update the list of supported sites**, `docs/supported-sites.md`: add a row (or change the
    row) with the site, the type, an example link, where the company, position, and description
-   come from, and today's date in **Tested** after step 6 passes on a real post ("Not yet" and
+   come from, and today's date in **Tested** after step 8 passes on a real post ("Not yet" and
    the reason when you could not test it). The tests check that every `JOB_BOARDS` key and every
    `jobBoards` host is in this list.
 
-6. **Test.**
+6. **Add a test page.** Write `tests/sites/NAME.json` (NAME: the site, for example
+   `thehub.json`; one more file for each other case, like `platsbanken-title.json`). It is a fake
+   page with only what the bookmark reads, and the values the form must get:
+
+   ```json
+   {
+     "site": "Example Jobs",
+     "page": {
+       "url": "https://example.com/jobs/123?ref=abc",
+       "title": "Backend Developer at Acme - Example Jobs",
+       "elements": { "h1": "Backend Developer", ".job-description": "We are hiring.", "main": "the text of the page" },
+       "ld": [{ "@type": "JobPosting", "title": "Backend Developer", "hiringOrganization": { "name": "Acme" }, "description": "<p>We are hiring.</p>" }]
+     },
+     "expect": { "company": "Acme", "position": "Backend Developer", "link": "https://example.com/jobs/123", "description": "We are hiring." }
+   }
+   ```
+
+   - `elements`: a selector the bookmark uses, and the text of that element (`innerText`).
+     For `SECTIONS`, put the text of the page under `main`, with the lines around the
+     description, so the test checks where it starts and ends.
+   - `ld`: the JSON-LD of the page, only when it has one. `selection`: selected text.
+   - `expect`: the form values that must be the same (`company`, `position`, `title`, `link`,
+     `recruiter`, `description`). For a long description, use `descriptionHas` and
+     `descriptionHasNot` (lists of texts) instead of `description`.
+   - Use made-up companies and short texts, not a copy of a real post.
+   - Each `JOB_BOARDS` and `SECTIONS` host needs a test page: the tests check it.
+
+7. **Run the tests**: `node --test "tests/*.test.js"`. They run the bookmark on every page in
+   `tests/sites` (`tests/sites.test.js`), so a change for the new site that breaks another site
+   fails here. Fix the code until all of them pass.
+
+8. **Test on the real site.**
    - Build: `bash scripts/make_bookmarklet.sh OWNER/REPO` (the user's repository from
      `git remote get-url origin`). It writes `data/bookmarklet.txt`.
    - Syntax: `node -e "new Function(require('fs').readFileSync('data/bookmarklet.txt','utf8').slice(11))"`
@@ -73,7 +112,7 @@ board has its own small parser, and its host is in `config.yaml`.
    - Source: `node -e "console.log(require('./.github/scripts/project.js').guessSource('### Job link\n\nURL\n'))"`
      with a post URL prints `Job board`.
 
-7. **Tell the user** to paste the new `data/bookmarklet.txt` into their bookmark (the old
+9. **Tell the user** to paste the new `data/bookmarklet.txt` into their bookmark (the old
    bookmark has the old code), and to run `bash scripts/setup.sh` again if the
    `source: job board` label does not exist yet.
 

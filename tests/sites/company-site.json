@@ -1,0 +1,18 @@
+{
+  "site": "A company website without a JobPosting: the host and the longest text block",
+  "page": {
+    "url": "https://careers.example.com/jobs/42",
+    "title": "Backend Developer - Example",
+    "elements": {
+      "main": "We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week. We build tools for small teams. You will design and run the services behind our app, work with product and design, and help the team ship every week.",
+      "section": "Short"
+    }
+  },
+  "expect": {
+    "company": "Example",
+    "position": "Backend Developer",
+    "descriptionHas": [
+      "work with product and design"
+    ]
+  }
+}
