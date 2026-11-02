@@ -1,22 +1,23 @@
-// The anonymous counter (telemetry in config.yaml): adds 1 to a public count at
-// https://horizon.goatcounter.com, "install" once, when the setup makes a board. Only the name of
-// the event is sent: no repository, user, or data.
-const COUNTER = "https://horizon.goatcounter.com/count";
+// The anonymous counter (telemetry in config.yaml): adds 1 to the public count "install" at
+// https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install, once, when the setup makes a
+// board. Every board counts (no unique visitors, no bot filter). Only the name of the event is
+// sent: no repository, user, or data.
+const COUNTER = "https://abacus.jasoncameron.dev/hit/can-sevinc-horizon/";
 
 async function count(event, config, core) {
   if (config.telemetry === false) return core.info(`Not counted (telemetry: false in config.yaml): ${event}`);
   // (never from the tests, unless a test replaced send)
   if (process.env.NODE_TEST_CONTEXT && module.exports.send === send) return;
   try {
-    const url = `${COUNTER}?p=${encodeURIComponent(event)}&e=true&rnd=${Math.random().toString(36).slice(2)}`;
-    await module.exports.send(url);
-    core.info(`Counted: ${event} (anonymous, turn off with telemetry: false in config.yaml)`);
+    const res = await module.exports.send(COUNTER + encodeURIComponent(event));
+    if (!res.ok) throw new Error(`the counter answered ${res.status}`);
+    const { value } = await res.json();
+    core.info(`Counted: ${event}, now ${value} (anonymous, turn off with telemetry: false in config.yaml)`);
   } catch (e) {
     core.info(`Not counted: ${e.message}`);
   }
 }
 
-// (a browser user agent: the counter leaves out the requests of bots)
-const send = url => fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Horizon/1.0" } });
+const send = url => fetch(url);
 
 module.exports = { COUNTER, count, send };

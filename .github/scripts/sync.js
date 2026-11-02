@@ -64,7 +64,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
     core.info(`Period: ${name}` + (started ? " (new)" : ""));
     if (started) {
       await github.rest.issues.createComment({ owner, repo, issue_number, body:
-        `🆕 A new job search period starts with this application: **${name}**. ` +
+        `A new job search period starts with this application: **${name}**. ` +
         "New applications get it until you end it (**Actions** > **End a period**)." });
     }
   }

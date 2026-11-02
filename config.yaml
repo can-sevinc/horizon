@@ -26,7 +26,7 @@ ghostedDays: 30
 tokenWarnDays: 14
 # Example in the Salary range field of the form
 salaryPlaceholder: "70000-110000 SEK/month"
-# Count this copy: add 1 to Horizon's public install counter (https://horizon.goatcounter.com)
+# Count this copy: add 1 to Horizon's public install counter (https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install)
 # once, when the setup makes the board.
 # Nothing else is sent. false: never.
 telemetry: true

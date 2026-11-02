@@ -34,7 +34,7 @@ module.exports = async ({ github, context, core }) => {
       "called `PROJECT_TOKEN`.",
     `- [ ] **Run the setup**: [Actions > Setup](${base}/actions/workflows/setup.yaml) > **Run workflow**. ` +
       "The fields show the default settings. Change what you want, for example your city and time zone, and click **Run workflow**. " +
-      "**Count this copy** only adds 1 to Horizon's public install counter. Untick it if you prefer.",
+      "**COUNT THIS COPY** only adds 1 to Horizon's public install counter, once. Untick it if you prefer.",
     "",
     "The setup creates the labels and the project board. Then it opens two short issues for the last steps (the board views and the bookmark) and closes this one.",
     "",

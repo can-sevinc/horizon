@@ -5,16 +5,18 @@ const telemetry = require("../.github/scripts/telemetry");
 test("the counter gets only the event name, and nothing with telemetry: false", async () => {
   const urls = [];
   const send = telemetry.send;
-  telemetry.send = async url => { urls.push(url); return {}; };
+  telemetry.send = async url => { urls.push(url); return { ok: true, json: async () => ({ value: 2 }) }; };
   try {
     const core = { info() {} };
     await telemetry.count("install", { telemetry: false }, core);
     assert.deepStrictEqual(urls, []);
     await telemetry.count("install", { telemetry: true }, core);
     assert.strictEqual(urls.length, 1);
-    const u = new URL(urls[0]);
-    assert.strictEqual(u.origin + u.pathname, telemetry.COUNTER);
-    assert.deepStrictEqual([...u.searchParams.keys()], ["p", "e", "rnd"]);
-    assert.strictEqual(u.searchParams.get("p"), "install");
+    assert.deepStrictEqual(urls, [telemetry.COUNTER + "install"]);
+    // An error of the counter is in the log, and the setup goes on
+    const log = [];
+    telemetry.send = async () => ({ ok: false, status: 400 });
+    await telemetry.count("install", { telemetry: true }, { info: m => log.push(m) });
+    assert.match(log[0], /^Not counted: the counter answered 400/);
   } finally { telemetry.send = send; }
 });

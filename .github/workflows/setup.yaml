@@ -9,10 +9,6 @@ name: Setup
 on:
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: "Dry run: only show what would change"
-        type: boolean
-        default: false
       project_title:
         description: "Name of the project board"
         default: "Job Applications"
@@ -40,12 +36,16 @@ on:
         description: "Days without an answer before the ghosted label"
         default: "30"
       count_copy:
-        description: "Count this copy: add 1 to Horizon's public install counter. Nothing else is sent."
+        description: "COUNT THIS COPY: add 1 to Horizon's public install counter, once. Nothing else is sent. Untick to turn it off."
         type: boolean
         default: true
       salary_placeholder:
         description: "Example in the Salary range field, for example 60k-80k EUR/year"
         default: "70000-110000 SEK/month"
+      dry_run:
+        description: "Dry run: only show what would change"
+        type: boolean
+        default: false
 
 permissions:
   issues: write

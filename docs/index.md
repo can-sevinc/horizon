@@ -15,7 +15,7 @@ Horizon tracks your job search in a private Github repository. Each application 
 
 Keep your copy private. Your applications, notes, and salaries are in its issues.
 
-[![Installs](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fhorizon.goatcounter.com%2Fcounter%2Finstall.json&query=%24.count&label=installs&color=blue)](https://horizon.goatcounter.com)
+[![Installs](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fabacus.jasoncameron.dev%2Fget%2Fcan-sevinc-horizon%2Finstall&query=%24.value&label=installs&color=blue)](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install)
 
 | Page | |
 | --- | --- |

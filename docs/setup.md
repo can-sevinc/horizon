@@ -32,7 +32,7 @@ The script:
 
 ## The install counter
 
-The Setup has a **Count this copy** checkbox, on by default. It adds 1 to the public [install counter](https://horizon.goatcounter.com) once, when the board is created. Nothing else is sent: no repository name, user, or data. Untick it, or set `telemetry: false` in `config.yaml`, to turn it off.
+The Setup has a **COUNT THIS COPY** checkbox, on by default. It adds 1 to the public [install counter](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install) once, when the board is created. Nothing else is sent: no repository name, user, or data. Untick it, or set `telemetry: false` in `config.yaml`, to turn it off.
 
 ## What the setup creates
 
