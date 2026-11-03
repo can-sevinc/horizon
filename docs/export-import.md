@@ -3,23 +3,38 @@ title: Export, archive, import
 nav_order: 6
 ---
 
-# Export, archive, and import
+# {% include icon.html name="transfer" %} Export, archive, and import
+{: #export-archive-and-import }
+
+Export your applications to keep a copy, archive an old search to clear the board, or bring in data from another tool.
 
 ## Export
 
-Run **Actions** > **Export**. You can limit it to one period and leave out archived cards. When it finishes, download the **applications** artifact from the run, or use `gh run download --name applications`. It has `applications.json` and `applications.csv`, and Github keeps it for 7 days.
+Run **Actions** > **Export**. Choose a period if you only want that search. You can also leave out archived cards.
+
+When the run finishes, download the **applications** artifact. It contains `applications.json` and `applications.csv`. Github keeps the download for 7 days. From your repository folder, you can download it with:
+
+```bash
+gh run download --name applications
+```
 
 ## Archive a period
 
-When a job search is over, you can take its cards off the board. The issues stay.
+When a search is over, run **Actions** > **Archive a period**. Enter its name, for example `2026`. You can also choose to close the open issues in that period.
 
-Run **Actions** > **Archive a period** and type the period, for example `2026`. You can also close the open issues of that period. Archived cards are not used by the reminders or the summary, and you can restore them from **Archived items** in the project menu.
+The cards leave the board, but the issues stay. Reminders and summaries do not use archived cards. To bring the cards back, open **Archived items** in the project's menu.
+
+---
 
 ## Import old data
 
+You need Python 3 and `gh` on your computer. Keep the import files in `data/`; git ignores that folder.
+
 ### From a JSON file
 
-`scripts/import_applications.py` imports a file in the format of `schema/applications.schema.json`, the same format as the export. An AI agent can make this file from almost anything (a spreadsheet, a Notion or Trello export, notes in any language) with the `import-applications` skill.
+The file must follow `schema/applications.schema.json`, which is also the export format. The `import-applications` skill can help turn a spreadsheet, another tool's export, or your notes into this format.
+
+Check the file, preview the import, then run it:
 
 ```bash
 python3 scripts/import_applications.py --check data/import/applications.json
@@ -27,20 +42,18 @@ python3 scripts/import_applications.py data/import/applications.json USER/job-ap
 python3 scripts/import_applications.py data/import/applications.json USER/job-applications PROJECT_NUMBER
 ```
 
-`--check` only validates the file. `--dry-run` shows what would happen. Each application is imported only once, so you can run it again safely.
+Replace `USER/job-applications` and `PROJECT_NUMBER` with your own values. `--check` validates the file. `--dry-run` shows what would happen. Already imported applications are skipped.
 
 ### From a CSV file
 
-Your spreadsheet needs these columns: `Date, Company, Position, Recruiter, City, Salary Range, Job Link, Response, Status`. `Source` and `Period` are optional.
+Use these column names: `Date, Company, Position, Recruiter, City, Salary Range, Job Link, Response, Status`. `Source` and `Period` are optional.
 
-- **Status** can be a status name or a row color: `pink` Wishlist, `white` Applied, `green` In progress, `purple` Offer, `red` Rejected after interview, `gray` Rejected without interview, `yellow` withdrawn. Empty means Applied.
-- Without a `Period` column, a gap of more than 90 days between applications starts a new period (`periodGapDays` in `config.yaml`).
-- **Response** goes into the issue as a timeline. Its last date becomes **Last update**, so `Position filled. 9 oct rejected` gives October 9.
-
-Save the CSV in `data/` (git ignores it) and run:
+- **Status** can be a status name or an old row color: `pink` is Wishlist, `white` Applied, `green` In progress, `purple` Offer, `red` Rejected after interview, `gray` Rejected without interview, and `yellow` withdrawn. An empty status means Applied.
+- Without a **Period** column, a gap of more than 90 days starts a new period. Change `periodGapDays` in `config.yaml` to use another gap.
+- **Response** becomes a timeline in the issue. The last date becomes **Last update**. For example, `Position filled. 9 oct rejected` uses October 9.
 
 ```bash
 python3 scripts/import_csv.py data/applications.csv USER/job-applications PROJECT_NUMBER
 ```
 
-Both scripts skip rows that are already imported. Useful options: `--period 2023` imports only one period (you can repeat it), `--archive` closes the issues and archives the cards, and `--update-fields` fills in the project fields again.
+Both scripts skip applications already imported. `--period 2023` limits the import to that period; you can repeat the option. `--archive` closes the imported issues and archives their cards. `--update-fields` fills the project fields again for existing imported applications.

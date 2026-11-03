@@ -83,7 +83,7 @@ The original outlined logos are also available on padded, rounded background pan
 | Stacked | `horizon-stacked-panel-light.svg` | `horizon-stacked-panel-dark.svg` |
 | Symbol | `horizon-mark-panel-light.svg` | `horizon-mark-panel-dark.svg` |
 
-The light panel is **#FAF8F2**; the dark panel is **#29334A**. These preserve the finalized logo colors, outlines, proportions, and spacing. Use a panel when the logo needs its own background, such as in a card or image shared outside GitHub.
+The light panel is **#FAF8F2**; the dark panel is **#29334A**. These preserve the finalized logo colors, outlines, proportions, and spacing. Use a panel when the logo needs its own background, such as in a card or image shared outside Github.
 
 ## Feature and documentation icons
 

@@ -3,27 +3,41 @@ title: Get updates
 nav_order: 8
 ---
 
-# Get updates
+# {% include icon.html name="updates" %} Get updates
+{: #get-updates }
 
-Your copy doesn't share any history with the template, so `git pull` doesn't work. The **Update** workflow does the job instead.
+A copy made with **Use this template** has its own git history. Use the **Update** workflow to get changes from Horizon, rather than trying to pull them into your copy.
 
-## How it works
+## What happens
 
-On the 1st of every month, or when you run **Actions** > **Update**, the workflow gets the latest version of the template and opens a pull request called **Update from the template**. Nothing changes until you merge it.
+On the 1st of each month, the workflow checks the template. You can also run **Actions** > **Update** yourself. If there are changes, it opens a pull request called **Update from the template**.
 
-For each file:
+Nothing is applied to your main branch until you merge it.
 
-- If you never changed it, you get the new version.
-- If only you changed it, your version stays.
-- If you both changed it, the changes are merged. If you both changed the same lines, the pull request has the template's version and lists the file under **Check these files**, so you can add your change again.
+| What changed | What you get |
+| --- | --- |
+| You did not change the file | The new template version |
+| Only you changed it | Your version stays |
+| Both sides changed different lines | The changes are merged |
+| Both sides changed the same lines | The template's version, with the file listed under **Check these files** |
 
-`config.yaml` and `README.md` always stay yours, and the files of this documentation site are not added back. If the template added a new setting, it is added with its default value. The form, the workflow times, and the Setup fields are made again from your settings, so your city and times stay as they are.
+For a file under **Check these files**, add your changes again before you merge. Read the pull request first; do not merge it only because the workflow passed.
 
-After you merge, run **Actions** > **Setup** once, so your board gets any new labels or fields. If the bookmark changed, the pull request tells you, and the Setup run shows the new one.
+---
 
-## Good to know
+## Your settings stay yours
 
-- The workflow pushes with your `PROJECT_TOKEN`. It needs the `workflow` scope, because updates often change files in `.github/workflows`.
-- The last template version you got is saved in `.github/template-version`. Don't edit it.
-- To get updates from somewhere else, for example your own fork of the template, change `templateRepo` in `config.yaml`.
-- If you don't want updates, turn the workflow off: **Actions** > **Update** > **...** > **Disable workflow**.
+`config.yaml` and `README.md` stay yours. New settings are added with their default values. The form and workflow times are made again from your settings, so your city and local times stay the same.
+
+The docs site and shared image files are not added back to private copies.
+
+After merging, run **Actions** > **Setup** once. This adds any new labels or fields to your board. If the bookmark changed, the pull request tells you. Copy the new one from the Setup run.
+
+---
+
+## Useful details
+
+- `PROJECT_TOKEN` needs the `workflow` scope. Updates can change workflow files.
+- `.github/template-version` records the last version you received. Do not edit it.
+- Change `templateRepo` in `config.yaml` to get updates from another template repository.
+- To stop update checks, open **Actions** > **Update** > **...** > **Disable workflow**.

@@ -3,31 +3,45 @@ title: Reminders and summary
 nav_order: 5
 ---
 
-# Reminders and summary
+# {% include icon.html name="reminders" %} Reminders and summary
+{: #reminders-and-summary }
+
+Horizon checks your applications each morning. The times and waiting periods come from `config.yaml`.
 
 ## Follow-up reminders
 
-Every morning the workflow checks the open applications and mentions you in a comment when:
+With the default settings, you get a comment that mentions you when:
 
-- the status is **In progress** and **Last update** is 10 or more days old
-- a planned `/next` date was yesterday, so you can write your notes
-- the issue has `revisit later` and no planned date
+- an **In progress** application's **Last update** is at least 10 days old
+- a planned `/next` date was yesterday, and the application is still active
+- an issue has `revisit later` and no date planned for today or later
 
-Each issue keeps only one reminder comment. A new one replaces the old one, so you still get a notification. Add the `on-pause` label to stop reminders for an issue.
+Each issue keeps one reminder comment. A new reminder replaces the old one, so you get a fresh notification without a long list of reminders.
 
-## Weekly summary
+Add `on-pause` to stop reminders for that issue. Remove it when you want them again. On hold stops reminders about an old update, but not reminders for a planned step.
 
-Every Monday morning a new issue with the `summary` label opens, and last week's one is closed. It shows:
+---
 
-- how many applications you have in each status
-- the last 7 days compared with the 7 days before: new applications, interviews, rejections
-- what happened this week, and what is coming up
+## {% include icon.html name="calendar" %} Weekly summary
+{: #weekly-summary }
+
+By default, a new summary opens every Monday morning. It has the `summary` label. Last week's summary closes, but you can still read it.
+
+The summary shows:
+
+- the number of applications in each status
+- new applications, interviews, and rejections from the last 7 days, compared with the week before
+- this week's events and upcoming steps
 - applications that need a follow-up, ghosted ones, and old wishlist jobs
-- totals and durations (applied to first interview, applied to rejection), with the median
-- results per source and per CV version, if you fill in the CV version
+- typical time from applying to the first interview or rejection, using the median (the middle result)
+- results by source and CV version, when those details are available
 
 Archived cards are not counted. To get a summary now, run **Actions** > **Weekly summary**.
 
-## Charts
+---
 
-Open the project board > **Insights** and add a bar chart with **Status** on the X axis. A second chart with **Labels** on the X axis, grouped by **Status**, shows your sources. Add the filter `-status:Wishlist` to count only real applications.
+## Charts on the board
+
+Open the project board, then **Insights**. Add a bar chart with **Status** on the X axis. A second chart with **Labels** on the X axis, grouped by **Status**, can show your sources.
+
+Use the filter `-status:Wishlist` if you want to count only jobs you applied for.

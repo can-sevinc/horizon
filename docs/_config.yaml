@@ -1,16 +1,23 @@
 # The documentation site (Github Pages: Settings > Pages > Deploy from a branch > main, /docs)
 title: Horizon
 description: Track your job search on Github, with issues, a project board, and a few workflows.
+logo: /assets/v1/brand/horizon-logo-light.svg
 url: https://can-sevinc.github.io
 baseurl: /horizon
 
 remote_theme: just-the-docs/just-the-docs@v0.10.1
+color_scheme: horizon
 plugins:
   - jekyll-remote-theme
   - jekyll-relative-links
 
 search_enabled: true
 heading_anchors: true
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
 aux_links:
   Horizon on Github: https://github.com/can-sevinc/horizon
 gh_edit_link: true

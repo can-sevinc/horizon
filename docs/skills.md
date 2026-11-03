@@ -3,23 +3,36 @@ title: AI agent skills
 nav_order: 11
 ---
 
-# AI agent skills
+# {% include icon.html name="skills" %} AI agent skills
+{: #ai-agent-skills }
 
-The `skills/` folder has instructions for AI coding agents such as Claude Code or Codex. Open the agent in your copy and ask for the task. `.claude/skills` and `.agents/skills` link to the folder, and `AGENTS.md` lists the skills for other agents. The agents only use `gh`, `git`, and the scripts in the repository, so your data stays where it is.
+The `skills/` folder has task instructions for AI coding agents, such as Claude Code or Codex. Open the agent in your own copy of Horizon and ask for what you need.
 
-| Skill | Use it to |
+For example: "Help me prepare for the interview in issue #42." You do not need to remember the skill name.
+
+## Available skills
+
+| Skill | What it helps with |
 | --- | --- |
-| `add-application` | Add an application from a link, a pasted post, or a recruiter message |
-| `import-applications` | Import old applications from a spreadsheet, an export, or notes |
+| `add-application` | Save a job from a link, pasted post, or recruiter message |
+| `import-applications` | Bring in a spreadsheet, export, or old notes |
 | `interview-prep` | Prepare for an interview |
-| `tailor-cv` | Tailor your CV to a job, or draft a cover letter |
+| `tailor-cv` | Adjust your CV for a job or draft a cover letter |
 | `follow-up-email` | Write a follow-up or thank-you email |
 | `recruiter-reply` | Reply to a recruiter |
 | `ask-for-referral` | Ask a contact for a referral |
-| `compare-offers` | Compare offers |
-| `negotiate-offer` | Prepare a counter-offer |
-| `weekly-plan` | Plan your week |
-| `job-search-retro` | See what works in your job search |
-| `data-cleanup` | Fix duplicates, missing data, and wrong statuses |
-| `setup-doctor` | Check the setup when something doesn't work |
-| `add-job-board` | Teach the bookmark a new job site |
+| `compare-offers` | Compare the details of your offers |
+| `negotiate-offer` | Draft a counter-offer |
+| `weekly-plan` | Decide what to do this week |
+| `job-search-retro` | Look at what worked in your search |
+| `data-cleanup` | Find duplicates, missing data, and wrong statuses |
+| `setup-doctor` | Check the setup and explain the fixes |
+| `add-job-board` | Add support for a job site |
+
+---
+
+## How the agent finds them
+
+`.claude/skills` and `.agents/skills` link to the `skills/` folder. `AGENTS.md` lists the tasks for other agents. If your agent does not find a skill, ask it to read `skills/NAME/SKILL.md`.
+
+The skills use `gh`, `git`, and the repository's scripts. They read the application details needed for the task. Check a draft before sending it, and check proposed data changes before applying them.

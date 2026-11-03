@@ -5,16 +5,11 @@ nav_order: 9
 
 # Supported sites
 
-The sites where the bookmark (`scripts/bookmarklet.src.js`) reads the job post. On any other site,
-the bookmark still works: it takes the company from the JobPosting data of the page (most job
-sites have it), or else from the host name.
+The bookmark reads the job posts on these sites. On other sites, it tries the page's JobPosting data first, then the host name. You can also select the description text before clicking the bookmark.
 
-To add a site, or to fix one that the bookmark reads wrong, use the `add-job-board` skill
-(`skills/add-job-board/SKILL.md`). The skill updates this list too.
+A **job board** lists jobs from many companies. Its links get **Source: Job board** when the host is in `jobBoards` in `config.yaml`. An **ATS** is software a company uses for its hiring pages. Those links get **Source: Company website**.
 
-**Type:** a *job board* has posts of many companies; its links get **Source: Job board** (its host is
-in `jobBoards` in `config.yaml`). An *ATS* hosts the career pages of companies; its links get
-**Source: Company website**.
+---
 
 | Site | Type | Example link | Company and position from | Description from | Tested |
 | --- | --- | --- | --- | --- | --- |
@@ -32,4 +27,11 @@ in `jobBoards` in `config.yaml`). An *ATS* hosts the career pages of companies; 
 | Teamtailor, BambooHR, Recruitee, Personio, Breezy, Homerun, Workbuster | ATS | `COMPANY.teamtailor.com/jobs/ID` | Subdomain, then JobPosting | JobPosting | - |
 | Other company sites | Company website | any | JobPosting, or the host name | JobPosting, or the longest text block | - |
 
-"Tested": the date someone checked the site with the bookmark on a real post. Each site also has a test page in `tests/sites`: the tests run the bookmark on it.
+
+The **Tested** column records a check on a real job post. A dash means there is no recorded live check. Automated tests use saved example pages in `tests/sites`; that is different from checking a live site.
+
+---
+
+## Add or fix a site
+
+Ask your coding agent to use `skills/add-job-board/SKILL.md`. Give it the job link and say which values are wrong. The skill updates the bookmark and this list.

@@ -3,36 +3,49 @@ title: Home
 nav_order: 1
 ---
 
-# Horizon
+# Keep track of your job search.
 
-<center>
-    <img src="assets/v1/brand/horizon-stacked-panel-dark.svg" alt="" width="320">
-</center>
-<br/>
+Horizon puts your applications, interview notes, and next steps in a private Github repository. Each application is an issue and a card on your project board.
+{: .home-lead }
 
-Horizon tracks your job search in a private Github repository. Each application is an issue and a card on a project board, and a few workflows keep everything up to date.
+There is no server to run and no subscription. Github workflows do the routine work, so you have less to update by hand.
 
-- A bookmark turns a job post into an application.
-- Comment commands like `/interview`, `/next`, and `/rejected` update the card for you.
-- You get follow-up reminders and a summary every Monday.
-- You can export, archive, and import your applications.
-- AI coding agents can help with interview prep, cover letters, follow-up emails, and more.
+<div class="home-actions">
+  <a class="btn btn-primary" href="{{ '/setup.html' | relative_url }}">Set up your copy</a>
+  <a class="btn btn-secondary" href="{{ '/add-application.html' | relative_url }}">Save your first job</a>
+</div>
 
-Keep your copy private. Your applications, notes, and salaries are in its issues.
+<ul class="home-features">
+  <li>{% include icon.html name="save" %}<span><strong>Save a job in one click.</strong><br>The bookmark reads the company, role, and job description.</span></li>
+  <li>{% include icon.html name="board" %}<span><strong>Keep the board up to date.</strong><br>New issues become cards. Closing an issue sets its rejected status.</span></li>
+  <li>{% include icon.html name="interview" %}<span><strong>Keep your interview notes.</strong><br>Use a comment command to open the notes template.</span></li>
+  <li>{% include icon.html name="reminders" %}<span><strong>Remember the next step.</strong><br>Get follow-up reminders and a weekly summary.</span></li>
+  <li>{% include icon.html name="transfer" %}<span><strong>Bring your old applications.</strong><br>Import a spreadsheet, and export to JSON or CSV later.</span></li>
+  <li>{% include icon.html name="skills" %}<span><strong>Get help from an AI agent.</strong><br>Prepare for interviews, tailor a CV, or draft a follow-up.</span></li>
+</ul>
+
+<p class="privacy-note">{% include icon.html name="privacy" %} Keep your copy private. Your applications, notes, and salaries are in its issues.</p>
 
 [![Boards created](https://img.shields.io/endpoint?url=https%3A%2F%2Fhorizon.mcansevinc.workers.dev%2Fbadge)](https://github.com/can-sevinc/horizon)
 
-<img src="assets/v1/brand/horizon-divider.svg" alt="" width="640">
+---
 
-| Page | |
-| --- | --- |
-| <img src="assets/v1/icons/icon-setup.svg" alt="" width="24" height="24"> [Setup](setup.md) | Create your copy |
-| <img src="assets/v1/icons/icon-save.svg" alt="" width="24" height="24"> [Add an application](add-application.md) | The bookmark, recruiter messages, the wishlist |
-| <img src="assets/v1/icons/icon-commands.svg" alt="" width="24" height="24"> [Update an application](update-application.md) | Commands, fields, rejections, labels, periods |
-| <img src="assets/v1/icons/icon-reminders.svg" alt="" width="24" height="24"> [Reminders and summary](reminders-and-summary.md) | Follow-ups, the weekly summary, charts |
-| <img src="assets/v1/icons/icon-transfer.svg" alt="" width="24" height="24"> [Export, archive, import](export-import.md) | Your data in and out |
-| <img src="assets/v1/icons/icon-settings.svg" alt="" width="24" height="24"> [Settings and files](settings.md) | `config.yaml` and the repository layout |
-| <img src="assets/v1/icons/icon-updates.svg" alt="" width="24" height="24"> [Get updates](updates.md) | New versions of the template |
-| <img src="assets/v1/icons/icon-sites.svg" alt="" width="24" height="24"> [Supported sites](supported-sites.md) | Where the bookmark reads the job post |
-| <img src="assets/v1/icons/icon-skills.svg" alt="" width="24" height="24"> [AI agent skills](skills.md) | What an AI agent can do for you |
-| <img src="assets/v1/icons/icon-help.svg" alt="" width="24" height="24"> [If there is a problem](troubleshooting.md) | The daily check and common fixes |
+## Find what you need
+
+<div class="guide-grid">
+{% for guide in site.data.guides %}
+  <a class="guide-card" href="{{ guide.path | relative_url }}">
+    {% include icon.html name=guide.icon %}
+    <span><strong>{{ guide.title }}</strong><small>{{ guide.description }}</small></span>
+  </a>
+{% endfor %}
+</div>
+
+---
+
+## {% include icon.html name="next" %} Where to start
+{: #where-to-start }
+
+Start with [Setup](setup.md). It makes your private copy and the board. Then add the bookmark to your browser and save a job post.
+
+Already have a copy? [Comment commands](update-application.md#comment-commands) are the quickest way to record an interview or plan the next step. It works also from the Github mobile app.

@@ -1,0 +1,40 @@
+- title: Setup
+  path: /setup.html
+  icon: setup
+  description: Create your private copy and prepare the board.
+- title: Add an application
+  path: /add-application.html
+  icon: save
+  description: Use the bookmark, save a recruiter message, or start a wishlist.
+- title: Update an application
+  path: /update-application.html
+  icon: commands
+  description: Record an interview, plan a step, or change the status.
+- title: Reminders and summary
+  path: /reminders-and-summary.html
+  icon: reminders
+  description: See when reminders arrive and what the weekly summary includes.
+- title: Export, archive, import
+  path: /export-import.html
+  icon: transfer
+  description: Bring old applications in, or keep a copy of your data.
+- title: Settings and files
+  path: /settings.html
+  icon: settings
+  description: Change your settings and find the right file.
+- title: Get updates
+  path: /updates.html
+  icon: updates
+  description: Bring changes from Horizon into your own copy.
+- title: Supported sites
+  path: /supported-sites.html
+  icon: sites
+  description: Check which job sites the bookmark can read.
+- title: If there is a problem
+  path: /troubleshooting.html
+  icon: help
+  description: Check the token, board, workflows, and shared images.
+- title: AI agent skills
+  path: /skills.html
+  icon: skills
+  description: Get help with interviews, applications, and follow-ups.

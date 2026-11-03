@@ -3,17 +3,22 @@ title: Setup
 nav_order: 2
 ---
 
-# Setup
+# {% include icon.html name="setup" %} Setup
+{: #setup }
 
-You need a Github account. For the setup on your computer you also need `gh` (the Github CLI) and `git`. Python 3 is only needed to import old data.
+You need a Github account. You can do the setup in your browser or on your computer. Choose the way you prefer.
 
 ## In the browser
 
-1. Click **Use this template** > **Create a new repository** and choose **Private**. Your applications will be issues in this repository, so it has to stay private.
-2. After a minute, an issue called **Finish the setup** opens in your copy. It has three steps: make a token, save it as the secret `PROJECT_TOKEN`, and run **Actions** > **Setup**. The Setup fields show the default settings (Stockholm, for example), so change the ones that don't fit you. If the issue doesn't show up, run **Actions** > **Welcome** by hand.
-3. When the setup is done, it closes that issue and opens two new ones with the `setup` label: **Prepare the board** and **Add the bookmark**. Follow them and close them when you are done. After that, and once more on day 7, an **Enjoying Horizon?** issue asks for a star. It doesn't show up if you have starred Horizon already.
+1. Click **Use this template** > **Create a new repository**. Choose **Private**. Your applications will be issues in this copy.
+2. Wait about a minute for the **Finish the setup** issue. Follow its steps to make a token, save it as `PROJECT_TOKEN`, and run **Actions** > **Setup**. Change the default city, time zone, and other fields if needed. If the issue does not appear, run **Actions** > **Welcome** yourself.
+3. Setup closes that issue when it finishes. It opens **Prepare the board** and **Add the bookmark** with the `setup` label. Follow both, then close them.
+
+After these steps, Horizon may ask for a star in an **Enjoying Horizon?** issue. It can ask once more on day 7. It does not ask if you already starred the project.
 
 ## On your computer
+
+You need `gh` (the Github command-line tool) and `git`. Python 3 is only needed if you import old data.
 
 ```bash
 gh auth login
@@ -22,74 +27,78 @@ cd job-applications
 bash scripts/setup.sh
 ```
 
-The script:
+The script makes a private repository if this folder is not your own copy yet. It keeps the original template as `upstream` and stops if your copy is public.
 
-- creates a private repository for you if the folder isn't yours yet, and keeps the template as the remote `upstream`
-- stops if your repository is public
-- asks for your settings (board name, city, time zone, reminder times, and so on). Press Enter to keep the value in brackets. The answers go into `config.yaml`.
-- opens a page to make the token and saves it as `PROJECT_TOKEN`
-- runs the **Setup** workflow, which opens the same two issues as in the browser, and saves the bookmark to `data/bookmarklet.txt`
+It asks for the board name, city, time zone, and reminder times. Press Enter to keep a value. It saves your answers in `config.yaml`, helps you make the token, and runs the **Setup** workflow. The bookmark code is also saved in `data/bookmarklet.txt`.
 
-## The install counter
+---
 
-The Setup has a **COUNT THIS COPY** checkbox, on by default. It adds 1 to the public [install counter](https://horizon.mcansevinc.workers.dev/badge) once, when the board is created. Nothing else is sent: no repository name, user, or data. Untick it, or set `telemetry: false` in `config.yaml`, to turn it off.
+## {% include icon.html name="board" %} Your board
+{: #your-board }
 
-## What the setup creates
+Setup creates four views. On a new project, the empty **View 1** becomes **Board**.
 
-Four views on the project board (the empty **View 1** of a new project becomes **Board**):
-
-| View | Layout | Shows |
+| View | Layout | What it shows |
 | --- | --- | --- |
 | Board | Board | All applications, with **Applied date** and **Last update** on the cards |
 | Table | Table | All applications |
 | Interviews | Roadmap | **In progress**, **On hold**, and **Rejected after interview** |
-| Summaries | Table | The weekly summaries |
+| Summaries | Table | Weekly summaries |
 
-The **Status** options:
+The default statuses are:
 
-| Status | Color | Meaning |
-| --- | --- | --- |
-| Wishlist | Pink | Not applied yet |
-| Applied | Blue | Applied, no answer yet |
-| In progress | Green | The process is going on |
-| On hold | Yellow | Paused, you will continue later |
-| Rejected after interview | Red | Stopped after at least one interview |
-| Rejected without interview | Gray | Stopped before any interview |
-| Offer | Purple | You got an offer |
+| Status | Meaning |
+| --- | --- |
+| Wishlist | You have not applied yet |
+| Applied | You applied and are waiting for an answer |
+| In progress | The process continues |
+| On hold | Paused, but not finished |
+| Rejected after interview | Stopped after at least one interview |
+| Rejected without interview | Stopped before any interview |
+| Offer | You got an offer |
 
-It also adds the fields **Applied date**, **Last update**, **Company**, **Position**, **City**, **Salary range**, **Recruiter**, **Job link**, and **Interviews**, plus the labels from `config.yaml`. On a new board, it removes the default project workflows and the labels that Github adds to every repository (`bug`, `question`, and so on). Your copy also gets its own short README with links to your board, and the files of this documentation site are removed from it. Don't rename the statuses: the workflows look for these names.
+Setup also adds the fields and labels from `config.yaml`. On a new board, it removes the default project workflows and the usual repository labels, such as `bug` and `question`.
 
-## Manual steps
+Your copy gets a short README with links to your board. It does not keep this docs site or its images. It loads shared images from the `assetsUrl` address in `config.yaml`.
 
-Github doesn't let workflows sort views or set timeline dates, so the **Prepare the board** issue asks you to do this once:
+Do not rename a status only on the board. The names must match `config.yaml`.
+
+## A few manual steps
+
+Github does not let the workflow set view sorting or timeline dates. The **Prepare the board** issue gives you the links and these settings:
 
 | View | Settings |
 | --- | --- |
 | Board | Sort by **Last update**, new to old. Field sum: **Count** and **Interviews**. |
 | Table | Sort by **Applied date**, old to new |
-| Interviews | Sort by **Last update**, new to old. Dates: **Applied date** to **Last update**. Zoom level: **Year**. |
+| Interviews | Sort by **Last update**, new to old. Dates: **Applied date** to **Last update**. Zoom: **Year**. |
 | Summaries | Sort by **Created**, new to old |
 
-![Board view settings](assets/v1/screenshots/board-view.png) ![Interviews view settings](assets/v1/screenshots/interviews-view.png)
+![Board view settings](assets/v1/screenshots/board-view.png)
 
-The **Add the bookmark** issue has your bookmark code. In Chrome, right-click the bookmarks bar, choose **Add page...**, and paste the code as the URL:
+![Interviews view settings](assets/v1/screenshots/interviews-view.png)
+
+The **Add the bookmark** issue has your bookmark code. In Chrome, right-click the bookmarks bar, choose **Add page...**, and paste the code into the URL field.
 
 ![Add bookmark in Chrome](assets/v1/screenshots/add-bookmark.png)
 
-## Run the setup again
+---
 
-You can run the setup as often as you like, for example after you change `config.yaml`. It doesn't touch your issues or cards. It only adds what is missing and updates colors, descriptions, the form, and the workflow times. Your sorting, columns, and own views stay as they are. It doesn't open the setup issues again. It asks before it replaces the token.
+## {% include icon.html name="settings" %} Change settings later
+{: #change-settings-later }
 
-To see what it would change without changing anything:
+Run setup again after you change `config.yaml`. It adds missing fields and updates the labels, form, and workflow times. Your issues, cards, view sorting, and own views stay as they are. It does not open the setup issues again.
+
+To check the changes first:
 
 ```bash
 DRY_RUN=1 bash scripts/setup.sh
 ```
 
-## The Setup workflow
+You can also use **Actions** > **Setup** in Github. Its fields show your saved settings. Change a field to save a new value, or tick **Dry run** to only see the planned changes. The run summary has the result and bookmark code.
 
-You can also run **Actions** > **Setup** on Github without anything on your computer. It needs the `PROJECT_TOKEN` secret.
+## The install counter
 
-- The fields show your current settings from `config.yaml`. Change a field to change that setting. The workflow saves it to `config.yaml`, the form, and the field defaults in one commit.
-- Tick **Dry run** to only see what would change.
-- The run summary shows what it did, the manual steps, and the bookmark.
+**COUNT THIS COPY** is on by default. When Setup creates the board, it adds 1 to the [public board count](https://horizon.mcansevinc.workers.dev/badge). It sends only the event name, not your repository name, user, or applications.
+
+Untick the checkbox, or set `telemetry: false` in `config.yaml`, to turn it off.
