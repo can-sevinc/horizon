@@ -10,7 +10,7 @@
 
 **Track your job search in a private Github repository.**
 
-[![Boards created](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fabacus.jasoncameron.dev%2Fget%2Fcan-sevinc-horizon%2Finstall&query=%24.value&label=boards%20created&labelColor=36435C&color=F2C85B&style=for-the-badge)](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install) [![Stars](https://img.shields.io/github/stars/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](https://github.com/can-sevinc/horizon/stargazers) [![License](https://img.shields.io/github/license/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](LICENSE)
+[![Boards created](https://img.shields.io/endpoint?url=https%3A%2F%2Fhorizon.mcansevinc.workers.dev%2Fbadge)](https://github.com/can-sevinc/horizon) [![Stars](https://img.shields.io/github/stars/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](https://github.com/can-sevinc/horizon/stargazers) [![License](https://img.shields.io/github/license/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](LICENSE)
 
 Each application is an issue and a card on a project board. Github Actions keep everything up to date. No server, no subscription.
 
@@ -64,7 +64,7 @@ When the Horizon template changes, the **Update** workflow opens a pull request 
 
 Your applications, notes, and salary details stay in your private repository. Setup refuses to run in a public repository, and a daily check warns you if its visibility changes.
 
-When setup creates your board, it sends one event to the optional [usage counter](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install). The event doesn't include your repository name, username, or application data. Set `telemetry: false` in [`config.yaml`](config.yaml) to turn it off.
+When setup creates your board, it sends one event to the optional [usage counter](https://horizon.mcansevinc.workers.dev/badge). The event doesn't include your repository name, username, or application data. Set `telemetry: false` in [`config.yaml`](config.yaml) to turn it off.
 
 ## Configuration
 

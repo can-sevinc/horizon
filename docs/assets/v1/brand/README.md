@@ -1,9 +1,5 @@
 # Horizon brand assets
 
-Final direction: **01–E First light**, with **Manrope at weight 550**.
-
-All lettering is converted to vector outlines. No font installation, font download, or external SVG resource is needed. The original logo backgrounds and the winding road are transparent. The `panel` versions add a solid background. The SVG title supplies an accessible name when opened directly; use an `alt` attribute when embedding an image.
-
 ## Files
 
 `light` means **for a light background**; `dark` means **for a dark background**.
@@ -35,9 +31,9 @@ Additional favicon files:
 
 The road uses an even-odd vector cutout rather than a painted white or dark stripe. It shows the actual background. All assets keep the selected First light silhouette.
 
-## GitHub README
+## Github README
 
-From the repository's root README, use the following. GitHub's theme fragments show one version at a time according to the selected GitHub theme.
+From the repository's root README, use the following. Github's theme fragments show one version at a time according to the selected Github theme.
 
 ```html
 <p align="center">
@@ -52,7 +48,7 @@ From the repository's root README, use the following. GitHub's theme fragments s
 
 For the stacked layout, replace `horizon-logo-` with `horizon-stacked-` and use a width of about 220 px. Use the `mark` version when no wordmark is needed.
 
-## GitHub Pages / Jekyll
+## Github Pages / Jekyll
 
 For a site whose theme follows the system light/dark preference:
 

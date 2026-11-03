@@ -5,6 +5,11 @@ nav_order: 1
 
 # Horizon
 
+<center>
+    <img src="assets/v1/brand/horizon-stacked-panel-dark.svg" alt="" width="320">
+</center>
+<br/>
+
 Horizon tracks your job search in a private Github repository. Each application is an issue and a card on a project board, and a few workflows keep everything up to date.
 
 - A bookmark turns a job post into an application.
@@ -15,7 +20,7 @@ Horizon tracks your job search in a private Github repository. Each application 
 
 Keep your copy private. Your applications, notes, and salaries are in its issues.
 
-[![Installs](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fabacus.jasoncameron.dev%2Fget%2Fcan-sevinc-horizon%2Finstall&query=%24.value&label=installs&labelColor=36435C&color=F2C85B)](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install)
+[![Boards created](https://img.shields.io/endpoint?url=https%3A%2F%2Fhorizon.mcansevinc.workers.dev%2Fbadge)](https://github.com/can-sevinc/horizon)
 
 <img src="assets/v1/brand/horizon-divider.svg" alt="" width="640">
 
