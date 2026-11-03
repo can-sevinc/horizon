@@ -1,11 +1,11 @@
 <!-- horizon: the README of the template -->
 
 <div align="center">
-
+<br/>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/horizon-logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/v1/brand/horizon-logo-light.svg">
-  <img alt="Horizon" src="docs/assets/v1/brand/horizon-logo-light.svg" width="360">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/motion/horizon-logo-dark.gif">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/v1/brand/motion/horizon-logo-light.gif">
+  <img alt="Horizon" src="docs/assets/v1/brand/motion/horizon-logo-light.gif" width="360">
 </picture>
 
 **Track your job search in a private Github repository.**
