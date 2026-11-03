@@ -178,7 +178,7 @@ test("the steps for you get their own issues, and Finish the setup closes with l
   const created = calls.filter(([n]) => n === "create").map(([, a]) => a);
   assert.deepStrictEqual(created.map(a => a.title), [issues.PREPARE, issues.BOOKMARK]);
   assert.ok(created.every(a => a.labels[0] === "setup"));
-  assert.match(created[0].body, /Field sum: \*\*Count\*\* and \*\*Interviews\*\*[\s\S]*board-view\.png\?raw=true[\s\S]*Zoom level: \*\*Year\*\*/);
+  assert.match(created[0].body, /Field sum: \*\*Count\*\* and \*\*Interviews\*\*[\s\S]*https:\/\/can-sevinc\.github\.io\/horizon\/assets\/v1\/screenshots\/board-view\.png\)[\s\S]*Zoom level: \*\*Year\*\*/);
   assert.match(created[0].body, /- \[ \] \*\*\[Board\]\(https:\/\/github\.com\/users\/o\/projects\/1\/views\/1\)\*\*/);
   assert.match(created[0].body, /- \[ \] \*\*\[Summaries\]\(https:\/\/github\.com\/users\/o\/projects\/1\/views\/4\)\*\*/);
   assert.match(created[1].body, /```\n   javascript:[\s\S]*add-bookmark\.png/);

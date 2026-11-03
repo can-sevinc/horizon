@@ -30,6 +30,9 @@ salaryPlaceholder: "70000-110000 SEK/month"
 # once, when the setup makes the board.
 # Nothing else is sent. false: never.
 telemetry: true
+# The address of the icons and pictures in the comments, the setup issues, and the README:
+# docs/assets/v1 of Horizon on its documentation site. Your own copy of them: their address.
+assetsUrl: https://can-sevinc.github.io/horizon/assets/v1
 # Import: days without an application that start a new period
 periodGapDays: 90
 # The template that the Update workflow gets new versions from (owner/name)

@@ -35,12 +35,19 @@ function issueForm(text, config) {
 // --- The README of a copy ---
 // The README of Horizon has this line; a copy gets templates/README.md instead
 const PITCH = "<!-- horizon: the README of the template -->";
-const copyReadme = (text, repo) => text.replace(/\{\{REPO\}\}/g, repo);
-// Files only for Horizon itself (its documentation site, the README of a copy): a copy deletes
-// them, and the Update workflow does not bring them back. docs/images (the setup issues use them)
-// and docs/supported-sites.md (the add-job-board skill changes it) stay.
-const horizonOnly = p => p === "templates/README.md" || p === "docs/_config.yaml" || p.startsWith("docs/_includes/") ||
-  (/^docs\/[^/]+\.md$/.test(p) && p !== "docs/supported-sites.md");
+const copyReadme = (text, repo, assets) => icons(text, assets).replace(/\{\{REPO\}\}/g, repo).replace(/\{\{ASSETS\}\}/g, assets);
+// Files only for Horizon itself (its documentation site with the pictures, the README of a copy):
+// a copy deletes them, and the Update workflow does not bring them back. The comments, the
+// setup issues, and the README of a copy load the pictures from the site (assetsUrl in
+// config.yaml). docs/supported-sites.md (the add-job-board skill changes it) stays.
+const horizonOnly = p => p === "templates/README.md" || (p.startsWith("docs/") && p !== "docs/supported-sites.md");
+
+// --- Icons: {{icon:NAME}} in a template is docs/assets/v1/icons/icon-NAME-light.svg, or
+// -dark.svg in the dark theme of Github, at the address assets (assetsUrl in config.yaml) ---
+const icon = (name, assets) => `<picture><source media="(prefers-color-scheme: dark)" srcset="${assets}/icons/icon-${name}-dark.svg">` +
+  `<img src="${assets}/icons/icon-${name}-light.svg" alt="" width="24" height="24"></picture>`;
+const ICON = /\{\{icon:([\w-]+)\}\}/g;
+const icons = (text, assets) => text.replace(ICON, (_, name) => icon(name, assets));
 
 // --- The fields of the Setup workflow ---
 // The settings that the Setup workflow can change: input -> config.yaml key
@@ -128,4 +135,4 @@ function workflowSchedule(text, config, keys) {
   return text.replace(re, (_, head) => head + block.join("\n") + "\n");
 }
 
-module.exports = { bookmarklet, formAttribute, issueForm, PITCH, copyReadme, horizonOnly, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };
+module.exports = { bookmarklet, formAttribute, issueForm, PITCH, copyReadme, horizonOnly, icon, ICON, icons, INPUTS, SETUP_WORKFLOW, setupInputs, inputDefaults, SCHEDULES, DAYS, offset, cron, cronLines, workflowSchedule };

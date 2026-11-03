@@ -1,6 +1,6 @@
 # Instructions for AI coding agents
 
-This repository tracks job applications: each application is a Github issue, on a Github Projects board. The workflows in `.github/workflows` (code in `.github/scripts`) keep the board up to date. Settings are in `config.yaml`. The documentation is at https://can-sevinc.github.io/horizon/ (a copy of Horizon keeps only `docs/images` and `docs/supported-sites.md`).
+This repository tracks job applications: each application is a Github issue, on a Github Projects board. The workflows in `.github/workflows` (code in `.github/scripts`) keep the board up to date. Settings are in `config.yaml`. The documentation is at https://can-sevinc.github.io/horizon/ (a copy of Horizon keeps only `docs/supported-sites.md`; the icons and pictures load from the site, `assetsUrl` in `config.yaml`).
 
 Rules:
 

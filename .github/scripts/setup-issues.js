@@ -1,15 +1,15 @@
 // The issues that the setup opens with the steps that only you can do (label "setup").
-// The pictures are in docs/images.
+// The pictures are in docs/assets/v1/screenshots of Horizon, on its site (assetsUrl in config.yaml).
 
 const LABEL = "setup";
 const PREPARE = "Prepare the board";
 const BOOKMARK = "Add the bookmark";
 
 // A picture of this repository, for an issue
-const image = (repo, branch, file, alt) => `![${alt}](https://github.com/${repo}/blob/${branch}/docs/images/${file}?raw=true)`;
+const image = (assets, file, alt) => `![${alt}](${assets}/screenshots/${file})`;
 
-function prepare({ owner, repo, branch, projectUrl, viewUrls = {} }) {
-  const img = (f, alt) => "  " + image(repo, branch, f, alt);
+function prepare({ owner, assets, projectUrl, viewUrls = {} }) {
+  const img = (f, alt) => "  " + image(assets, f, alt);
   // The name of a view, with a link to it
   const view = name => viewUrls[name] ? `**[${name}](${viewUrls[name]})**` : `**${name}**`;
   return [
@@ -45,7 +45,7 @@ function prepare({ owner, repo, branch, projectUrl, viewUrls = {} }) {
   ].join("\n");
 }
 
-function bookmark({ owner, repo, branch, bookmarklet }) {
+function bookmark({ owner, repo, assets, bookmarklet }) {
   return [
     `@${owner} The bookmark saves a job post to your board in one click.`,
     "",
@@ -58,7 +58,7 @@ function bookmark({ owner, repo, branch, bookmarklet }) {
     "2. In Chrome, show the bookmarks bar (Cmd+Shift+B on a Mac, Ctrl+Shift+B on Windows), right-click it and choose **Add page...**. " +
       "Name it `Add to application board`, paste the code as the URL, and click **Save**.",
     "",
-    "   " + image(repo, branch, "add-bookmark.png", "Add bookmark in Chrome"),
+    "   " + image(assets, "add-bookmark.png", "Add bookmark in Chrome"),
     "",
     "   Other browsers work the same way: make a new bookmark and paste the code as its URL.",
     "",

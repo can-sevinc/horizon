@@ -70,11 +70,11 @@ Github doesn't let workflows sort views or set timeline dates, so the **Prepare 
 | Interviews | Sort by **Last update**, new to old. Dates: **Applied date** to **Last update**. Zoom level: **Year**. |
 | Summaries | Sort by **Created**, new to old |
 
-![Board view settings](images/board-view.png) ![Interviews view settings](images/interviews-view.png)
+![Board view settings](assets/v1/screenshots/board-view.png) ![Interviews view settings](assets/v1/screenshots/interviews-view.png)
 
 The **Add the bookmark** issue has your bookmark code. In Chrome, right-click the bookmarks bar, choose **Add page...**, and paste the code as the URL:
 
-![Add bookmark in Chrome](images/add-bookmark.png)
+![Add bookmark in Chrome](assets/v1/screenshots/add-bookmark.png)
 
 ## Run the setup again
 

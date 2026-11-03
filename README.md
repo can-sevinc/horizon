@@ -1,53 +1,74 @@
 <!-- horizon: the README of the template -->
-# Horizon
 
-Track your job search in a private Github repository. Each application is an issue and a card on a project board, and a few workflows keep it up to date. No server and no subscription.
+<div align="center">
 
-Documentation: https://can-sevinc.github.io/horizon/
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/horizon-logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/v1/brand/horizon-logo-light.svg">
+  <img alt="Horizon" src="docs/assets/v1/brand/horizon-logo-light.svg" width="360">
+</picture>
 
-[![Installs](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fabacus.jasoncameron.dev%2Fget%2Fcan-sevinc-horizon%2Finstall&query=%24.value&label=installs&color=blue)](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install)
+**Track your job search in a private Github repository.**
+
+[![Boards created](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fabacus.jasoncameron.dev%2Fget%2Fcan-sevinc-horizon%2Finstall&query=%24.value&label=boards%20created&labelColor=36435C&color=F2C85B&style=for-the-badge)](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install) [![Stars](https://img.shields.io/github/stars/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](https://github.com/can-sevinc/horizon/stargazers) [![License](https://img.shields.io/github/license/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](LICENSE)
+
+Each application is an issue and a card on a project board. Github Actions keep everything up to date. No server, no subscription.
+
+[Get started](#setup) · [Features](#features) · [Documentation](https://can-sevinc.github.io/horizon/)
+
+</div>
 
 ## Features
 
 <!-- GIF: the bookmark on a job post -->
-- **One click to save a job.** A bookmark fills in the company, position, link, and job description. It works on LinkedIn, Greenhouse, Lever, Ashby, Workday, Teamtailor, and [more](docs/supported-sites.md).
+- <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/icons/icon-save-dark.svg"><img src="docs/assets/v1/icons/icon-save-light.svg" alt="" width="24" height="24"></picture> **Save jobs in one click.** A bookmark picks up the company, position, link, and description from Linkedin, Greenhouse, Lever, Ashby, Workday, Teamtailor, and [other sites](docs/supported-sites.md).
 
 <!-- GIF: a card moving on the board -->
-- **The board updates itself.** New issues become cards, and closing an issue sets the right rejected status.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/icons/icon-board-dark.svg"><img src="docs/assets/v1/icons/icon-board-light.svg" alt="" width="24" height="24"></picture> **The board updates itself.** New issues become cards, and closing an issue sets the right status.
 
 <!-- GIF: /interview and /next in an issue -->
-- **Comment commands.** `/interview`, `/next 2026-12-01 call`, `/offer`, `/rejected` and a few more. They also work in the Github mobile app.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/icons/icon-commands-dark.svg"><img src="docs/assets/v1/icons/icon-commands-light.svg" alt="" width="24" height="24"></picture> **Comment commands.** `/interview`, `/next 2026-12-01 call`, `/offer`, `/rejected` and a few more. They also work in the Github mobile app.
 
 <!-- GIF: a weekly summary -->
-- **Reminders and a weekly summary.** You hear about follow-ups and silent companies, and every Monday you get your numbers.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/icons/icon-reminders-dark.svg"><img src="docs/assets/v1/icons/icon-reminders-light.svg" alt="" width="24" height="24"></picture> **Reminders and weekly summaries.** Get follow-up reminders, see the companies that went quiet, and get your weekly stats every Monday.
 
-- **Import and export.** Bring your old spreadsheet, and export to JSON or CSV any time.
+- <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/icons/icon-transfer-dark.svg"><img src="docs/assets/v1/icons/icon-transfer-light.svg" alt="" width="24" height="24"></picture> **Import and export.** Bring your old spreadsheet, and export everything as JSON or CSV any time.
 
-- **AI agent skills.** Interview prep, CV tailoring, follow-up emails, offer comparison, and [more](docs/skills.md).
+- <picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/icons/icon-skills-dark.svg"><img src="docs/assets/v1/icons/icon-skills-light.svg" alt="" width="24" height="24"></picture> **AI agent skills.** Interview prep, CV tailoring, follow-up emails, offer comparisons and [more skills](docs/skills.md).
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/horizon-divider-dark.svg">
+    <img src="docs/assets/v1/brand/horizon-divider-light.svg" alt="" width="640">
+  </picture>
+</p>
 
 ## Setup
 
-In the browser: click **Use this template**, choose **Private**, and follow the **Finish the setup** issue that opens in your copy.
+**In your browser:** Click [Use this template](https://github.com/can-sevinc/horizon/generate), select **Private**, and follow the **Finish the setup** issue in your new repository.
 
-On your computer, with `gh` and `git`:
+**In your terminal:** Requires `gh` and `git`.
 
 ```bash
-gh repo clone can-sevinc/horizon job-applications
+gh repo create job-applications --private --template can-sevinc/horizon --clone
 cd job-applications
 bash scripts/setup.sh
 ```
 
-More in [Setup](docs/setup.md). When the template changes, the **Update** workflow opens a pull request in your copy. See [Get updates](docs/updates.md).
+See the [setup guide](docs/setup.md).
 
-## Keep it private
+When the Horizon template changes, the **Update** workflow opens a pull request in your copy. [How updates work](docs/updates.md).
 
-Your applications, notes, and salaries live in the issues of your copy. The setup stops if the repository is public, and a daily check warns you if it ever becomes public.
 
-The only thing your copy sends out is a +1 to the public [install counter](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install): once, when the setup creates your board. No repository name, user, or data is sent, and `telemetry: false` in `config.yaml` turns it off.
+## Privacy
 
-## Settings
+Your applications, notes, and salary details stay in your private repository. Setup refuses to run in a public repository, and a daily check warns you if its visibility changes.
 
-Everything is in [`config.yaml`](config.yaml): time zone, reminder times, statuses, fields, and labels. Run the setup again after a change.
+When setup creates your board, it sends one event to the optional [usage counter](https://abacus.jasoncameron.dev/get/can-sevinc-horizon/install). The event doesn't include your repository name, username, or application data. Set `telemetry: false` in [`config.yaml`](config.yaml) to turn it off.
+
+## Configuration
+
+Set your time zone, reminder times, statuses, fields, and labels in [`config.yaml`](config.yaml). Run setup again to apply changes.
 
 ## Development
 
@@ -55,7 +76,7 @@ Everything is in [`config.yaml`](config.yaml): time zone, reminder times, status
 node --test "tests/*.test.js"
 ```
 
-See [`AGENTS.md`](AGENTS.md) if you work with an AI coding agent.
+See [`AGENTS.md`](AGENTS.md) for coding agent instructions.
 
 ## License
 

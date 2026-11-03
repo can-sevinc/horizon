@@ -48,7 +48,8 @@ module.exports = async ({ github, context, core }) => {
 // templates/README.md, and the files only for Horizon go. { path: text, or null to delete }
 function copyChanges(root, repo) {
   if (!fs.readFileSync(path.join(root, "README.md"), "utf8").includes(render.PITCH)) return {};
-  const changes = { "README.md": render.copyReadme(fs.readFileSync(path.join(root, "templates/README.md"), "utf8"), repo) };
+  const assets = require("./config").parse(fs.readFileSync(path.join(root, "config.yaml"), "utf8")).assetsUrl;
+  const changes = { "README.md": render.copyReadme(fs.readFileSync(path.join(root, "templates/README.md"), "utf8"), repo, assets) };
   const walk = dir => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap(e =>
     e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]);
   for (const p of [...walk("docs"), ...walk("templates")]) if (render.horizonOnly(p)) changes[p] = null;

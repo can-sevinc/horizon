@@ -1,16 +1,18 @@
+<p align="right"><sub>Powered by <a href="https://github.com/can-sevinc/horizon"><picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/horizon-logo-dark.svg"><img src="{{ASSETS}}/brand/horizon-logo-light.svg" alt="Horizon" height="16" align="top"></picture></a></sub></p>
+
 # Job applications
 
 My job search, tracked with [Horizon](https://github.com/can-sevinc/horizon). Each application is an issue and a card on the [project board](https://github.com/{{REPO}}/projects).
 
 Keep this repository private. The issues have your applications, notes, and salaries.
 
-## Add an application
+## {{icon:save}} Add an application
 
 - Click the bookmark on a job post. The form opens with the details filled in.
 - On your phone, or for a recruiter message: [new application form](https://github.com/{{REPO}}/issues/new?template=application.yaml).
 - To save a job for later, set **Stage** to **Wishlist**.
 
-## Update an application
+## {{icon:commands}} Update an application
 
 Move the card on the [board](https://github.com/{{REPO}}/projects), or start a comment with a command:
 
@@ -27,7 +29,7 @@ Move the card on the [board](https://github.com/{{REPO}}/projects), or start a c
 
 Every new issue gets a comment with the full list. To change the comments that the commands write, edit the files in [`templates/comments`](templates/comments).
 
-## What happens by itself
+## {{icon:board}} What happens by itself
 
 - A reminder comment when an application needs a follow-up
 - The `ghosted` label when an application gets no answer
@@ -35,7 +37,7 @@ Every new issue gets a comment with the full list. To change the comments that t
 - A daily check of the setup. Problems show up as an issue with the `maintenance` label.
 - A pull request when a new version of Horizon is out
 
-## Settings and more
+## {{icon:settings}} Settings and more
 
 Your settings are in [`config.yaml`](config.yaml). `telemetry: false` turns off the anonymous install counter, which only adds 1 once, at setup. After a change, run [Actions > Setup](https://github.com/{{REPO}}/actions/workflows/setup.yaml).
 

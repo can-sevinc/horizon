@@ -292,7 +292,7 @@ module.exports = async ({ github, context, core, getOctokit }) => {
         opened.push(i);
         return i;
       };
-      const ctx = { owner, repo: R, branch, projectUrl, viewUrls, bookmarklet: mark };
+      const ctx = { owner, repo: R, assets: config.assetsUrl, projectUrl, viewUrls, bookmarklet: mark };
       if (projectUrl) await open(issues.PREPARE, issues.prepare(ctx), false);
       await open(issues.BOOKMARK, issues.bookmark(ctx), true);
     }
