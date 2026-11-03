@@ -39,6 +39,7 @@ Github runs schedules in UTC. Setup writes the UTC times for your time zone. If 
 Changing files in `.github/workflows` needs a token with the `workflow` scope. If the token does not have it, Setup tells you which files to change yourself.
 
 ---
+{: .divider-double }
 
 ## {% include icon.html name="sites" %} Shared images
 {: #shared-images }

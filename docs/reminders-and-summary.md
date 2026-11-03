@@ -21,6 +21,7 @@ Each issue keeps one reminder comment. A new reminder replaces the old one, so y
 Add `on-pause` to stop reminders for that issue. Remove it when you want them again. On hold stops reminders about an old update, but not reminders for a planned step.
 
 ---
+{: .divider-offset }
 
 ## {% include icon.html name="calendar" %} Weekly summary
 {: #weekly-summary }

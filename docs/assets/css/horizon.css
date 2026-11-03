@@ -88,6 +88,21 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .main-content li { margin-top: 5px; }
 .main-content ol > li::before, .main-content ul > li::before { color: var(--muted); }
 .main-content hr { height: 54px; max-width: 640px; margin: 32px auto; border: 0; background: var(--divider) center / contain no-repeat; }
+.main-content hr.divider-right,
+.main-content hr.divider-left,
+.main-content hr.divider-offset,
+.main-content hr.divider-double { height: auto; aspect-ratio: 8 / 1; }
+.main-content hr.divider-large { height: auto; aspect-ratio: 40 / 7; }
+.main-content hr.divider-right { --divider: url("../v1/brand/dividers/horizon-divider-right-light.svg"); }
+.main-content hr.divider-left { --divider: url("../v1/brand/dividers/horizon-divider-left-light.svg"); }
+.main-content hr.divider-large { --divider: url("../v1/brand/dividers/horizon-divider-large-light.svg"); }
+.main-content hr.divider-offset { --divider: url("../v1/brand/dividers/horizon-divider-offset-light.svg"); }
+.main-content hr.divider-double { --divider: url("../v1/brand/dividers/horizon-divider-double-light.svg"); }
+[data-theme="dark"] .main-content hr.divider-right { --divider: url("../v1/brand/dividers/horizon-divider-right-dark.svg"); }
+[data-theme="dark"] .main-content hr.divider-left { --divider: url("../v1/brand/dividers/horizon-divider-left-dark.svg"); }
+[data-theme="dark"] .main-content hr.divider-large { --divider: url("../v1/brand/dividers/horizon-divider-large-dark.svg"); }
+[data-theme="dark"] .main-content hr.divider-offset { --divider: url("../v1/brand/dividers/horizon-divider-offset-dark.svg"); }
+[data-theme="dark"] .main-content hr.divider-double { --divider: url("../v1/brand/dividers/horizon-divider-double-dark.svg"); }
 .brand-icon { display: inline-flex; vertical-align: -.18em; flex: 0 0 auto; line-height: 0; }
 .brand-icon img { width: 28px; height: 28px; }
 h1 .brand-icon { margin-right: 8px; vertical-align: -.08em; }

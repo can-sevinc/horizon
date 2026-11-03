@@ -10,6 +10,8 @@ You need a Github account. You can do the setup in your browser or on your compu
 
 ## In the browser
 
+<p><a class="btn btn-primary" href="https://github.com/new?template_name=horizon&amp;template_owner=can-sevinc&amp;visibility=private">Use this template</a></p>
+
 1. Click **Use this template** > **Create a new repository**. Choose **Private**. Your applications will be issues in this copy.
 2. Wait about a minute for the **Finish the setup** issue. Follow its steps to make a token, save it as `PROJECT_TOKEN`, and run **Actions** > **Setup**. Change the default city, time zone, and other fields if needed. If the issue does not appear, run **Actions** > **Welcome** yourself.
 3. Setup closes that issue when it finishes. It opens **Prepare the board** and **Add the bookmark** with the `setup` label. Follow both, then close them.
@@ -32,6 +34,7 @@ The script makes a private repository if this folder is not your own copy yet. I
 It asks for the board name, city, time zone, and reminder times. Press Enter to keep a value. It saves your answers in `config.yaml`, helps you make the token, and runs the **Setup** workflow. The bookmark code is also saved in `data/bookmarklet.txt`.
 
 ---
+{: .divider-large }
 
 ## {% include icon.html name="board" %} Your board
 {: #your-board }
@@ -83,6 +86,7 @@ The **Add the bookmark** issue has your bookmark code. In Chrome, right-click th
 ![Add bookmark in Chrome](assets/v1/screenshots/add-bookmark.png)
 
 ---
+{: .divider-offset }
 
 ## {% include icon.html name="settings" %} Change settings later
 {: #change-settings-later }

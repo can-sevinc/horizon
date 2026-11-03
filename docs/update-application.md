@@ -31,6 +31,7 @@ Put the command at the start of your comment. Only the repository owner can use 
 To change the comments these commands write, edit `templates/comments`. Keep the field labels that the workflows read. The README in that folder explains them and the `{% raw %}{{icon:NAME}}{% endraw %}` placeholders.
 
 ---
+{: .divider-double }
 
 ## {% include icon.html name="board" %} Project fields
 {: #project-fields }
@@ -60,6 +61,7 @@ Check **Interviews** before closing. Rejected issues close as **not planned**. U
 - **Ghosted:** with the default settings, an Applied card gets `ghosted` after 30 days without an update. It goes away when the status moves on. Remove it yourself if they finally reject you.
 
 ---
+{: .divider-left }
 
 ## Labels
 

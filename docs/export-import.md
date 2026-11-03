@@ -25,6 +25,7 @@ When a search is over, run **Actions** > **Archive a period**. Enter its name, f
 The cards leave the board, but the issues stay. Reminders and summaries do not use archived cards. To bring the cards back, open **Archived items** in the project's menu.
 
 ---
+{: .divider-right }
 
 ## Import old data
 

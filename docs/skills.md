@@ -30,6 +30,7 @@ For example: "Help me prepare for the interview in issue #42." You do not need t
 | `add-job-board` | Add support for a job site |
 
 ---
+{: .divider-large }
 
 ## How the agent finds them
 

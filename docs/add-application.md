@@ -21,6 +21,7 @@ Use the bookmark for a job post. For a message from a recruiter, you can use the
 If the job description is empty, a comment and the weekly summary remind you. Save it while the post is still online.
 
 ---
+{: .divider-right }
 
 ## {% include icon.html name="contact" %} From a recruiter message
 {: #from-a-recruiter-message }

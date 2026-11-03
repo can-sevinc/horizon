@@ -27,4 +27,4 @@ gh_edit_source: docs
 gh_edit_view_mode: tree
 exclude:
   - assets/v1/brand/README.md
-footer_content: "MIT License. Keep your own copy private: your applications are in its issues."
+footer_content: "Your next step starts here."

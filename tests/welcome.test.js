@@ -32,7 +32,7 @@ test("a new copy gets its own README, and the files only for Horizon go, in one 
   await welcome({ github: m.github, core: m.core, context: { repo: { owner: "me", repo: "jobs" } } });
   const [, { tree }] = m.calls.find(([n]) => n === "createTree");
   const readme = tree.find(e => e.path === "README.md");
-  assert.match(readme.content, /^<p align="right"><sub>Powered by <a href="https:\/\/github\.com\/can-sevinc\/horizon"><picture>.*\/brand\/horizon-logo-dark\.svg[\s\S]*\n# Job applications/);
+  assert.match(readme.content, /^<p align="right">[\s\S]*?\/brand\/attribution\/powered-by-horizon-dark\.svg[\s\S]*?\/brand\/attribution\/powered-by-horizon-light\.svg[\s\S]*?\n# <picture>.*\/brand\/horizon-mark-dark\.svg.*Job applications/);
   assert.match(readme.content, /<img src="https:\/\/can-sevinc\.github\.io\/horizon\/assets\/v1\/icons\/icon-save-light\.svg"/);
   assert.match(readme.content, /github\.com\/me\/jobs\/projects/);
   assert.ok(!readme.content.includes("{{"));

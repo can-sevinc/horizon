@@ -1,16 +1,20 @@
-<p align="right"><sub>Powered by <a href="https://github.com/can-sevinc/horizon"><picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/horizon-logo-dark.svg"><img src="{{ASSETS}}/brand/horizon-logo-light.svg" alt="Horizon" height="16" align="top"></picture></a></sub></p>
+<p align="right">
+  <a href="https://github.com/can-sevinc/horizon"><picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/attribution/powered-by-horizon-dark.svg"><img src="{{ASSETS}}/brand/attribution/powered-by-horizon-light.svg" alt="Powered by Horizon" width="169" height="34"></picture></a>
+</p>
 
-# Job applications
+# <picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/horizon-mark-dark.svg"><img src="{{ASSETS}}/brand/horizon-mark-light.svg" alt="" width="40" height="40"></picture> Job applications
 
 My job search, tracked with [Horizon](https://github.com/can-sevinc/horizon). Each application is an issue and a card on the [project board](https://github.com/{{REPO}}/projects).
 
-Keep this repository private. The issues have your applications, notes, and salaries.
+> {{icon:privacy}} Keep this repository private. The issues have your applications, notes, and salaries.
 
 ## {{icon:save}} Add an application
 
 - Click the bookmark on a job post. The form opens with the details filled in.
 - On your phone, or for a recruiter message: [new application form](https://github.com/{{REPO}}/issues/new?template=application.yaml).
 - To save a job for later, set **Stage** to **Wishlist**.
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/dividers/horizon-divider-right-dark.svg"><img src="{{ASSETS}}/brand/dividers/horizon-divider-right-light.svg" alt="" width="640"></picture></p>
 
 ## {{icon:commands}} Update an application
 
@@ -29,6 +33,8 @@ Move the card on the [board](https://github.com/{{REPO}}/projects), or start a c
 
 Every new issue gets a comment with the full list. To change the comments that the commands write, edit the files in [`templates/comments`](templates/comments).
 
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/dividers/horizon-divider-offset-dark.svg"><img src="{{ASSETS}}/brand/dividers/horizon-divider-offset-light.svg" alt="" width="640"></picture></p>
+
 ## {{icon:board}} What happens by itself
 
 - A reminder comment when an application needs a follow-up
@@ -36,6 +42,8 @@ Every new issue gets a comment with the full list. To change the comments that t
 - A [weekly summary](https://github.com/{{REPO}}/issues?q=label%3Asummary) every Monday
 - A daily check of the setup. Problems show up as an issue with the `maintenance` label.
 - A pull request when a new version of Horizon is out
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="{{ASSETS}}/brand/dividers/horizon-divider-left-dark.svg"><img src="{{ASSETS}}/brand/dividers/horizon-divider-left-light.svg" alt="" width="640"></picture></p>
 
 ## {{icon:settings}} Settings and more
 

@@ -18,6 +18,7 @@ Doctor also runs each morning. It checks that:
 - workflows have not been turned off
 
 ---
+{: .divider-right }
 
 ## Cards do not appear, or workflows fail
 

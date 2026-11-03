@@ -1,5 +1,45 @@
 # Horizon brand assets
 
+## Divider alternatives and motion
+
+`dividers/horizon-divider-options.png` compares four alternatives. Each comes as `-light.svg`, `-dark.svg`, and an adaptive `.svg` without a mode suffix:
+
+- `horizon-divider-right`: the symbol at the right end of a long rule.
+- `horizon-divider-large`: a larger symbol between two shorter rules.
+- `horizon-divider-left`: the symbol at the left, followed by a long rule.
+- `horizon-divider-raised`: the symbol above a full-width rule.
+- `horizon-divider-offset`: the symbol about one third along the rule.
+- `horizon-divider-double`: paired horizon lines around the symbol.
+
+All six are transparent vectors at 640 units wide. The first four are in `dividers/horizon-divider-options.png`; the two later designs are in `dividers/horizon-divider-options-2.png`. Selected guides now use the right, left, large, offset, and double versions. The home page keeps the original divider.
+
+`motion/horizon-road-light.gif` and `motion/horizon-road-dark.gif` animate only the symbol. The road bends smoothly as a curve moves toward the viewer. There are no moving lane markings. The sun stays in place and gently brightens within the yellow palette; the outer silhouette stays still. Each is 256 × 256 px, with 72 frames in a seamless 3.6-second loop. The backgrounds are warm white (#FAF8F2) and navy (#29334A), respectively. There is no wordmark.
+
+Matching `horizon-road-light-still.png` and `horizon-road-dark-still.png` provide the original still symbol for a non-animated version. The GIFs can be displayed at 128 or 160 px wide in a README.
+
+The same animation is available with the approved outlined wordmark:
+
+| Layout | Light background | Dark background | Size |
+| --- | --- | --- | --- |
+| Wordmark on the right | `motion/horizon-logo-light.gif` | `motion/horizon-logo-dark.gif` | 608 × 256 px |
+| Wordmark below | `motion/horizon-stacked-light.gif` | `motion/horizon-stacked-dark.gif` | 320 × 352 px |
+
+The road and sun animate together with the symbol-only version. The wordmark stays still. Its Manrope outlines, weight, spacing, and approved light/dark colors are preserved. All four have 72 frames in the same 3.6-second loop, plus matching `-still.png` fallback images. Display the horizontal version at about 304 px wide and the stacked version at about 160 px wide for a small logo.
+
+## Powered by horizon
+
+`attribution/powered-by-horizon-light.svg` and `attribution/powered-by-horizon-dark.svg` are small **169 × 34 px** badges. They use the original symbol, the approved outlined wordmark, and a rounded background. All text is outlined, including “powered by”. No font download is needed.
+
+`attribution/powered-by-horizon.svg` follows the browser's preferred color scheme. The `-light@2x.png` and `-dark@2x.png` files provide 338 × 68 px raster versions. Display those at 169 × 34 px. `powered-by-horizon-preview.png` compares the two backgrounds.
+
+For a small clickable badge in Markdown:
+
+```markdown
+[![powered by horizon](https://can-sevinc.github.io/horizon/assets/v1/brand/attribution/powered-by-horizon.svg)](https://can-sevinc.github.io/horizon/)
+```
+
+For a site with its own theme switch, use the matching explicit light or dark file, as with the other logos. The assets are ready for use; no badge has been added to the site or templates yet.
+
 ## Files
 
 `light` means **for a light background**; `dark` means **for a dark background**.
@@ -14,7 +54,7 @@
 Additional favicon files:
 
 - `favicon.svg`: changes the lower shape for the browser's preferred light/dark scheme. The sun stays yellow.
-- `favicon.ico`: 16, 32, and 48 px fallback images, with a light tile for contrast on either toolbar.
+- `favicon.ico`: transparent 16, 32, and 48 px fallback images. The corners and road cutout contain no background fill. The site's favicon URLs include a version suffix so browsers refresh the old opaque fallback.
 - `favicon-light-16.png`, `favicon-light-32.png`, `favicon-light-48.png` and the matching `dark` files: transparent PNG fallbacks.
 - `apple-touch-icon.png`: 180 px icon with a light background.
 

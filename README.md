@@ -10,7 +10,7 @@
 
 **Track your job search in a private Github repository.**
 
-[![Boards created](https://img.shields.io/endpoint?url=https%3A%2F%2Fhorizon.mcansevinc.workers.dev%2Fbadge)](https://github.com/can-sevinc/horizon) [![Stars](https://img.shields.io/github/stars/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](https://github.com/can-sevinc/horizon/stargazers) [![License](https://img.shields.io/github/license/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](LICENSE)
+[![Boards created](https://img.shields.io/endpoint?url=https%3A%2F%2Fhorizon.mcansevinc.workers.dev%2Fbadge)](https://github.com/can-sevinc/horizon) [![Stars](https://img.shields.io/github/stars/can-sevinc/horizon?style=for-the-badge&labelColor=36435C&color=F2C85B)](https://github.com/can-sevinc/horizon/stargazers) [![License](https://img.shields.io/github/license/can-sevinc/horizon?style=for-the-badge&label=license&labelColor=36435C&color=F2C85B)](LICENSE)
 
 Each application is an issue and a card on a project board. Github Actions keep everything up to date. No server, no subscription.
 

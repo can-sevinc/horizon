@@ -24,6 +24,7 @@ Nothing is applied to your main branch until you merge it.
 For a file under **Check these files**, add your changes again before you merge. Read the pull request first; do not merge it only because the workflow passed.
 
 ---
+{: .divider-left }
 
 ## Your settings stay yours
 
