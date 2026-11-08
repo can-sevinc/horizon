@@ -3,9 +3,8 @@
 <div align="center">
 <br/>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/motion/horizon-logo-dark.gif">
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/v1/brand/motion/horizon-logo-light.gif">
-  <img alt="Horizon" src="docs/assets/v1/brand/motion/horizon-logo-light.gif" width="360">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/motion/horizon-banner-dark.gif">
+  <img src="docs/assets/v1/brand/motion/horizon-banner-light.gif" alt="Horizon" width="100%">
 </picture>
 
 **Track your job search in a private Github repository.**

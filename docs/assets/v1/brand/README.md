@@ -26,6 +26,19 @@ The same animation is available with the approved outlined wordmark:
 
 The road and sun animate together with the symbol-only version. The wordmark stays still. Its Manrope outlines, weight, spacing, and approved light/dark colors are preserved. All four have 72 frames in the same 3.6-second loop, plus matching `-still.png` fallback images. Display the horizontal version at about 304 px wide and the stacked version at about 160 px wide for a small logo.
 
+### Wide animated README banners
+
+`motion/horizon-banner-light.gif` and `motion/horizon-banner-dark.gif` are **1080 × 256 px**. They add 236 px of matching background on each side of the horizontal animation. The logo size, colors, and animation stay the same. Matching `-still.png` files are available too.
+
+Use this in the root README. The banner fills the available width and shrinks on smaller screens:
+
+```html
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/v1/brand/motion/horizon-banner-dark.gif">
+  <img src="docs/assets/v1/brand/motion/horizon-banner-light.gif" alt="Horizon" width="100%">
+</picture>
+```
+
 ## Powered by horizon
 
 `attribution/powered-by-horizon-light.svg` and `attribution/powered-by-horizon-dark.svg` are small **169 × 34 px** badges. They use the original symbol, the approved outlined wordmark, and a rounded background. All text is outlined, including “powered by”. No font download is needed.

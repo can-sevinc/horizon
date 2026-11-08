@@ -1,7 +1,7 @@
 # The documentation site (Github Pages: Settings > Pages > Deploy from a branch > main, /docs)
 title: Horizon
 description: Track your job search on Github, with issues, a project board, and a few workflows.
-logo: /assets/v1/brand/motion/horizon-logo-light.gif
+logo: /assets/v1/brand/horizon-logo-light.svg
 url: https://can-sevinc.github.io
 baseurl: /horizon
 
