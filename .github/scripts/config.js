@@ -89,8 +89,12 @@ function setValues(text, values) {
   return text;
 }
 
+// The lists whose new items (by name) are added too: the code needs each of these labels
+const ADD_ITEMS = ["labels"];
+
 // The top-level settings of a newer config.yaml that a text does not have yet, added at the end
-// with their comments: { text, added: ["newKey", ...] }. The values that the text has stay.
+// with their comments, and the new items of the ADD_ITEMS lists, added at the end of the list:
+// { text, added: ["newKey", "labels: setup", ...] }. The values that the text has stay.
 function addMissing(text, newer) {
   const have = parse(text);
   const added = [];
@@ -107,6 +111,23 @@ function addMissing(text, newer) {
       block = null;
       comments = /^#/.test(line) ? [...comments, line] : [];
     }
+  }
+  for (const b of blocks.filter(b => ADD_ITEMS.includes(b.key) && Array.isArray(have[b.key]))) {
+    // The items of the newer list: from one "- name:" line to the next
+    const items = [];
+    for (const line of b.lines.slice(b.lines.findIndex(l => l.startsWith(`${b.key}:`)) + 1)) {
+      const name = line.match(/^\s+-\s+name:\s*(.*)$/);
+      if (name) items.push({ name: scalar(stripComment(name[1])), lines: [line] });
+      else if (items.length && line.trim()) items[items.length - 1].lines.push(line);
+    }
+    const fresh = items.filter(i => !have[b.key].some(h => h.name === i.name));
+    if (!fresh.length) continue;
+    const lines = text.split("\n");
+    let end = lines.findIndex(l => l.startsWith(`${b.key}:`));
+    while (end + 1 < lines.length && /^\s+\S/.test(lines[end + 1])) end++;
+    lines.splice(end + 1, 0, ...fresh.flatMap(i => i.lines));
+    text = lines.join("\n");
+    added.push(...fresh.map(i => `${b.key}: ${i.name}`));
   }
   for (const b of blocks.filter(b => !(b.key in have))) {
     text = text.replace(/\n*$/, "\n\n") + b.lines.join("\n") + "\n";

@@ -27,6 +27,21 @@ test("setValues changes a line and keeps the comments", () => {
   assert.throws(() => cfg.setValues(text, { nope: 1 }), /no "nope:" line/);
 });
 
+test("addMissing adds the new settings and the new labels, and keeps yours", () => {
+  const mine = "city: Oslo\n\nlabels:\n  - name: summary\n    color: \"EDEDED\"\n  - name: mine\n\nsources:\n  - option: A\n";
+  const newer = "city: Stockholm\n\nlabels:\n  - name: summary\n    color: \"000000\"\n  - name: setup\n    color: \"0E8A16\"\n" +
+    "    description: Setup\n\nsources:\n  - option: A\n  - option: B\n\n# New\nnewSetting: 5\n";
+  const { text, added } = cfg.addMissing(mine, newer);
+  assert.deepStrictEqual(added, ["labels: setup", "newSetting"]);
+  assert.deepStrictEqual(cfg.parse(text), {
+    city: "Oslo",
+    labels: [{ name: "summary", color: "EDEDED" }, { name: "mine" }, { name: "setup", color: "0E8A16", description: "Setup" }],
+    sources: [{ option: "A" }],
+    newSetting: 5,
+  });
+  assert.deepStrictEqual(cfg.addMissing(text, newer).added, []);
+});
+
 test("the settings that the setup asks for are in config.yaml", () => {
   const c = cfg.load();
   for (const k of ["projectTitle", "city", "timezone", "reminderTime", "summaryDay", "summaryTime", "doctorTime",
