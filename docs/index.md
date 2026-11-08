@@ -3,6 +3,11 @@ title: Home
 nav_order: 1
 ---
 
+<div class="home-banner">
+  <img class="brand-light" src="{{ '/assets/v1/brand/horizon-banner-light.svg' | relative_url }}" width="1080" height="256" alt="Horizon">
+  <img class="brand-dark" src="{{ '/assets/v1/brand/horizon-banner-dark.svg' | relative_url }}" width="1080" height="256" alt="Horizon">
+</div>
+
 # Keep track of your job search.
 
 Horizon puts your applications, interview notes, and next steps in a private Github repository. Each application is an issue and a card on your project board.

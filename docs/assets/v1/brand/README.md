@@ -28,6 +28,8 @@ The road and sun animate together with the symbol-only version. The wordmark sta
 
 ### Wide animated README banners
 
+For a still banner with a transparent background, use `horizon-banner-light.svg` or `horizon-banner-dark.svg` in this directory. Both are 1080 × 256 units, with the original outlined logo centered and extra space at the sides. The Pages home page uses these banners and switches them with the site's theme control. The sidebar also uses the original still SVG logos.
+
 `motion/horizon-banner-light.gif` and `motion/horizon-banner-dark.gif` are **1080 × 256 px**. They add 236 px of matching background on each side of the horizontal animation. The logo size, colors, and animation stay the same. Matching `-still.png` files are available too.
 
 Use this in the root README. The banner fills the available width and shrinks on smaller screens:

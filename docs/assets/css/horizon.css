@@ -46,6 +46,8 @@ body, .main, .main-content-wrap, .main-header { background-color: var(--page); }
 .site-title:hover { background: transparent; }
 .brand-site-logo { display: block; line-height: 0; }
 .brand-site-logo img { width: 200px; height: auto; }
+.home-banner { margin: 0 0 24px; line-height: 0; }
+.home-banner img { width: 100%; height: auto; }
 .brand-dark { display: none !important; }
 [data-theme="dark"] .brand-light { display: none !important; }
 [data-theme="dark"] .brand-dark { display: inline-block !important; }
